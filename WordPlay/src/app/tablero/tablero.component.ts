@@ -1,13 +1,15 @@
 import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { PopupComponent } from '../popup/popup.component';
+import { DialogComponent } from '../dialog/dialog.component';
 import { Component, OnInit } from '@angular/core';
 import { RandomWordService } from '../services/randomword.service';
 import { SearchwordService } from '../services/searchword.service';
+import { MatDialog } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-tablero',
   standalone: true,
-  imports: [NgFor, NgIf, CommonModule, PopupComponent],
+  imports: [NgFor, NgIf, CommonModule, DialogComponent],
   templateUrl: './tablero.component.html',
   styleUrl: './tablero.component.css'
 })
@@ -22,7 +24,11 @@ export class TableroComponent implements OnInit {
   palabraValida: boolean = false;
   estadoTablero: (number | boolean)[][];
 
-  constructor(private palabraService: RandomWordService, private buscarPalabra: SearchwordService) {
+
+  constructor(
+    private palabraService: RandomWordService,
+    private buscarPalabra: SearchwordService,
+    public dialog: MatDialog) {
     this.filas = this.generarTablero(6, 5);
     this.estadoTablero = this.inicializarEstadoTablero(); // Inicializar el estado del tablero
   }
@@ -130,13 +136,11 @@ export class TableroComponent implements OnInit {
 
   comprobarPalabra() {
     const palabraIngresada = this.filas[this.filaActual].join('').trim().toLocaleLowerCase();
-    console.log('Palabra ingresada:', palabraIngresada, this.palabraAdivinar);
 
     // Llamada a la API para verificar si la palabra existe
     this.buscarPalabra.verificarPalabra(palabraIngresada).then(
 
       (response: any) => {
-        console.log('Respuesta de la API:', response);
         // if (response.data.title === 'No Definitions Found') {
         //   // Si la respuesta indica que no se encontraron definiciones para la palabra,
         //   // entonces la palabra ingresada no es válida
@@ -157,6 +161,7 @@ export class TableroComponent implements OnInit {
         this.palabraValida = false;
         this.estadoTablero[this.filaActual][1] = false;
         console.error('La palabra ingresada no existe:', palabraIngresada, error);
+        this.openDialog("PALABRA NO ENCONTRADA", "");
       }
     );
 
@@ -170,11 +175,16 @@ export class TableroComponent implements OnInit {
       this.palabraAdivinada = true;
       this.palabraValida = true;
       this.estadoTablero[this.filaActual][1] = true;
+      this.openDialog("FELICIDADES!",  "HAS ACERTADO");
     } else {
       console.log('La palabra ingresada no es correcta.');
       // No avanzar a la siguiente fila si la palabra no es correcta
       this.enterPresionado = false; // Reiniciar la bandera de Enter presionado
-      this.avanzarFila();
+      if(this.filaActual == this.filas.length - 1){
+        this.openDialog("PALABRA CORRECTA", this.palabraAdivinar.toUpperCase());
+      }else{
+        this.avanzarFila();
+      }
     }
   }
 
@@ -216,6 +226,21 @@ export class TableroComponent implements OnInit {
     }
   }
 
+  openDialog(title: string, message: string): void {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: { title: title, message: message}
+    });
+
+    position: {
+      top: '100px'
+    }
+
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('El diálogo ha sido cerrado.');
+    });
+  }
+
+
+
 }
-
-

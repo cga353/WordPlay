@@ -6,23 +6,30 @@
 .tablero {
     display: flex;
     flex-direction: column;
+    justify-content: center; /* Centra el contenido verticalmente */
+    align-items: center; /* Centra el contenido horizontalmente */
+    width: fit-content; /* Ajusta el ancho del contenedor al contenido */
+    margin: auto; /* Añade margen automático para centrarlo horizontalmente */
 }
+
 
 .fila {
     display: flex;
 }
 
 .elemento {
-    border: 1px solid #000;
+    border: 1px solid #636363;
+    border-radius: 10px;
     width: 50px;
     height: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 5px;
 }
 
 .correcto {
-    background-color: green;
+    background-color: rgb(31, 143, 31);
     color: white;
     font-style: bold;
 }
@@ -34,7 +41,7 @@
 }
 
 .no-encontrado {
-    background-color: gray;
+    background-color: rgb(184, 184, 184);
     color: white;
     font-style: bold;
 }
