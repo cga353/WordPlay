@@ -1,6 +1,5 @@
 .contenedor-tablero {
     cursor: text;
-    border: 1px solid #000;
 }
 
 .tablero {
@@ -11,7 +10,6 @@
     width: fit-content; /* Ajusta el ancho del contenedor al contenido */
     margin: auto; /* Añade margen automático para centrarlo horizontalmente */
 }
-
 
 .fila {
     display: flex;

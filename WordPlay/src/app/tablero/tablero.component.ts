@@ -156,15 +156,18 @@ export class TableroComponent implements OnInit {
         // }
       },
       (error: any) => {
-        // Si hay un error, la palabra no existe
-        this.enterPresionado = false; // Reiniciar la bandera de Enter presionado
-        this.palabraValida = false;
-        this.estadoTablero[this.filaActual][1] = false;
-        console.error('La palabra ingresada no existe:', palabraIngresada, error);
-        this.openDialog("PALABRA NO ENCONTRADA", "");
+        if (!(palabraIngresada.toLowerCase() === this.palabraAdivinar.toLowerCase())) {
+          // Si hay un error, la palabra no existe
+          this.enterPresionado = false; // Reiniciar la bandera de Enter presionado
+          this.palabraValida = false;
+          this.estadoTablero[this.filaActual][1] = false;
+          console.error('La palabra ingresada no existe:', palabraIngresada, error);
+          this.openDialog("PALABRA NO ENCONTRADA", "");
+        }else{
+          this.palabraCorrecta(palabraIngresada);
+        }
       }
     );
-
   }
 
   palabraCorrecta(palabraIngresada: string) {
@@ -175,19 +178,18 @@ export class TableroComponent implements OnInit {
       this.palabraAdivinada = true;
       this.palabraValida = true;
       this.estadoTablero[this.filaActual][1] = true;
-      this.openDialog("FELICIDADES!",  "HAS ACERTADO");
+      this.openDialog("FELICIDADES!", "HAS ACERTADO");
     } else {
       console.log('La palabra ingresada no es correcta.');
       // No avanzar a la siguiente fila si la palabra no es correcta
       this.enterPresionado = false; // Reiniciar la bandera de Enter presionado
-      if(this.filaActual == this.filas.length - 1){
+      if (this.filaActual == this.filas.length - 1) {
         this.openDialog("PALABRA CORRECTA", this.palabraAdivinar.toUpperCase());
-      }else{
+      } else {
         this.avanzarFila();
       }
     }
   }
-
 
   obtenerFilaDisponible(): number {
     for (let i = this.filaActual + 1; i < this.filas.length; i++) {
@@ -210,7 +212,6 @@ export class TableroComponent implements OnInit {
     return ''; // Si la fila no está completa o no se ha presionado Enter, no se aplica ningún color
   }
 
-
   obtenerClase(filaIndex: number, letraIndex: number): string {
     const letra = this.filas[filaIndex][letraIndex].toLowerCase();
 
@@ -228,19 +229,15 @@ export class TableroComponent implements OnInit {
 
   openDialog(title: string, message: string): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      data: { title: title, message: message}
+      data: { title: title, message: message }
     });
 
     position: {
       top: '100px'
     }
 
-
     dialogRef.afterClosed().subscribe(result => {
       console.log('El diálogo ha sido cerrado.');
     });
   }
-
-
-
 }
