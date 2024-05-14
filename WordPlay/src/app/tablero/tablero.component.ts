@@ -5,11 +5,12 @@ import { RandomWordService } from '../services/randomword.service';
 import { SearchwordService } from '../services/searchword.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDialogRef } from '@angular/material/dialog';
+import { NavBarComponent } from '../nav-bar/nav-bar.component';
 
 @Component({
   selector: 'app-tablero',
   standalone: true,
-  imports: [NgFor, NgIf, CommonModule, DialogComponent],
+  imports: [NgFor, NgIf, CommonModule, DialogComponent, NavBarComponent],
   templateUrl: './tablero.component.html',
   styleUrl: './tablero.component.css'
 })
