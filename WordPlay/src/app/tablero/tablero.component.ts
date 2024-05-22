@@ -25,7 +25,6 @@ export class TableroComponent implements OnInit {
   palabraValida: boolean = false;
   estadoTablero: (number | boolean)[][];
 
-
   constructor(
     private palabraService: RandomWordService,
     private buscarPalabra: SearchwordService,
