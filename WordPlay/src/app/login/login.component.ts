@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { UserService } from '../services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -11,11 +13,31 @@ import { FormsModule } from '@angular/forms';
 export class LoginComponent {
   email: string | undefined;
   password: string | undefined;
+  userName: string | undefined;
 
-  constructor() { }
+  constructor(private userService: UserService, private router: Router) { 
+    console.log('LoginComponent constructor');
+  }
 
   login() {
-    console.log(this.email);
-    console.log(this.password);
+    if (!this.userName || !this.password) {
+      console.error('Username and password are required');
+      return;
+    }
+
+    this.userService.validateUser(this.userName, this.password)
+      .subscribe(
+        user => {
+          console.log('User:', user);
+          // Redirigir a la página principal u otra página deseada
+          this.router.navigate(['/home']);
+        },
+        error => {
+          console.error('Error:', error);
+          // Manejar el error aquí, por ejemplo, mostrar un mensaje de error al usuario
+        }
+      );
   }
+
+
 }
