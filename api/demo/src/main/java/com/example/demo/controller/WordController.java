@@ -1,52 +1,47 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Word;
-import com.example.demo.repository.WordRepository;
+import com.example.demo.service.WordService;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/words") 
 public class WordController {
 
     @Autowired
-    private WordRepository wordRepository;
+    private WordService wordService;
 
-    // Ruta GET para obtener todos los palabras
     @GetMapping
     public List<Word> getAllWords() {
-        return (List<Word>) wordRepository.findAll();
+        return wordService.getAllWords();
     }
 
-    // Ruta GET para obtener un palabra por su ID
     @GetMapping("/{id}")
     public Word getWordById(@PathVariable Long id) {
-        return wordRepository.findById(id).orElse(null);
+        return wordService.getWordById(id);
     }
 
-    // Ruta POST para crear un nuevo palabra
+    @GetMapping("/search")
+    public Word getWordIdByName(@PathVariable String name) {
+        return wordService.getWordByName(name);
+    }
+
     @PostMapping
-    public Word createWord(@RequestBody Word Word) {
-        return wordRepository.save(Word);
+    public Long createWordAndGetId(@RequestBody Word word) {
+        return wordService.createOrUpdateWord(word);
     }
 
-    // Ruta PUT para actualizar un palabra existente
     @PutMapping("/{id}")
-    public Word updateWord(@PathVariable Long id, @RequestBody Word WordDetails) {
-        Word Word = wordRepository.findById(id).orElse(null);
-        if (Word != null) {
-            Word.setName(WordDetails.getName());
-            return wordRepository.save(Word);
-        }
-        return null;
+    public Word updateWord(@PathVariable Long id, @RequestBody Word wordDetails) {
+        return wordService.updateWord(id, wordDetails);
     }
 
-    // Ruta DELETE para eliminar una palabra por su ID
     @DeleteMapping("/{id}")
     public void deleteWord(@PathVariable Long id) {
-        wordRepository.deleteById(id);
+        wordService.deleteWord(id);
     }
 }

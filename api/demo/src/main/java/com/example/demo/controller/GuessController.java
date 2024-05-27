@@ -1,9 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.Attempt;
-import com.example.demo.entity.AuxId;
 import com.example.demo.entity.Guess;
-import com.example.demo.repository.GuessRepository;
+import com.example.demo.service.GuessService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,43 +14,40 @@ import java.util.Optional;
 public class GuessController {
 
     @Autowired
-    private GuessRepository guessRepository;
+    private GuessService guessService;
 
-    // Ruta GET para obtener todos los usuarios
     @GetMapping
-    public List<Guess> getAllGuess() {
-        return (List<Guess>) guessRepository.findAll();
+    public List<Guess> getAllGuesses() {
+        return guessService.getAllGuesses();
     }
 
     @GetMapping("/user/{userId}")
-    public List<Attempt> getGuessByUserId(@PathVariable Long userId) {
-        return guessRepository.findByUserId(userId);
+    public List<Guess> getGuessesByUserId(@PathVariable Long userId) {
+        return guessService.getGuessesByUserId(userId);
     }
 
     @GetMapping("/word/{wordId}")
-    public List<Attempt> getGuessByWordId(@PathVariable Long wordId) {
-        return guessRepository.findByWordId(wordId);
+    public List<Guess> getGuessesByWordId(@PathVariable Long wordId) {
+        return guessService.getGuessesByWordId(wordId);
     }
 
     @GetMapping("/{userId}/{wordId}")
     public Optional<Guess> getGuessByUserIdAndWordId(@PathVariable Long userId, @PathVariable Long wordId) {
-        return guessRepository.findById(new AuxId(userId, wordId));
+        return guessService.getGuessByUserIdAndWordId(userId, wordId);
     }
 
     @PostMapping
     public Guess createGuess(@RequestBody Guess guess) {
-        return guessRepository.save(guess);
+        return guessService.createGuess(guess);
     }
 
     @PutMapping("/{userId}/{wordId}")
     public Guess updateGuess(@PathVariable Long userId, @PathVariable Long wordId, @RequestBody Guess guess) {
-        guess.setUserId(userId);
-        guess.setWordId(wordId);
-        return guessRepository.save(guess);
+        return guessService.updateGuess(userId, wordId, guess);
     }
 
     @DeleteMapping("/{userId}/{wordId}")
     public void deleteGuess(@PathVariable Long userId, @PathVariable Long wordId) {
-        guessRepository.deleteById(new AuxId(userId, wordId));
+        guessService.deleteGuess(userId, wordId);
     }
 }

@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import java.util.Date;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
@@ -23,16 +25,19 @@ public class Guess {
     @NotNull(message = "Number of attempts is mandatory")
     private int nAttempt;
 
+    private Date date;
+
     // Constructor vacío
     public Guess() {
     }
 
     // Constructor con todos los campos
-    public Guess(Long userId, Long wordId, boolean isGuessed, int nAttempt) {
+    public Guess(Long userId, Long wordId, boolean isGuessed, int nAttempt, Date date) {
         this.userId = userId;
         this.wordId = wordId;
         this.isGuessed = isGuessed;
         this.nAttempt = nAttempt;
+        this.date = date;
     }
 
     // Getters y Setters
@@ -66,6 +71,14 @@ public class Guess {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
 }
