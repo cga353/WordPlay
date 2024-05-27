@@ -20,6 +20,11 @@ public class AttemptController {
         return attemptService.getAllAttempts();
     }
 
+    @GetMapping("/top5/user/{userId}")
+    public List<Attempt> getTop5AttemptsByUserId(@PathVariable Long userId) {
+        return attemptService.getTop5AttemptsByUserId(userId);
+    }
+
     @GetMapping("/user/{userId}")
     public List<Attempt> getAttemptsByUserId(@PathVariable Long userId) {
         return attemptService.getAttemptsByUserId(userId);

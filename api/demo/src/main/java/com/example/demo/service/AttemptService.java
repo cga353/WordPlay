@@ -4,6 +4,7 @@ import com.example.demo.entity.Attempt;
 import com.example.demo.entity.AuxId;
 import com.example.demo.repository.AttemptRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,10 @@ public class AttemptService {
         return (List<Attempt>) attemptRepository.findAll();
     }
 
+    public List<Attempt> getTop5AttemptsByUserId(Long userId) {
+        return attemptRepository.findTop5ByUserIdOrderByNVecesDesc(userId, PageRequest.of(0, 5));
+    }
+    
     public List<Attempt> getAttemptsByUserId(Long userId) {
         return attemptRepository.findByUserId(userId);
     }
