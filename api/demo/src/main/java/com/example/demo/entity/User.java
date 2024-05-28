@@ -75,7 +75,7 @@ public class User {
         return email;
     }
 
-    public void sertPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
