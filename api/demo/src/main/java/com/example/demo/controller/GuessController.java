@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -15,6 +16,11 @@ public class GuessController {
 
     @Autowired
     private GuessService guessService;
+
+    @GetMapping("/statistics/{userId}")
+    public Map<String, Integer> getGuessStatistics(@PathVariable Long userId) {
+        return guessService.getGuessStatistics(userId);
+    }
 
     @GetMapping
     public List<Guess> getAllGuesses() {
