@@ -7,6 +7,7 @@ import com.example.demo.repository.GuessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,17 @@ public class GuessService {
 
         return statistics;
     }
+
+    public List<Guess> getSuccessfulGuessesByUserId(Long userId) {
+        List<Guess> guessedGuesses = new ArrayList<>();
+        for (Guess guess : guessRepository.findByUserId(userId)) {
+            if (guess.getisGuessed()) {
+                guessedGuesses.add(guess);
+            }
+        }
+        return guessedGuesses;
+    }
+
 
     public List<Guess> getGuessesByUserId(Long userId) {
         return guessRepository.findByUserId(userId);

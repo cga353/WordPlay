@@ -22,6 +22,11 @@ public class GuessController {
         return guessService.getGuessStatistics(userId);
     }
 
+    @GetMapping("/successes/{userId}")
+    public List<Guess> getSuccessfulGuessesByUserId(@PathVariable Long userId) {
+        return guessService.getSuccessfulGuessesByUserId(userId);
+    }
+
     @GetMapping
     public List<Guess> getAllGuesses() {
         return guessService.getAllGuesses();
