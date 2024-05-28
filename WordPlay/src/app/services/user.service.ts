@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { User } from '../interfaces/user';
 
 @Injectable({
   providedIn: 'root'
@@ -25,5 +26,12 @@ export class UserService {
     return this.http.post(this.backendUrl, user);
   }
 
+  getUserById(id: number): Observable<User> {
+    return this.http.get<User>(`${this.backendUrl}/${id}`);
+  }
+
+  updateUser(id: number, user: User): Observable<User> {
+    return this.http.put<User>(`${this.backendUrl}/${id}`, user);
+  }
 
 }

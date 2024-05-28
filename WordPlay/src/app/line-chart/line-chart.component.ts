@@ -1,34 +1,63 @@
 import { Component, OnInit } from '@angular/core';
-import { Chart, ChartType } from 'chart.js/auto';
+import { Chart, ChartType, registerables } from 'chart.js';
+import { WordService } from '../services/word.service';
+import { Guess } from '../interfaces/guess';  // Cambia `Attempt` a `Guess` si es necesario
+import { Router } from '@angular/router';
+
+// Registrar los componentes de Chart.js
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-line-chart',
   standalone: true,
-  imports: [],
   templateUrl: './line-chart.component.html',
-  styleUrl: './line-chart.component.css'
+  styleUrls: ['./line-chart.component.css']
 })
-export class LineChartComponent implements OnInit{
+export class LineChartComponent implements OnInit {
 
   public chart: Chart | undefined;
+  private userId: number = 2; // Cambia esto al ID del usuario que quieras usar
+
+  constructor(private wordService: WordService, private router: Router) { }
 
   ngOnInit(): void {
-    // datos
-    const data = {
-      labels: [1, 2, 3, 4, 5],
-      datasets: [{
-        label: 'My First Dataset',
-        data: [65, 59, 80, 81, 56],
-        fill: false,
-        borderColor: 'rgb(75, 192, 192)',
-        tension: 0.1
-      }]
-    };
-    // Creamos la gráfica
-    this.chart = new Chart("line-chart", {
-      type: 'line' as ChartType, // tipo de la gráfica 
-      data: data // datos 
+    this.wordService.getSuccessfulGuessesByUserId(this.userId).subscribe((data: Guess[]) => {
+      // Filtra las adivinanzas correctas
+      const victoriesData = data.filter((guess: Guess) => guess.isGuessed);
+      // Mapea los intentos y victorias
+      const values = victoriesData.map((guess: Guess) => guess.nAttempt);
+
+      const chartData = {
+        labels: [1, 2, 3, 4, 5], // Números de intentos
+        datasets: [{
+          label: 'Victorias por Intento',
+          data: values, // Número de victorias
+          fill: false,
+          borderColor: 'rgb(75, 192, 192)',
+          tension: 0.1
+        }]
+      };
+
+      // Crear el gráfico
+      this.chart = new Chart("line-chart", {
+        type: 'line' as ChartType,
+        data: chartData,
+        options: {
+          indexAxis: 'x',
+          scales: {
+            x: {
+              beginAtZero: true
+            },
+            y: {
+              type: 'linear',
+              ticks: {
+                stepSize: 1,
+                precision: 0
+              }
+            }
+          }
+        },
+      });
     });
   }
-
 }

@@ -3,13 +3,14 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    height: 10vh;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .nav-bar img{
-    width: 6%;
-    height: 6%;
-    margin: 1% 5% 1% 1%;
+    width: 5rem;
+    height: 3rem;
+    margin: 1rem 5rem 1rem 1rem;
 }
 
 .buttons{
