@@ -2,30 +2,36 @@
     <app-nav-bar></app-nav-bar>
     <div class="profile">
         <div class="profile-panel">
-            <div class="edit-profile">
+            <div class="edit-profile" (click)="enableEditMode()">
                 <img src="../../assets/logo-8.png" alt="Descripción de la imagen">
                 <p>Editar perfil</p>
             </div>
             <img src="../../assets/logo.png" alt="Descripción de la imagen">
-
-            <h2>Nombre usuario</h2>
-            <h5>Nombre completo persona</h5>
-
-
+            <div *ngIf="editMode && editedUser">
+                <input [(ngModel)]="editedUser.userName" placeholder="Nombre de usuario">
+                <input [(ngModel)]="editedUser.name" placeholder="Nombre completo">
+                <input [(ngModel)]="editedUser.email" placeholder="Correo electrónico">
+                <button (click)="saveChanges()">Guardar cambios</button>
+            </div>
+            <div *ngIf="!editMode">
+                <h2>{{ user?.userName }}</h2>
+                <h5>{{ user?.name }}</h5>
+                <h5>{{ user?.email }}</h5>
+            </div>
         </div>
         <div class="statistics">
             <h2>Estadísticas</h2>
             <div class="statistics-top">
-                <div>
-                    <app-bar-chart></app-bar-chart>
-                  </div>
-                  <div>
-                    <app-line-chart></app-line-chart>
-                  </div>
-            </div>
-            <div class="chart-container">
+              <div (click)="navigateToWordList('pie-chart')">
                 <app-pie-chart></app-pie-chart>
+              </div>
+              <div (click)="navigateToWordList('line-chart')">
+                <app-line-chart></app-line-chart>
+              </div>
             </div>
-        </div>
+            <div class="chart-container" (click)="navigateToWordList('bar-chart')">
+              <app-bar-chart></app-bar-chart>
+            </div>
+          </div>
     </div>
 </div>

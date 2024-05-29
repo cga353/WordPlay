@@ -12,5 +12,5 @@ export const routes: Routes = [
     { path: 'word-list', component: WordListComponent },
     { path: "login", component: LoginComponent, pathMatch: "full" },
     { path: "register", component: RegisterComponent, pathMatch: "full" },
-  
+
 ];

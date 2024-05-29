@@ -6,6 +6,8 @@ import { SearchwordService } from '../services/searchword.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDialogRef } from '@angular/material/dialog';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
+import { WordService } from '../services/word.service';
+import { Attempt } from '../interfaces/attempt';
 
 @Component({
   selector: 'app-tablero',
@@ -24,24 +26,26 @@ export class TableroComponent implements OnInit {
   palabraAdivinada: boolean = false;
   palabraValida: boolean = false;
   estadoTablero: (number | boolean)[][];
+  palabraId: number | undefined;
 
   constructor(
     private palabraService: RandomWordService,
     private buscarPalabra: SearchwordService,
+    private wordService: WordService,
     public dialog: MatDialog) {
     this.filas = this.generarTablero(6, 5);
-    this.estadoTablero = this.inicializarEstadoTablero(); // Inicializar el estado del tablero
+    this.estadoTablero = this.inicializarEstadoTablero();
   }
 
   ngOnInit(): void {
     this.obtenerPalabraAdivinar();
-    console.warn('Palabra a adivinar:', this.palabraAdivinar);
   }
 
   obtenerPalabraAdivinar() {
     this.palabraService.obtenerPalabraAdivinar().subscribe(
       (palabra: string) => {
         this.palabraAdivinar = palabra[0];
+        this.addPalabra(this.palabraAdivinar.toLowerCase());
       },
       (error: any) => {
         console.error('Error al obtener la palabra a adivinar:', error);
@@ -163,7 +167,7 @@ export class TableroComponent implements OnInit {
           this.estadoTablero[this.filaActual][1] = false;
           console.error('La palabra ingresada no existe:', palabraIngresada, error);
           this.openDialog("PALABRA NO ENCONTRADA", "");
-        }else{
+        } else {
           this.palabraCorrecta(palabraIngresada);
         }
       }
@@ -171,9 +175,13 @@ export class TableroComponent implements OnInit {
   }
 
   palabraCorrecta(palabraIngresada: string) {
+    console.warn('Palabra ingresada:', palabraIngresada);
+    this.addPalabra(palabraIngresada.toLowerCase());
+    this.handleWordAttempt(2, this.palabraId || -1); //TODO Cambiar por el id usuario real
     // Verificar si la palabra ingresada por el usuario es igual a la palabra a adivinar
     if (palabraIngresada === this.palabraAdivinar.toLowerCase()) {
       console.log('¡Felicidades! Has adivinado la palabra.');
+      this.addPalabraAdivinada(palabraIngresada);
       this.entradaActivada = false;
       this.palabraAdivinada = true;
       this.palabraValida = true;
@@ -184,7 +192,8 @@ export class TableroComponent implements OnInit {
       // No avanzar a la siguiente fila si la palabra no es correcta
       this.enterPresionado = false; // Reiniciar la bandera de Enter presionado
       if (this.filaActual == this.filas.length - 1) {
-        this.openDialog("PALABRA CORRECTA", this.palabraAdivinar.toUpperCase());
+        this.addPalabraAdivinada(palabraIngresada);
+        this.openDialog("PALABRA CORRECTA:", this.palabraAdivinar.toUpperCase());
       } else {
         this.avanzarFila();
       }
@@ -198,6 +207,79 @@ export class TableroComponent implements OnInit {
       }
     }
     return -1;
+  }
+
+  addPalabra(palabra: string) {
+    console.warn('Palabra', palabra);
+    this.wordService.addPalabra(palabra).subscribe(
+      (id: number) => {
+        this.palabraId = id;
+        console.log('Palabra a adivinar ID:', this.palabraId);
+      },
+      error => {
+        console.error('Error al obtener la palabra a adivinar:', error);
+      }
+    );
+  }
+
+  addPalabraAdivinada(palabraIngresada: string) {
+
+    const guess = {
+      userId: 2, // Reemplazar con el ID del usuario real
+      wordId: this.palabraId,
+      isGuessed: palabraIngresada.toLowerCase() === this.palabraAdivinar.toLowerCase(),
+      nAttempt: this.filaActual +1, // Reemplazar con el número real de intentos
+      date: new Date()
+    };
+
+    this.wordService.addPalabraAdivinada(guess).subscribe(
+      response => {
+        console.log('Palabra adivinada guardada con éxito', response);
+      },
+      error => {
+        console.error('Error al guardar la palabra adivinada', error);
+      }
+    );
+  }
+
+  addAttempt(attempt: Attempt) {
+    this.wordService.createAttempt(attempt).subscribe(
+      (response) => {
+        console.log('Intento creado:', response);
+      },
+      (error) => {
+        console.error('Error al crear el intento:', error);
+      }
+    );
+  }
+
+  updateAttempt(attempt: Attempt) {
+    this.wordService.updateAttempt(attempt.userId, attempt.wordId, attempt).subscribe(
+      (response) => {
+        console.log('Intento actualizado:', response);
+      },
+      (error) => {
+        console.error('Error al actualizar el intento:', error);
+      }
+    );
+  }
+
+  handleWordAttempt(userId: number, wordId: number) {
+    this.wordService.getAttemptByUserIdAndWordId(userId, wordId).subscribe(
+      (attempt) => {
+        if (attempt) {
+          attempt.nVeces += 1;
+          this.updateAttempt(attempt);
+        } else {
+          const newAttempt: Attempt = { userId, wordId, nVeces: 1 };
+          console.log('Nuevo intento:', newAttempt);
+          this.addAttempt(newAttempt);
+        }
+      },
+      (error) => {
+        console.error('Error al obtener el intento:', error);
+      }
+    );
   }
 
   private filaCompleta(filaIndex: number): boolean {

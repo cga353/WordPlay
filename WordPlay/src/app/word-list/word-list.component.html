@@ -1,3 +1,56 @@
-<p>word-list works!</p>
+<app-nav-bar></app-nav-bar>
 
-<!-- Words / n Attempts / Traduction-->
+<div class="word-list-container">
+  <div class="word-list-header">
+    <div *ngIf="source === 'bar-chart'" class="card-body">
+      <span class="header-item">Words</span>
+      <span class="header-item">n Veces</span>
+      <span class="header-item">Translation</span>
+    </div>
+    <div *ngIf="source === 'line-chart'" class="card-body">
+      <span class="header-item">Words</span>
+      <span class="header-item">isGuessed</span>
+      <span class="header-item">n Attempts</span>
+      <span class="header-item">Date</span>
+      <span class="header-item">Translation</span>
+    </div>
+    <div *ngIf="source === 'pie-chart'" class="card-body">
+      <span class="header-item">Words</span>
+      <span class="header-item">isGuessed</span>
+      <span class="header-item">Translation</span>
+    </div>
+  </div>
+  <div class="word-list">
+    <div class="word-list-item card" *ngFor="let word of words">
+      <div *ngIf="source === 'bar-chart'" class="card-body">
+        <span class="item-content">{{ word.name }}</span>
+        <span class="item-content">{{ word.nVeces }}</span>
+        <span class="item-content">
+          <ul>
+            <li *ngFor="let translation of word.translations">{{ translation }}</li>
+          </ul>
+        </span>
+      </div>
+      <div *ngIf="source === 'line-chart'" class="card-body">
+        <span class="item-content">{{ word.name }}</span>
+        <span class="item-content">{{ word.isGuessed }}</span>
+        <span class="item-content">{{ word.nAttempt }}</span>
+        <span class="item-content">{{ word.date }}</span>
+        <span class="item-content">
+          <ul>
+            <li *ngFor="let translation of word.translations">{{ translation }}</li>
+          </ul>
+        </span>
+      </div>
+      <div *ngIf="source === 'pie-chart'" class="card-body">
+        <span class="item-content">{{ word.name }}</span>
+        <span class="item-content">{{ word.isGuessed }}</span>
+        <span class="item-content">
+          <ul>
+            <li *ngFor="let translation of word.translations">{{ translation }}</li>
+          </ul>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
