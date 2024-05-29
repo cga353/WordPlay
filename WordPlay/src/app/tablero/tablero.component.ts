@@ -109,6 +109,12 @@ export class TableroComponent implements OnInit {
 
   borrarLetra() {
     console.log('Tecla retroceso presionada');
+    // Verificar si la palabra ya se ha adivinado
+    if (this.palabraAdivinada) {
+      console.log('La palabra ya se ha adivinado. No se puede borrar.');
+      return;
+    }
+  
     // Eliminar la última letra de la fila actual si no está vacía
     const filaActual = this.filas[this.filaActual];
     const ultimoIndex = filaActual.reduceRight((acc, letra, index) => {
@@ -117,11 +123,12 @@ export class TableroComponent implements OnInit {
       }
       return acc;
     }, -1);
-
+  
     if (ultimoIndex !== -1) {
       filaActual[ultimoIndex] = '';
     }
   }
+  
 
   recogerEnter() {
     if (this.entradaActivada && !this.enterPresionado && !this.palabraAdivinada) {
@@ -321,41 +328,6 @@ export class TableroComponent implements OnInit {
     }
     return count;
   }
-  
-
-  // obtenerClase(filaIndex: number, letraIndex: number): string {
-  //   const letra = this.filas[filaIndex][letraIndex].toLowerCase();
-  
-  //   if (!letra) return ''; // Si no hay letra, no se aplica ninguna clase
-  //   const letraAdivinar = this.palabraAdivinar.charAt(letraIndex).toLowerCase();
-  
-  //   // Verificar si la letra coincide en posición y letra con la palabra a adivinar
-  //   if (letra === letraAdivinar && letraIndex === this.palabraAdivinar.indexOf(letra)) {
-  //     return 'correcto';
-  //   } else if (letra === letraAdivinar) {
-  //     return 'incorrecto';
-  //   } else if (this.palabraAdivinar.includes(letra)) {
-  //     return 'no-encontrado';
-  //   } else {
-  //     return '';
-  //   }
-  // }
-  
-
-  // obtenerClase(filaIndex: number, letraIndex: number): string {
-  //   const letra = this.filas[filaIndex][letraIndex].toLowerCase();
-
-  //   if (!letra) return ''; // Si no hay letra, no se aplica ninguna clase
-  //   const letraAdivinar = this.palabraAdivinar.charAt(letraIndex).toLowerCase();
-
-  //   if (letra === letraAdivinar) {
-  //     return 'correcto';
-  //   } else if (this.palabraAdivinar.includes(letra)) {
-  //     return 'incorrecto';
-  //   } else {
-  //     return 'no-encontrado';
-  //   }
-  // }
 
   openDialog(title: string, message: string): void {
     const dialogRef = this.dialog.open(DialogComponent, {
