@@ -38,7 +38,8 @@ export class TableroComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.obtenerPalabraAdivinar();
+    this.palabraAdivinar = "sport"
+    // this.obtenerPalabraAdivinar();
   }
 
   obtenerPalabraAdivinar() {
@@ -114,7 +115,7 @@ export class TableroComponent implements OnInit {
       console.log('La palabra ya se ha adivinado. No se puede borrar.');
       return;
     }
-  
+
     // Eliminar la última letra de la fila actual si no está vacía
     const filaActual = this.filas[this.filaActual];
     const ultimoIndex = filaActual.reduceRight((acc, letra, index) => {
@@ -123,12 +124,12 @@ export class TableroComponent implements OnInit {
       }
       return acc;
     }, -1);
-  
+
     if (ultimoIndex !== -1) {
       filaActual[ultimoIndex] = '';
     }
   }
-  
+
 
   recogerEnter() {
     if (this.entradaActivada && !this.enterPresionado && !this.palabraAdivinada) {
@@ -173,7 +174,7 @@ export class TableroComponent implements OnInit {
           this.palabraValida = false;
           this.estadoTablero[this.filaActual][1] = false;
           console.error('La palabra ingresada no existe:', palabraIngresada, error);
-          this.openDialog("PALABRA NO ENCONTRADA", "");
+          this.openDialog("PALABRA NO ENCONTRADA", "", palabraIngresada, false);
         } else {
           this.palabraCorrecta(palabraIngresada);
         }
@@ -193,14 +194,14 @@ export class TableroComponent implements OnInit {
       this.palabraAdivinada = true;
       this.palabraValida = true;
       this.estadoTablero[this.filaActual][1] = true;
-      this.openDialog("FELICIDADES!", "HAS ACERTADO");
+      this.openDialog("¡FELICIDADES!", "has acertado la palabra", palabraIngresada, true);
     } else {
       console.log('La palabra ingresada no es correcta.');
       // No avanzar a la siguiente fila si la palabra no es correcta
       this.enterPresionado = false; // Reiniciar la bandera de Enter presionado
       if (this.filaActual == this.filas.length - 1) {
         this.addPalabraAdivinada(palabraIngresada);
-        this.openDialog("PALABRA CORRECTA:", this.palabraAdivinar.toUpperCase());
+        this.openDialog("¡PERDISTE!", "La palabra era:", this.palabraAdivinar.toUpperCase(), false);
       } else {
         this.avanzarFila();
       }
@@ -235,7 +236,7 @@ export class TableroComponent implements OnInit {
       userId: 2, // Reemplazar con el ID del usuario real
       wordId: this.palabraId,
       isGuessed: palabraIngresada.toLowerCase() === this.palabraAdivinar.toLowerCase(),
-      nAttempt: this.filaActual +1, // Reemplazar con el número real de intentos
+      nAttempt: this.filaActual + 1, // Reemplazar con el número real de intentos
       date: new Date()
     };
 
@@ -303,22 +304,22 @@ export class TableroComponent implements OnInit {
 
   obtenerClase(filaIndex: number, letraIndex: number): string {
     const letra = this.filas[filaIndex][letraIndex].toLowerCase();
-  
+
     if (!letra) return ''; // Si no hay letra, no se aplica ninguna clase
     const letraAdivinar = this.palabraAdivinar.charAt(letraIndex).toLowerCase();
-  
+
     // Verificar si la letra coincide en posición y letra con la palabra a adivinar
     if (letra === letraAdivinar && this.contarOcurrencias(letraAdivinar) > 0) {
       return 'correcto';
     } else if (letra === letraAdivinar) {
-      return 'incorrecto';
-    } else if (this.palabraAdivinar.includes(letra)) {
       return 'no-encontrado';
+    } else if (this.palabraAdivinar.includes(letra)) {
+      return 'incorrecto';
     } else {
       return '';
     }
   }
-  
+
   contarOcurrencias(letra: string): number {
     let count = 0;
     for (let i = 0; i < this.palabraAdivinar.length; i++) {
@@ -329,13 +330,16 @@ export class TableroComponent implements OnInit {
     return count;
   }
 
-  openDialog(title: string, message: string): void {
+  openDialog(title: string, message: string, palabra: string, adivinada: boolean): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      data: { title: title, message: message }
+      data: { title: title, message: message, palabra: palabra, adivinada: adivinada},
+      panelClass: 'custom-dialog-panel'
     });
 
     position: {
-      top: '100px'
+      top: '50%'
+      left: '50%'
+      transform: 'translate(-50%, -50%)'
     }
 
     dialogRef.afterClosed().subscribe(result => {

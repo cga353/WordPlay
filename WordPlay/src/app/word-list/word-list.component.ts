@@ -72,10 +72,7 @@ export class WordListComponent implements OnInit {
       this.wordService.getTranslation(word.name).toPromise().then(translations => {
         if (translations && translations.length > 0) {
           word.translations = translations.map(translation => translation.text);
-        } else {
-          console.warn(word.name, 'not found');
-          word.translations = ['palabra no encontrada'];
-        }
+        } 
       })
     );
   }
