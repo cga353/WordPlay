@@ -48,3 +48,11 @@
     justify-content: space-between;
     border: 1px solid #ccc;
   }
+
+  .word-list-item card{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }

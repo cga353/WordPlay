@@ -13,6 +13,7 @@ export class WordService {
   private wordsUrl = 'http://localhost:8080/api/words';
   private gessuesUrl = 'http://localhost:8080/api/guesses';
   private attemptsUrl = 'http://localhost:8080/api/attempts';
+  private translationUrl = 'http://localhost:8080/api/translation';
 
   private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -52,6 +53,10 @@ export class WordService {
 
   getGuessesByUserId(userId: number): Observable<Guess[]> {
     return this.http.get<Guess[]>(`${this.gessuesUrl}/user/${userId}`);
+  }
+
+  getTranslation(word: string): Observable<{ name: string, text: string }[]> {
+    return this.http.get<{ name: string, text: string }[]>(`${this.translationUrl}/${word}`);
   }
 
   getAllAttempts(): Observable<Attempt[]> {

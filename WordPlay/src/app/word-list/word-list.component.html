@@ -1,11 +1,5 @@
 <app-nav-bar></app-nav-bar>
 
-<!-- 
-También hay que discernir entre la gráfica que se ha clicado, porque dependiendo de si es una u otra, van a salir unos datos de la palabra u otros.
-- Si viene de bar-chart: nombre, número de veces usada y traducción.
-- Si viene de pie-chart: nombre, isAdivinada, traducción
-- Si viene de line-chart: nombre, isGuessed, nAttempt, Date y traduccion -->
-
 <div class="word-list-container">
   <div class="word-list-header">
     <div *ngIf="source === 'bar-chart'" class="card-body">
@@ -31,19 +25,31 @@ También hay que discernir entre la gráfica que se ha clicado, porque dependien
       <div *ngIf="source === 'bar-chart'" class="card-body">
         <span class="item-content">{{ word.name }}</span>
         <span class="item-content">{{ word.nVeces }}</span>
-        <div>Traduction</div>
+        <span class="item-content">
+          <ul>
+            <li *ngFor="let translation of word.translations">{{ translation }}</li>
+          </ul>
+        </span>
       </div>
       <div *ngIf="source === 'line-chart'" class="card-body">
         <span class="item-content">{{ word.name }}</span>
         <span class="item-content">{{ word.isGuessed }}</span>
         <span class="item-content">{{ word.nAttempt }}</span>
         <span class="item-content">{{ word.date }}</span>
-        <div>Traduction</div>
+        <span class="item-content">
+          <ul>
+            <li *ngFor="let translation of word.translations">{{ translation }}</li>
+          </ul>
+        </span>
       </div>
       <div *ngIf="source === 'pie-chart'" class="card-body">
         <span class="item-content">{{ word.name }}</span>
         <span class="item-content">{{ word.isGuessed }}</span>
-        <div>Traduction</div>
+        <span class="item-content">
+          <ul>
+            <li *ngFor="let translation of word.translations">{{ translation }}</li>
+          </ul>
+        </span>
       </div>
     </div>
   </div>

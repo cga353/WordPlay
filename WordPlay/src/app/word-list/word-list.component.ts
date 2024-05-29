@@ -33,8 +33,9 @@ export class WordListComponent implements OnInit {
         this.wordService.getWordsByIds(wordIds).subscribe(words => {
           this.words = data.map(attempt => {
             const word = words.find(w => w.id === attempt.wordId);
-            return { ...attempt, name: word.name };
+            return { ...attempt, name: word.name, translations: [] };
           });
+          this.fetchTranslations();
           console.warn('Bar Chart Data:', this.words); // Datos para bar-chart
         });
       });
@@ -44,8 +45,9 @@ export class WordListComponent implements OnInit {
         this.wordService.getWordsByIds(wordIds).subscribe(words => {
           this.words = data.map(guess => {
             const word = words.find(w => w.id === guess.wordId);
-            return { ...guess, name: word.name };
+            return { ...guess, name: word.name, translations: [] };
           });
+          this.fetchTranslations();
           console.warn('Pie Chart Data:', this.words); // Datos para pie-chart
         });
       });
@@ -56,11 +58,26 @@ export class WordListComponent implements OnInit {
           this.words = data.map(guess => {
             const word = words.find(w => w.id === guess.wordId);
             const formattedDate = new Date(guess.date).toLocaleDateString();
-            return { ...guess, name: word.name, date: formattedDate };
+            return { ...guess, name: word.name, date: formattedDate, translations: [] };
           });
+          this.fetchTranslations();
           console.warn('Line Chart Data:', this.words); // Datos para line-chart
         });
       });
     }
   }
+
+  fetchTranslations(): void {
+    const translationPromises = this.words.map(word =>
+      this.wordService.getTranslation(word.name).toPromise().then(translations => {
+        if (translations && translations.length > 0) {
+          word.translations = translations.map(translation => translation.text);
+        } else {
+          console.warn(word.name, 'not found');
+          word.translations = ['palabra no encontrada'];
+        }
+      })
+    );
+  }
+  
 }
