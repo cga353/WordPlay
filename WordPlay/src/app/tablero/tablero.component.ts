@@ -38,8 +38,7 @@ export class TableroComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.palabraAdivinar = "sport"
-    // this.obtenerPalabraAdivinar();
+    this.obtenerPalabraAdivinar();
   }
 
   obtenerPalabraAdivinar() {
@@ -129,7 +128,6 @@ export class TableroComponent implements OnInit {
       filaActual[ultimoIndex] = '';
     }
   }
-
 
   recogerEnter() {
     if (this.entradaActivada && !this.enterPresionado && !this.palabraAdivinada) {
@@ -301,38 +299,42 @@ export class TableroComponent implements OnInit {
     }
     return ''; // Si la fila no está completa o no se ha presionado Enter, no se aplica ningún color
   }
-
+  
   obtenerClase(filaIndex: number, letraIndex: number): string {
-    const letra = this.filas[filaIndex][letraIndex].toLowerCase();
-
-    if (!letra) return ''; // Si no hay letra, no se aplica ninguna clase
-    const letraAdivinar = this.palabraAdivinar.charAt(letraIndex).toLowerCase();
-
-    // Verificar si la letra coincide en posición y letra con la palabra a adivinar
-    if (letra === letraAdivinar && this.contarOcurrencias(letraAdivinar) > 0) {
-      return 'correcto';
-    } else if (letra === letraAdivinar) {
-      return 'no-encontrado';
-    } else if (this.palabraAdivinar.includes(letra)) {
-      return 'incorrecto';
-    } else {
-      return '';
-    }
-  }
-
-  contarOcurrencias(letra: string): number {
-    let count = 0;
-    for (let i = 0; i < this.palabraAdivinar.length; i++) {
-      if (this.palabraAdivinar.charAt(i).toLowerCase() === letra) {
-        count++;
+    const palabraAdivinar = this.palabraAdivinar.toLowerCase();
+    const resultado = Array(5).fill('no-encontrado'); // Inicializamos con 'no-encontrado'
+    const letraUsada = Array(5).fill(false); // Para llevar cuenta de las letras adivinadas
+  
+    // Primera pasada: comprobar las letras correctas (en la posición correcta)
+    for (let i = 0; i < 5; i++) {
+      const letra = this.filas[filaIndex][i].toLowerCase();
+      if (letra === palabraAdivinar[i]) {
+        resultado[i] = 'correcto';
+        letraUsada[i] = true; // Marcar la letra como usada
       }
     }
-    return count;
+  
+    // Segunda pasada: comprobar las letras incorrectas pero presentes en la palabra
+    for (let i = 0; i < 5; i++) {
+      if (resultado[i] === 'correcto') continue; // Saltar las letras ya adivinadas correctamente
+  
+      const letra = this.filas[filaIndex][i].toLowerCase();
+      for (let j = 0; j < 5; j++) {
+        if (!letraUsada[j] && letra === palabraAdivinar[j]) {
+          resultado[i] = 'incorrecto';
+          letraUsada[j] = true; // Marcar la letra como usada
+          break;
+        }
+      }
+    }
+  
+    return resultado[letraIndex];
   }
+  
 
   openDialog(title: string, message: string, palabra: string, adivinada: boolean): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      data: { title: title, message: message, palabra: palabra, adivinada: adivinada},
+      data: { title: title, message: message, palabra: palabra, adivinada: adivinada },
       panelClass: 'custom-dialog-panel'
     });
 
