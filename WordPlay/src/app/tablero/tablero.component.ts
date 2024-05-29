@@ -296,18 +296,66 @@ export class TableroComponent implements OnInit {
 
   obtenerClase(filaIndex: number, letraIndex: number): string {
     const letra = this.filas[filaIndex][letraIndex].toLowerCase();
-
+  
     if (!letra) return ''; // Si no hay letra, no se aplica ninguna clase
     const letraAdivinar = this.palabraAdivinar.charAt(letraIndex).toLowerCase();
-
-    if (letra === letraAdivinar) {
+  
+    // Verificar si la letra coincide en posición y letra con la palabra a adivinar
+    if (letra === letraAdivinar && this.contarOcurrencias(letraAdivinar) > 0) {
       return 'correcto';
-    } else if (this.palabraAdivinar.includes(letra)) {
+    } else if (letra === letraAdivinar) {
       return 'incorrecto';
-    } else {
+    } else if (this.palabraAdivinar.includes(letra)) {
       return 'no-encontrado';
+    } else {
+      return '';
     }
   }
+  
+  contarOcurrencias(letra: string): number {
+    let count = 0;
+    for (let i = 0; i < this.palabraAdivinar.length; i++) {
+      if (this.palabraAdivinar.charAt(i).toLowerCase() === letra) {
+        count++;
+      }
+    }
+    return count;
+  }
+  
+
+  // obtenerClase(filaIndex: number, letraIndex: number): string {
+  //   const letra = this.filas[filaIndex][letraIndex].toLowerCase();
+  
+  //   if (!letra) return ''; // Si no hay letra, no se aplica ninguna clase
+  //   const letraAdivinar = this.palabraAdivinar.charAt(letraIndex).toLowerCase();
+  
+  //   // Verificar si la letra coincide en posición y letra con la palabra a adivinar
+  //   if (letra === letraAdivinar && letraIndex === this.palabraAdivinar.indexOf(letra)) {
+  //     return 'correcto';
+  //   } else if (letra === letraAdivinar) {
+  //     return 'incorrecto';
+  //   } else if (this.palabraAdivinar.includes(letra)) {
+  //     return 'no-encontrado';
+  //   } else {
+  //     return '';
+  //   }
+  // }
+  
+
+  // obtenerClase(filaIndex: number, letraIndex: number): string {
+  //   const letra = this.filas[filaIndex][letraIndex].toLowerCase();
+
+  //   if (!letra) return ''; // Si no hay letra, no se aplica ninguna clase
+  //   const letraAdivinar = this.palabraAdivinar.charAt(letraIndex).toLowerCase();
+
+  //   if (letra === letraAdivinar) {
+  //     return 'correcto';
+  //   } else if (this.palabraAdivinar.includes(letra)) {
+  //     return 'incorrecto';
+  //   } else {
+  //     return 'no-encontrado';
+  //   }
+  // }
 
   openDialog(title: string, message: string): void {
     const dialogRef = this.dialog.open(DialogComponent, {
