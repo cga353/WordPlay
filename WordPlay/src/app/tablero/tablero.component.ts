@@ -28,11 +28,21 @@ export class TableroComponent implements OnInit {
   estadoTablero: (number | boolean)[][];
   palabraId: number | undefined;
 
+  shouldExpand: boolean = true;
+  // Definimos el teclado virtual
+  teclado: string[][] = [
+    ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Ñ'],
+    ['Z', 'X', 'C', 'V', 'B', 'N', 'M', 'Enter']
+  ];
+  estadoTeclas: { [key: string]: string } = {};
+
   constructor(
     private palabraService: RandomWordService,
     private buscarPalabra: SearchwordService,
     private wordService: WordService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog
+  ) {
     this.filas = this.generarTablero(6, 5);
     this.estadoTablero = this.inicializarEstadoTablero();
   }
@@ -131,11 +141,9 @@ export class TableroComponent implements OnInit {
 
   recogerEnter() {
     if (this.entradaActivada && !this.enterPresionado && !this.palabraAdivinada) {
-      console.log('Tecla Enter presionada');
       this.enterPresionado = true;
       // Verificar si la fila actual está completa
-      const filaCompleta = this.filaCompleta(this.filaActual);
-      if (filaCompleta) {
+      if (this.filaCompleta(this.filaActual)) {
         this.comprobarPalabra();
       } else {
         console.log('La fila no está completa, no se aplicarán colores.');
@@ -144,26 +152,16 @@ export class TableroComponent implements OnInit {
     }
   }
 
-  comprobarPalabra() {
+
+comprobarPalabra() {
     const palabraIngresada = this.filas[this.filaActual].join('').trim().toLocaleLowerCase();
 
     // Llamada a la API para verificar si la palabra existe
     this.buscarPalabra.verificarPalabra(palabraIngresada).then(
-
       (response: any) => {
-        // if (response.data.title === 'No Definitions Found') {
-        //   // Si la respuesta indica que no se encontraron definiciones para la palabra,
-        //   // entonces la palabra ingresada no es válida
-        //   this.palabraValida = false;
-        //   console.log('La palabra ingresada no es válida:', palabraIngresada);
-        //   this.avanzar = false;
-        // } else {
-        // Si la respuesta contiene datos, la palabra existe
-        console.log('La palabra ingresada es válida:', palabraIngresada);
         this.palabraValida = true;
         this.estadoTablero[this.filaActual][1] = true;
         this.palabraCorrecta(palabraIngresada);
-        // }
       },
       (error: any) => {
         if (!(palabraIngresada.toLowerCase() === this.palabraAdivinar.toLowerCase())) {
@@ -175,6 +173,7 @@ export class TableroComponent implements OnInit {
           this.openDialog("PALABRA NO ENCONTRADA", "", palabraIngresada, false);
         } else {
           this.palabraCorrecta(palabraIngresada);
+          
         }
       }
     );
@@ -192,14 +191,19 @@ export class TableroComponent implements OnInit {
       this.palabraAdivinada = true;
       this.palabraValida = true;
       this.estadoTablero[this.filaActual][1] = true;
-      this.openDialog("¡FELICIDADES!", "has acertado la palabra", palabraIngresada, true);
+      setTimeout(() => {
+        this.openDialog("¡FELICIDADES!", "has acertado la palabra", palabraIngresada, true);
+      }, 1500);
     } else {
       console.log('La palabra ingresada no es correcta.');
       // No avanzar a la siguiente fila si la palabra no es correcta
       this.enterPresionado = false; // Reiniciar la bandera de Enter presionado
       if (this.filaActual == this.filas.length - 1) {
         this.addPalabraAdivinada(palabraIngresada);
-        this.openDialog("¡PERDISTE!", "La palabra era:", this.palabraAdivinar.toUpperCase(), false);
+        // this.openDialog("¡PERDISTE!", "La palabra era:", this.palabraAdivinar.toUpperCase(), false);
+        setTimeout(() => {
+          this.openDialog("¡PERDISTE!", "La palabra era:", this.palabraAdivinar.toUpperCase(), false);
+        }, 2000);
       } else {
         this.avanzarFila();
       }
@@ -295,11 +299,11 @@ export class TableroComponent implements OnInit {
   aplicarColores(filaIndex: number, letraIndex: number): string {
     // Verificar si la fila está completa
     if (this.estadoTablero[filaIndex][1] === true) {
-      return this.obtenerClase(filaIndex, letraIndex);
+      return `elemento animate__flipInX ${this.obtenerClase(filaIndex, letraIndex)}`;
     }
     return ''; // Si la fila no está completa o no se ha presionado Enter, no se aplica ningún color
   }
-  
+
   obtenerClase(filaIndex: number, letraIndex: number): string {
     const palabraAdivinar = this.palabraAdivinar.toLowerCase();
     const resultado = Array(5).fill('no-encontrado'); // Inicializamos con 'no-encontrado'
@@ -330,7 +334,6 @@ export class TableroComponent implements OnInit {
   
     return resultado[letraIndex];
   }
-  
 
   openDialog(title: string, message: string, palabra: string, adivinada: boolean): void {
     const dialogRef = this.dialog.open(DialogComponent, {

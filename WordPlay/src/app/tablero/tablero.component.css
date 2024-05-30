@@ -5,10 +5,15 @@
 .tablero {
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Centra el contenido verticalmente */
-    align-items: center; /* Centra el contenido horizontalmente */
-    width: fit-content; /* Ajusta el ancho del contenedor al contenido */
-    margin: auto; /* Añade margen automático para centrarlo horizontalmente */
+    justify-content: center;
+    /* Centra el contenido verticalmente */
+    align-items: center;
+    /* Centra el contenido horizontalmente */
+    width: fit-content;
+    /* Ajusta el ancho del contenedor al contenido */
+    margin: auto;
+    /* Añade margen automático para centrarlo horizontalmente */
+    margin-top: 2rem;
 }
 
 .fila {
@@ -24,6 +29,7 @@
     justify-content: center;
     align-items: center;
     margin: 5px;
+    
 }
 
 .correcto {
@@ -50,5 +56,79 @@
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     font-size: 16px;
-  }
-  
+}
+
+
+.contenedor-tablero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.teclado {
+    margin-top: 3rem;
+}
+
+.fila-teclado {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.fila-teclado button {
+    margin: 0 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.fila-teclado button.correcto {
+    background-color: green;
+    color: white;
+}
+
+.fila-teclado button.incorrecto {
+    background-color: orange;
+    color: white;
+}
+
+.fila-teclado button.no-encontrado {
+    background-color: gray;
+    color: white;
+}
+
+.tablero.animate__slideInUp {
+    animation-duration: 1s; /* Cambiar la duración de la animación según sea necesario */
+}
+
+@keyframes flipInX {
+    from {
+        transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+        animation-timing-function: ease-in;
+        opacity: 0;
+    }
+
+    40% {
+        transform: perspective(400px) rotate3d(0, 1, 0, -20deg);
+        animation-timing-function: ease-in;
+    }
+
+    60% {
+        transform: perspective(400px) rotate3d(0, 1, 0, 10deg);
+        opacity: 1;
+    }
+
+    80% {
+        transform: perspective(400px) rotate3d(0, 1, 0, -5deg);
+    }
+
+    to {
+        transform: perspective(400px);
+    }
+}
+
+.animate__flipInX {
+    animation-name: flipInX;
+    animation-duration: 1.2s; /* Puedes ajustar la duración según sea necesario */
+}
