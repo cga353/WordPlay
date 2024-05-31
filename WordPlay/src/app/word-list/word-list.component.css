@@ -1,58 +1,111 @@
 .word-list-container {
-    width: 100%;
-    max-width: 800px;
-    margin: auto;
-  }
-  
-  .word-list-header {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    background-color: #f5f5f5;
-    border-bottom: 2px solid #ccc;
-    font-weight: bold;
-  }
-  
-  .header-item {
-    flex: 1;
-    text-align: center;
-  }
-  
-  .word-list {
-    margin-top: 10px;
-  }
-  
-  .word-list-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .card {
-    background: #fff;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 10px;
-    padding: 15px;
-  }
-  
-  .item-content {
-    flex: 1;
-    text-align: center;
-  }
-  
-  .card-body{
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    border: 1px solid #ccc;
-  }
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+}
 
-  .word-list-item card{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-  }
+.word-list-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+
+}
+
+.word-list-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-bottom: 2px solid #ccc;
+  font-weight: bold;
+}
+
+.header-item {
+  flex: 1;
+  text-align: center;
+}
+
+.word-list {
+  margin-top: 10px;
+}
+
+.word-list-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.card {
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  padding: 15px;
+}
+
+.item-content {
+  flex: 1;
+  text-align: center;
+}
+
+.card-body {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.word-list-item card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.search-bar {
+  padding: 10px;
+  margin: 10px 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.combobox {
+  padding: 10px;
+  margin: 10px 0;
+  width: 15rem;
+  box-sizing: border-box;
+}
+
+.chip-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chip {
+  padding: 10px;
+  background-color: #e0e0e0;
+  border-radius: 16px;
+  cursor: pointer;
+}
+
+.chip:hover {
+  background-color: #c0c0c0;
+}
+
+mat-slider {
+  width: 15rem;
+}
+
+.date-filter{
+  display: flex;
+  flex-direction: column;
+}
