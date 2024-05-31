@@ -109,3 +109,27 @@ mat-slider {
   display: flex;
   flex-direction: column;
 }
+
+.filter-container {
+  position: relative;
+}
+
+.filter-options-bar {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.filter-options-toggle {
+  cursor: pointer;
+  color: blue;
+  margin-right: 10px;
+}
+
+.clear-filters {
+  display: none;
+}
+
+.filter-options-bar.show-clear-filters .clear-filters {
+  display: inline-block;
+}

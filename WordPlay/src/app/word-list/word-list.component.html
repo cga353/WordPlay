@@ -16,40 +16,60 @@
   <div class="filter-container">
     <input type="text" class="search-bar" placeholder="Search words..." (input)="onSearch($event)">
 
-    <div *ngIf="source === 'line-chart'" class="card-body">
-      <mat-radio-group class="date-filter" aria-label="Select an option" [value]="selectedRadio" (change)="onRadioFilterChange($event)">
-        <mat-radio-button color="primary" value="1" (click)="selectedRadio === '1' ? onRadioFilterChange({ value: null }) : null">Adivinadas</mat-radio-button>
-        <mat-radio-button color="primary" value="2" (click)="selectedRadio === '2' ? onRadioFilterChange({ value: null }) : null">No adivinadas</mat-radio-button>
-      </mat-radio-group>
+    <div class="filter-options-bar">
 
-      <label for="attempts-filter">Number of Attempts:</label>
-      <input type="number" id="attempts-filter" name="attempts-filter" (input)="onAttemptsFilterChange($event)">
- 
+      <div class="filter-options-toggle" (click)="toggleFilterOptions()">
+        Filter options
+      </div>
+      <div class="filter-options-bar" [class.show-clear-filters]="showFilterOptions">
 
-      <div class="date-filter">
-        <div>
-          <label for="start-date">Start Date:</label>
-          <input type="date" id="start-date" (change)="onStartDateChange($event)">
-        </div>
-        <div>
-          <label for="end-date">End Date:</label>
-          <input type="date" id="end-date" (change)="onEndDateChange($event)">
-        </div>
+        <button *ngIf="showFilterOptions" class="clear-filters" (click)="clearFilters()">Clear Filters</button>
+
       </div>
     </div>
-    
-    <div *ngIf="source === 'pie-chart'" class="card-body">
-      <mat-radio-group class="date-filter" aria-label="Select an option" [value]="selectedRadio" (change)="onRadioFilterChange($event)">
-        <mat-radio-button color="primary" value="1" (click)="selectedRadio === '1' ? onRadioFilterChange({ value: null }) : null">Adivinadas</mat-radio-button>
-        <mat-radio-button color="primary" value="2" (click)="selectedRadio === '2' ? onRadioFilterChange({ value: null }) : null">No adivinadas</mat-radio-button>
-      </mat-radio-group>
-    </div>
 
-    <div *ngIf="source === 'bar-chart'" class="card-body">
-      <label for="attempts-filter">Number of Attempts:</label>
-      <input type="number" id="attempts-filter" name="attempts-filter" (input)="onAttemptsFilterChange($event)">
+    <div *ngIf="showFilterOptions">
+      <div *ngIf="source === 'line-chart'" class="card-body">
+        <mat-radio-group class="date-filter" aria-label="Select an option" [value]="selectedRadio"
+          (change)="onRadioFilterChange($event)">
+          <mat-radio-button color="primary" value="1"
+            (click)="selectedRadio === '1' ? onRadioFilterChange({ value: null }) : null">Adivinadas</mat-radio-button>
+          <mat-radio-button color="primary" value="2"
+            (click)="selectedRadio === '2' ? onRadioFilterChange({ value: null }) : null">No
+            adivinadas</mat-radio-button>
+        </mat-radio-group>
+
+        <label for="attempts-filter">Number of Attempts:</label>
+        <input type="number" id="attempts-filter" name="attempts-filter" (input)="onAttemptsFilterChange($event)">
+
+        <div class="date-filter">
+          <div>
+            <label for="start-date">Start Date:</label>
+            <input type="date" id="start-date" (change)="onStartDateChange($event)">
+          </div>
+          <div>
+            <label for="end-date">End Date:</label>
+            <input type="date" id="end-date" (change)="onEndDateChange($event)">
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="source === 'pie-chart'" class="card-body">
+        <mat-radio-group class="date-filter" aria-label="Select an option" [value]="selectedRadio"
+          (change)="onRadioFilterChange($event)">
+          <mat-radio-button color="primary" value="1"
+            (click)="selectedRadio === '1' ? onRadioFilterChange({ value: null }) : null">Adivinadas</mat-radio-button>
+          <mat-radio-button color="primary" value="2"
+            (click)="selectedRadio === '2' ? onRadioFilterChange({ value: null }) : null">No
+            adivinadas</mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+      <div *ngIf="source === 'bar-chart'" class="card-body">
+        <label for="attempts-filter">Number of Attempts:</label>
+        <input type="number" id="attempts-filter" name="attempts-filter" (input)="onAttemptsFilterChange($event)">
+      </div>
     </div>
-    
   </div>
 
   <table matSort (matSortChange)="sortData($event)">

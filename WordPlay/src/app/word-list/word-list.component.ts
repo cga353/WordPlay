@@ -27,6 +27,10 @@ export class WordListComponent implements OnInit {
   radioFilter: string | null = null; // Almacena el filtro actual
   startDate: string | null = null; // Fecha de inicio
   endDate: string | null = null; // Fecha de fin
+  searchTerm: string = ''; // Término de búsqueda
+  attemptsFilter: number | null = null; // Filtro de intentos
+  showFilterOptions: boolean = false;
+
 
   constructor(private wordService: WordService, private route: ActivatedRoute) { }
 
@@ -96,8 +100,8 @@ export class WordListComponent implements OnInit {
   }
 
   onSearch(event: any) {
-    const searchTerm = event.target.value.toLowerCase();
-    this.applyFilters(searchTerm);
+    this.searchTerm = event.target.value.toLowerCase();
+    this.applyFilters();
   }
 
   onFilterChange(event: any) {
@@ -105,64 +109,71 @@ export class WordListComponent implements OnInit {
     this.loadWords(); // Recargar palabras cuando se cambia el filtro
   }
 
-  
-onRadioFilterChange(event: any) {
-  const newValue = event.value;
+  onRadioFilterChange(event: any) {
+    const newValue = event.value;
 
-  if (this.selectedRadio === newValue) {
-    // Si se hace clic en el radio botón ya seleccionado, desmarcarlo
-    this.selectedRadio = null;
-    this.radioFilter = null;
-  } else {
-    // Si se hace clic en un radio botón diferente, actualizar el valor seleccionado
-    this.selectedRadio = newValue;
-    this.radioFilter = newValue;
-  }
-
-  this.applyFilters();
-}
-
-onAttemptsFilterChange(event: any) {
-  const filterValue = event.target.value;
-  const attemptsFilter = filterValue !== '' ? parseInt(filterValue) : null;
-  this.applyFilters('', attemptsFilter);
-}
-
-onStartDateChange(event: any) {
-  const startDate = event.target.value;
-  this.applyFilters('', null, startDate, this.endDate);
-}
-
-// Método para manejar el cambio en el filtro de fecha de fin
-onEndDateChange(event: any) {
-  const endDate = event.target.value;
-  this.applyFilters('', null, this.startDate, endDate);
-}
-
-
-// Método para aplicar los filtros
-applyFilters(searchTerm: string = '', attemptsFilter: number | null = null, startDate: string | null = null, endDate: string | null = null) {
-  this.filteredWords = this.words.filter(word => {
-    const matchesSearch = word.name.toLowerCase().includes(searchTerm);
-    const matchesRadio = this.radioFilter ? (this.radioFilter === '1' ? word.isGuessed : !word.isGuessed) : true;
-    const matchesAttempts = attemptsFilter ? (word.nAttempt === attemptsFilter) : true;
-    
-    // Verificar si la fecha de la palabra está dentro del rango seleccionado
-    let matchesDate = true;
-    if (startDate && endDate) {
-      const wordDate = new Date(word.date);
-      const start = new Date(startDate);
-      const end = new Date(endDate);
-      matchesDate = wordDate >= start && wordDate <= end;
+    if (this.selectedRadio === newValue) {
+      // Si se hace clic en el radio botón ya seleccionado, desmarcarlo
+      this.selectedRadio = null;
+      this.radioFilter = null;
+    } else {
+      // Si se hace clic en un radio botón diferente, actualizar el valor seleccionado
+      this.selectedRadio = newValue;
+      this.radioFilter = newValue;
     }
 
-    return matchesSearch && matchesRadio && matchesAttempts && matchesDate;
-  });
-}
+    this.applyFilters();
+  }
 
-  toggleFilter(filter: any) {
-    filter.active = !filter.active;
-    // Update filteredWords based on active filters
+  onAttemptsFilterChange(event: any) {
+    const filterValue = event.target.value;
+    this.attemptsFilter = filterValue !== '' ? parseInt(filterValue) : null;
+    this.applyFilters();
+  }
+
+  onStartDateChange(event: any) {
+    this.startDate = event.target.value;
+    this.applyFilters();
+  }
+
+  onEndDateChange(event: any) {
+    this.endDate = event.target.value;
+    this.applyFilters();
+  }
+
+  applyFilters() {
+    this.filteredWords = this.words.filter(word => {
+      const matchesSearch = word.name.toLowerCase().includes(this.searchTerm);
+      const matchesRadio = this.radioFilter ? (this.radioFilter === '1' ? word.isGuessed : !word.isGuessed) : true;
+      const matchesAttempts = this.attemptsFilter ? (word.nAttempt === this.attemptsFilter) ||  (word.nVeces === this.attemptsFilter): true;
+
+      let matchesDate = true;
+      if (this.startDate && word.date) {
+        const wordDateParts = word.date.split('/');
+        const formattedWordDate = `${wordDateParts[2]}-${wordDateParts[1]}-${wordDateParts[0]}`;
+        const wordDateObj = new Date(formattedWordDate);
+        const start = new Date(this.startDate);
+
+        const wordDateWithoutTime = new Date(wordDateObj.getFullYear(), wordDateObj.getMonth(), wordDateObj.getDate());
+        const startWithoutTime = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+
+        matchesDate = wordDateWithoutTime >= startWithoutTime;
+      }
+
+      if (this.endDate && word.date) {
+        const wordDateParts = word.date.split('/');
+        const formattedWordDate = `${wordDateParts[2]}-${wordDateParts[1]}-${wordDateParts[0]}`;
+        const wordDateObj = new Date(formattedWordDate);
+        const end = new Date(this.endDate);
+
+        const wordDateWithoutTime = new Date(wordDateObj.getFullYear(), wordDateObj.getMonth(), wordDateObj.getDate());
+        const endWithoutTime = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+
+        matchesDate = matchesDate && wordDateWithoutTime <= endWithoutTime;
+      }
+
+      return matchesSearch && matchesRadio && matchesAttempts && matchesDate;
+    });
   }
 
   sortData(sort: Sort) {
@@ -191,8 +202,29 @@ applyFilters(searchTerm: string = '', attemptsFilter: number | null = null, star
     });
   }
 
-  // Método de utilidad para comparación
   compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
+
+  toggleFilterOptions() {
+    this.showFilterOptions = !this.showFilterOptions;
+  }
+
+  clearFilters() {
+    this.selectedRadio = null;
+    this.radioFilter = null;
+    this.startDate = null;
+    this.endDate = null;
+    this.searchTerm = '';
+    this.attemptsFilter = null;
+
+    // Limpia el input de número de intentos
+    const attemptsFilterInput = document.getElementById('attempts-filter') as HTMLInputElement;
+    if (attemptsFilterInput) {
+      attemptsFilterInput.value = '';
+    }
+
+    this.applyFilters();
+  }
+
 }
