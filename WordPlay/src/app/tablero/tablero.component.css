@@ -29,8 +29,20 @@
     justify-content: center;
     align-items: center;
     margin: 5px;
-    
 }
+
+.tecla {
+    border: 1px solid #636363;
+    background-color: #cbcbcb;
+    border-radius: 5px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+}
+
 
 .correcto {
     background-color: rgb(31, 143, 31);
@@ -100,6 +112,10 @@
 
 .tablero.animate__slideInUp {
     animation-duration: 1s; /* Cambiar la duración de la animación según sea necesario */
+}
+
+.teclado.animate__slideInUp {
+    animation-duration: 2s; /* Cambiar la duración de la animación según sea necesario */
 }
 
 @keyframes flipInX {

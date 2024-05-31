@@ -10,9 +10,9 @@
     </div>
 
     <!-- Tu teclado virtual -->
-    <div class="teclado">
+    <div class="teclado animate__animated animate__slideInUp">
         <div class="fila-teclado" *ngFor="let fila of teclado">
-            <button *ngFor="let tecla of fila">
+            <button *ngFor="let tecla of fila" class="tecla" (click)="agregarLetra(tecla)">
                 {{ tecla }}
             </button>
         </div>

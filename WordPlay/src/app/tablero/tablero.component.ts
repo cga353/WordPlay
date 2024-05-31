@@ -32,7 +32,7 @@ export class TableroComponent implements OnInit {
   // Definimos el teclado virtual
   teclado: string[][] = [
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
-    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Ñ'],
+    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', '◀'],
     ['Z', 'X', 'C', 'V', 'B', 'N', 'M', 'Enter']
   ];
   estadoTeclas: { [key: string]: string } = {};
@@ -109,6 +109,21 @@ export class TableroComponent implements OnInit {
     }
   }
 
+  agregarLetra(letra: string) {
+    if (this.entradaActivada && !this.palabraAdivinada) {
+      if (letra === 'Enter') {
+        this.recogerEnter();
+      } else if (letra === '◀') {
+        this.borrarLetra();
+      } else {
+        const letraIndex = this.filas[this.filaActual].indexOf('');
+        if (letraIndex !== -1) {
+          this.filas[this.filaActual][letraIndex] = letra.toUpperCase();
+        }
+      }
+    }
+  }
+
   avanzarFila() {
     const filaIndex = this.obtenerFilaDisponible();
     if (filaIndex !== -1) {
@@ -153,7 +168,7 @@ export class TableroComponent implements OnInit {
   }
 
 
-comprobarPalabra() {
+  comprobarPalabra() {
     const palabraIngresada = this.filas[this.filaActual].join('').trim().toLocaleLowerCase();
 
     // Llamada a la API para verificar si la palabra existe
@@ -173,7 +188,7 @@ comprobarPalabra() {
           this.openDialog("PALABRA NO ENCONTRADA", "", palabraIngresada, false);
         } else {
           this.palabraCorrecta(palabraIngresada);
-          
+
         }
       }
     );
@@ -308,7 +323,7 @@ comprobarPalabra() {
     const palabraAdivinar = this.palabraAdivinar.toLowerCase();
     const resultado = Array(5).fill('no-encontrado'); // Inicializamos con 'no-encontrado'
     const letraUsada = Array(5).fill(false); // Para llevar cuenta de las letras adivinadas
-  
+
     // Primera pasada: comprobar las letras correctas (en la posición correcta)
     for (let i = 0; i < 5; i++) {
       const letra = this.filas[filaIndex][i].toLowerCase();
@@ -317,11 +332,11 @@ comprobarPalabra() {
         letraUsada[i] = true; // Marcar la letra como usada
       }
     }
-  
+
     // Segunda pasada: comprobar las letras incorrectas pero presentes en la palabra
     for (let i = 0; i < 5; i++) {
       if (resultado[i] === 'correcto') continue; // Saltar las letras ya adivinadas correctamente
-  
+
       const letra = this.filas[filaIndex][i].toLowerCase();
       for (let j = 0; j < 5; j++) {
         if (!letraUsada[j] && letra === palabraAdivinar[j]) {
@@ -331,7 +346,7 @@ comprobarPalabra() {
         }
       }
     }
-  
+
     return resultado[letraIndex];
   }
 
