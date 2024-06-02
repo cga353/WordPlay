@@ -1,7 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 
-/* html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 * {
   box-sizing: border-box;
@@ -13,6 +12,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
 
 html,
 body {
+  height: 100%;
   background: #ecf0f3;
 }
 
@@ -20,17 +20,13 @@ h1 {
   margin: 0;
   padding: 0;
 }
-
 .custom-form {
-  min-width: 300px;
-  max-width: 60%;
   margin: 0px auto;
   background: rgba(255, 255, 255, 0.15);
   padding: 2rem 3rem;
-  margin: auto;
   border-radius: 2.5rem;
   background-color: #ecf0f3;
-  box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #ffffff;
+  border: 1px solid #d9d9d9;
   color: black;
   margin-top: 10rem;
 }

@@ -344,7 +344,9 @@ export class TableroComponent implements OnInit {
       return `elemento animate__flipInX ${this.obtenerClase(filaIndex, letraIndex)}`;
     }
     return ''; // Si la fila no está completa o no se ha presionado Enter, no se aplica ningún color
+
   }
+  
 // Método para obtener la clase para una letra en una fila específica
 obtenerClase(filaIndex: number, letraIndex: number): string {
   const palabraAdivinar = this.palabraAdivinar.toLowerCase();

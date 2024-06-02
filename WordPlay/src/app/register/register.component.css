@@ -1,0 +1,106 @@
+.register {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    /* Ajusta el contenedor a la altura de la ventana */
+    background: linear-gradient(to right, #02182f, #03a5aa, #00c25f, #06db87, #03dcfb);
+    /* background: linear-gradient(to right, #02182f, #03a5aa, #00c25f, #06db87, #03dcfb); */
+
+    /* clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); */
+    padding: 2rem;
+    /* Añade padding para evitar que los contenidos toquen los bordes */
+    box-sizing: border-box;
+    /* Asegura que el padding no afecte el tamaño del contenedor */
+    overflow: hidden;
+    /* Evita que el contenido se desborde */
+   
+}
+
+.imagen {
+    height: 10rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.imagen img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+h1 {
+    color: white;
+    font-size: 2rem;
+    text-align: center;
+}
+
+.formulario{
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+}
+
+.custom-form2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    /* Ajusta el ancho del formulario */
+    /* Limita el ancho máximo del formulario */
+    background: rgb(255, 255, 255);
+    border: 1px solid #d9d9d9;
+    border-radius: 2.5rem;
+    margin-top: 3rem;
+    padding: 2rem 3rem;
+    /* Añade margen superior para separarlo de los otros elementos */
+}
+
+.custom-form2 h1 {
+    margin-top: 0;
+    color: #02182f;
+    text-align: center;
+}
+
+.custom-form2 input {
+    display: block;
+    width: 100%;
+    margin: 0.5rem 0;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    background: #ebf5fc;
+    box-shadow: inset -5px -5px 15px rgba(255, 255, 255, 0.8), inset 5px 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.custom-form2 button {
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    border: none;
+    font-size: 0.875rem;
+    color: #ffffff;
+    font-weight: bold;
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border-radius: 1.5rem;
+    cursor: not-allowed;
+    background-color: #bcd8c1;
+}
+
+.custom-form2 button.enabled {
+    cursor: pointer;
+    background-color: #0c918e;
+}
+
+.register p {
+    margin-top: 0.5rem;
+    /* Reduce el margen superior del párrafo */
+    color: white;
+    text-align: center;
+    margin-top: 1.5rem;
+    cursor: pointer;
+}
