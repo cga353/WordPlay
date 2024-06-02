@@ -53,6 +53,7 @@ export class TableroComponent implements OnInit {
   ngOnInit(): void {
     this.obtenerPalabraAdivinar();
     this.inicializarEstadoTeclado();
+    this.activarEntrada();
   }
 
   obtenerPalabraAdivinar() {
@@ -103,6 +104,11 @@ export class TableroComponent implements OnInit {
   }
 
   recogerLetra(event: KeyboardEvent) {
+
+    console.log('Tecla presionada:', event.key);
+    console.log("entradaActivada", this.entradaActivada);
+    console.log("palabraAdivinada", this.palabraAdivinada);
+    
     if (this.entradaActivada && !this.palabraAdivinada) {
       if (!this.enterPresionado) {
         this.palabraValida = false;
@@ -346,47 +352,12 @@ export class TableroComponent implements OnInit {
     return ''; // Si la fila no está completa o no se ha presionado Enter, no se aplica ningún color
 
   }
-  
-// Método para obtener la clase para una letra en una fila específica
-obtenerClase(filaIndex: number, letraIndex: number): string {
-  const palabraAdivinar = this.palabraAdivinar.toLowerCase();
-  const resultado = Array(5).fill('no-encontrado'); // Inicializamos con 'no-encontrado'
-  const letraUsada = Array(5).fill(false); // Para llevar cuenta de las letras adivinadas
 
-  // Primera pasada: comprobar las letras correctas (en la posición correcta)
-  for (let i = 0; i < 5; i++) {
-    const letra = this.filas[filaIndex][i].toLowerCase();
-    if (letra === palabraAdivinar[i]) {
-      resultado[i] = 'correcto';
-      letraUsada[i] = true; // Marcar la letra como usada
-    }
-  }
-
-  // Segunda pasada: comprobar las letras incorrectas pero presentes en la palabra
-  for (let i = 0; i < 5; i++) {
-    if (resultado[i] === 'correcto') continue; // Saltar las letras ya adivinadas correctamente
-
-    const letra = this.filas[filaIndex][i].toLowerCase();
-    for (let j = 0; j < 5; j++) {
-      if (!letraUsada[j] && letra === palabraAdivinar[j]) {
-        resultado[i] = 'incorrecto';
-        letraUsada[j] = true; // Marcar la letra como usada
-        break;
-      }
-    }
-  }
-
-  return resultado[letraIndex];
-}
-
-// Método para colorear las teclas del teclado virtual
-colorearTeclasTeclado() {
-  const palabraAdivinar = this.palabraAdivinar.toLowerCase();
-
-  // Actualizar el estado de las teclas basado en las filas actuales
-  for (let filaIndex = 0; filaIndex <= this.filaActual; filaIndex++) {
-    const letraUsada = Array(5).fill(false); // Para llevar cuenta de las letras adivinadas
+  // Método para obtener la clase para una letra en una fila específica
+  obtenerClase(filaIndex: number, letraIndex: number): string {
+    const palabraAdivinar = this.palabraAdivinar.toLowerCase();
     const resultado = Array(5).fill('no-encontrado'); // Inicializamos con 'no-encontrado'
+    const letraUsada = Array(5).fill(false); // Para llevar cuenta de las letras adivinadas
 
     // Primera pasada: comprobar las letras correctas (en la posición correcta)
     for (let i = 0; i < 5; i++) {
@@ -411,31 +382,66 @@ colorearTeclasTeclado() {
       }
     }
 
-    // Actualizar estadoTeclas para cada letra en la fila
-    for (let i = 0; i < 5; i++) {
-      const letra = this.filas[filaIndex][i].toUpperCase();
-      if (resultado[i] === 'correcto') {
-        this.estadoTeclas[letra] = 'correcto';
-      } else if (resultado[i] === 'incorrecto') {
-        // Solo actualizar si no está ya marcado como correcto
-        if (this.estadoTeclas[letra] !== 'correcto') {
-          this.estadoTeclas[letra] = 'incorrecto';
+    return resultado[letraIndex];
+  }
+
+  // Método para colorear las teclas del teclado virtual
+  colorearTeclasTeclado() {
+    const palabraAdivinar = this.palabraAdivinar.toLowerCase();
+
+    // Actualizar el estado de las teclas basado en las filas actuales
+    for (let filaIndex = 0; filaIndex <= this.filaActual; filaIndex++) {
+      const letraUsada = Array(5).fill(false); // Para llevar cuenta de las letras adivinadas
+      const resultado = Array(5).fill('no-encontrado'); // Inicializamos con 'no-encontrado'
+
+      // Primera pasada: comprobar las letras correctas (en la posición correcta)
+      for (let i = 0; i < 5; i++) {
+        const letra = this.filas[filaIndex][i].toLowerCase();
+        if (letra === palabraAdivinar[i]) {
+          resultado[i] = 'correcto';
+          letraUsada[i] = true; // Marcar la letra como usada
         }
-      } else {
-        // Solo actualizar si no está ya marcado como correcto o incorrecto
-        if (!this.estadoTeclas[letra]) {
-          this.estadoTeclas[letra] = 'no-encontrado';
+      }
+
+      // Segunda pasada: comprobar las letras incorrectas pero presentes en la palabra
+      for (let i = 0; i < 5; i++) {
+        if (resultado[i] === 'correcto') continue; // Saltar las letras ya adivinadas correctamente
+
+        const letra = this.filas[filaIndex][i].toLowerCase();
+        for (let j = 0; j < 5; j++) {
+          if (!letraUsada[j] && letra === palabraAdivinar[j]) {
+            resultado[i] = 'incorrecto';
+            letraUsada[j] = true; // Marcar la letra como usada
+            break;
+          }
+        }
+      }
+
+      // Actualizar estadoTeclas para cada letra en la fila
+      for (let i = 0; i < 5; i++) {
+        const letra = this.filas[filaIndex][i].toUpperCase();
+        if (resultado[i] === 'correcto') {
+          this.estadoTeclas[letra] = 'correcto';
+        } else if (resultado[i] === 'incorrecto') {
+          // Solo actualizar si no está ya marcado como correcto
+          if (this.estadoTeclas[letra] !== 'correcto') {
+            this.estadoTeclas[letra] = 'incorrecto';
+          }
+        } else {
+          // Solo actualizar si no está ya marcado como correcto o incorrecto
+          if (!this.estadoTeclas[letra]) {
+            this.estadoTeclas[letra] = 'no-encontrado';
+          }
         }
       }
     }
   }
-}
 
   obtenerClaseTecla(teclaUtilizada: boolean, letraCorrecta: boolean, filaIndex: number, teclaIndex: number): string {
     const palabraAdivinar = this.palabraAdivinar.toLowerCase();
     const resultado = Array(this.palabraAdivinar.length).fill('no-encontrado'); // Inicializamos con 'no-encontrado'
     const letraUsada = Array(this.palabraAdivinar.length).fill(false); // Para llevar cuenta de las letras adivinadas
-  
+
     // Primera pasada: comprobar las letras correctas (en la posición correcta)
     for (let i = 0; i < this.palabraAdivinar.length; i++) {
       const letra = this.filas[filaIndex][i].toLowerCase();
@@ -444,11 +450,11 @@ colorearTeclasTeclado() {
         letraUsada[i] = true; // Marcar la letra como usada
       }
     }
-  
+
     // Segunda pasada: comprobar las letras incorrectas pero presentes en la palabra
     for (let i = 0; i < this.palabraAdivinar.length; i++) {
       if (resultado[i] === 'correcto') continue; // Saltar las letras ya adivinadas correctamente
-  
+
       const letra = this.filas[filaIndex][i].toLowerCase();
       for (let j = 0; j < this.palabraAdivinar.length; j++) {
         if (!letraUsada[j] && letra === palabraAdivinar[j]) {
@@ -458,10 +464,10 @@ colorearTeclasTeclado() {
         }
       }
     }
-  
+
     return resultado[teclaIndex];
   }
-  
+
 
   openDialog(title: string, message: string, palabra: string, adivinada: boolean): void {
     const dialogRef = this.dialog.open(DialogComponent, {

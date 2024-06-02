@@ -15,14 +15,15 @@
     /* Asegura que el padding no afecte el tamaño del contenedor */
     overflow: hidden;
     /* Evita que el contenido se desborde */
-   
 }
 
 .imagen {
+    display: flex;
+    flex-direction: row;
+    align-items: end;
     height: 10rem;
     margin-bottom: 1rem;
     display: flex;
-    align-items: center;
     justify-content: center;
 }
 

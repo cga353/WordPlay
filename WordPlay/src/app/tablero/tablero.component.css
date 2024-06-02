@@ -2,6 +2,11 @@
     cursor: text;
 }
 
+.contenedor-tablero:focus {
+    outline: none;
+}
+
+
 .tablero {
     display: flex;
     flex-direction: column;
@@ -22,18 +27,6 @@
 
 .elemento {
     border: 1px solid #636363;
-    border-radius: 10px;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 5px;
-}
-
-.tecla {
-    border: 1px solid #a8a8a8;
-    background-color: #cbcbcb;
     border-radius: 5px;
     width: 50px;
     height: 50px;
@@ -41,24 +34,47 @@
     justify-content: center;
     align-items: center;
     margin: 5px;
+    background-color: #ecf0f3;
 }
 
+.tecla {
+    background-color: #dce1ed;
+    border-radius: 4px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+    color: #414a5e !important;
+    border: 2px solid transparent;
+    flex: 1 1;
+    font-size: 17px;
+    font-weight: 700;
+}
 
+.tecla:hover {
+    background-color: #c4cbdd; /* Cambia el color de fondo al pasar el cursor sobre el elemento */
+}
+
+.fila-teclado button.correcto,
 .correcto {
-    background-color: rgb(31, 143, 31);
-    color: white;
+    background-color: #79b851;
+    color: white !important; 
     font-style: bold;
 }
 
+.fila-teclado button.incorrecto,
 .incorrecto {
     background-color: #f3c237;
-    color: white;
+    color: white !important; 
     font-style: bold;
 }
 
+.fila-teclado button.no-encontrado,
 .no-encontrado {
-    background-color: rgb(184, 184, 184);
-    color: white;
+    background-color: #a4aec4;
+    color: white !important; 
     font-style: bold;
 }
 
@@ -93,21 +109,6 @@
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-}
-
-.fila-teclado button.correcto {
-    background-color: green;
-    color: white;
-}
-
-.fila-teclado button.incorrecto {
-    background-color: orange;
-    color: white;
-}
-
-.fila-teclado button.no-encontrado {
-    background-color: gray;
-    color: white;
 }
 
 .tablero.animate__slideInUp {
