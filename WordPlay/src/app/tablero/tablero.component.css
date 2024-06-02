@@ -2,13 +2,23 @@
     cursor: text;
 }
 
+.contenedor-tablero:focus {
+    outline: none;
+}
+
+
 .tablero {
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Centra el contenido verticalmente */
-    align-items: center; /* Centra el contenido horizontalmente */
-    width: fit-content; /* Ajusta el ancho del contenedor al contenido */
-    margin: auto; /* Añade margen automático para centrarlo horizontalmente */
+    justify-content: center;
+    /* Centra el contenido verticalmente */
+    align-items: center;
+    /* Centra el contenido horizontalmente */
+    width: fit-content;
+    /* Ajusta el ancho del contenedor al contenido */
+    margin: auto;
+    /* Añade margen automático para centrarlo horizontalmente */
+    margin-top: 2rem;
 }
 
 .fila {
@@ -17,29 +27,125 @@
 
 .elemento {
     border: 1px solid #636363;
-    border-radius: 10px;
+    border-radius: 5px;
     width: 50px;
     height: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 5px;
+    background-color: #ecf0f3;
 }
 
+.tecla {
+    background-color: #dce1ed;
+    border-radius: 4px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+    color: #414a5e !important;
+    border: 2px solid transparent;
+    flex: 1 1;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.tecla:hover {
+    background-color: #c4cbdd; /* Cambia el color de fondo al pasar el cursor sobre el elemento */
+}
+
+.fila-teclado button.correcto,
 .correcto {
-    background-color: rgb(31, 143, 31);
-    color: white;
+    background-color: #79b851;
+    color: white !important; 
     font-style: bold;
 }
 
+.fila-teclado button.incorrecto,
 .incorrecto {
     background-color: #f3c237;
-    color: white;
+    color: white !important; 
     font-style: bold;
 }
 
+.fila-teclado button.no-encontrado,
 .no-encontrado {
-    background-color: rgb(184, 184, 184);
-    color: white;
+    background-color: #a4aec4;
+    color: white !important; 
     font-style: bold;
+}
+
+.custom-dialog-panel {
+    background-color: #f5f5f5;
+    color: #333;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+}
+
+
+.contenedor-tablero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.teclado {
+    margin-top: 3rem;
+}
+
+.fila-teclado {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.fila-teclado button {
+    margin: 0 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.tablero.animate__slideInUp {
+    animation-duration: 1s; /* Cambiar la duración de la animación según sea necesario */
+}
+
+.teclado.animate__slideInUp {
+    animation-duration: 2s; /* Cambiar la duración de la animación según sea necesario */
+}
+
+@keyframes flipInX {
+    from {
+        transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+        animation-timing-function: ease-in;
+        opacity: 0;
+    }
+
+    40% {
+        transform: perspective(400px) rotate3d(0, 1, 0, -20deg);
+        animation-timing-function: ease-in;
+    }
+
+    60% {
+        transform: perspective(400px) rotate3d(0, 1, 0, 10deg);
+        opacity: 1;
+    }
+
+    80% {
+        transform: perspective(400px) rotate3d(0, 1, 0, -5deg);
+    }
+
+    to {
+        transform: perspective(400px);
+    }
+}
+
+.animate__flipInX {
+    animation-name: flipInX;
+    animation-duration: 1.2s; /* Puedes ajustar la duración según sea necesario */
 }
