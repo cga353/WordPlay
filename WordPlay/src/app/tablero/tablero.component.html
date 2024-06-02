@@ -1,7 +1,7 @@
 <app-nav-bar></app-nav-bar>
 <div (click)="activarEntrada()" (keydown.backspace)="borrarLetra()" (keydown.enter)="recogerEnter()"
     (keypress)="recogerLetra($event)" class="contenedor-tablero" tabindex="0">
-    <div class="tablero animate__animated animate__slideInUp"> <!-- Agregar la clase de animación aquí -->
+    <div class="tablero animate__animated animate__slideInUp">
         <div *ngFor="let fila of filas; let i=index" class="fila">
             <div *ngFor="let letra of fila; let j=index" class="elemento" [ngClass]="aplicarColores(i,j)">
                 {{ letra }}
@@ -9,10 +9,9 @@
         </div>
     </div>
 
-    <!-- Tu teclado virtual -->
     <div class="teclado animate__animated animate__slideInUp">
         <div class="fila-teclado" *ngFor="let fila of teclado">
-            <button *ngFor="let tecla of fila" class="tecla" (click)="agregarLetra(tecla)">
+            <button *ngFor="let tecla of fila" class="tecla" [ngClass]="estadoTeclas[tecla]" (click)="agregarLetra(tecla)">
                 {{ tecla }}
             </button>
         </div>
