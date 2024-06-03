@@ -1,12 +1,23 @@
 <div class="dialog-container">
-  <h2 mat-dialog-title class="dialog-title">{{dialog.title}}</h2>
-  <div mat-dialog-content class="dialog-content">
-    <p>{{dialog.message}}</p>
-    <h3>{{dialog.palabra.toUpperCase()}}</h3>
-    <span class="item-content">
-      <ul>
-        <li *ngFor="let translation of translations">{{ translation }}</li>
-      </ul>
-    </span>
+  <div *ngIf="!palabraNoEncontrada" class="dialog-container">
+    <div class="top">
+      <h2 mat-dialog-title class="dialog-title">{{dialog.title}}</h2>
+    </div>
+    <div mat-dialog-content class="dialog-content">
+      <p>{{dialog.message}}</p>
+      <h3>{{dialog.palabra.toUpperCase()}}</h3>
+      <p>Significado:</p>
+      <span class="item-content">
+        <ul>
+          <li *ngFor="let translation of translations">{{ translation }}</li>
+        </ul>
+      </span>
+    </div>
+    <div class="button-container">
+      <button (click)="navigateToHome()" class="dialog-button">Jugar de nuevo</button>
+    </div>
+  </div>
+  <div *ngIf="palabraNoEncontrada" class="top">
+    <h2 mat-dialog-title class="dialog-title">{{dialog.title}}</h2>
   </div>
 </div>
