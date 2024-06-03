@@ -63,7 +63,7 @@ export class TableroComponent implements OnInit {
         this.addPalabra(this.palabraAdivinar.toLowerCase());
       },
       (error: any) => {
-        console.error('Error al obtener la palabra a adivinar:', error);
+        // console.error('Error al obtener la palabra a adivinar:', error); //TODO: Descomentar
       }
     );
   }
@@ -108,7 +108,7 @@ export class TableroComponent implements OnInit {
     console.log('Tecla presionada:', event.key);
     console.log("entradaActivada", this.entradaActivada);
     console.log("palabraAdivinada", this.palabraAdivinada);
-    
+
     if (this.entradaActivada && !this.palabraAdivinada) {
       if (!this.enterPresionado) {
         this.palabraValida = false;
