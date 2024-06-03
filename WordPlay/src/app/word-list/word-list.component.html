@@ -2,7 +2,7 @@
 
 <div class="word-list-container">
   <div class="word-list-title">
-    <h1>Word List</h1>
+    <h1>Detalles gráfico</h1>
     <!-- Example of a combobox -->
     <select class="combobox" (change)="onFilterChange($event)">
       <option value="">Select Chart Type</option>
@@ -15,21 +15,18 @@
   <!-- Search bar and filters -->
   <div class="filter-container">
     <input type="text" class="search-bar" placeholder="Search words..." (input)="onSearch($event)">
-
     <div class="filter-options-bar">
-
       <div class="filter-options-toggle" (click)="toggleFilterOptions()">
         Filter options
       </div>
       <div class="filter-options-bar" [class.show-clear-filters]="showFilterOptions">
-
         <button *ngIf="showFilterOptions" class="clear-filters" (click)="clearFilters()">Clear Filters</button>
-
       </div>
     </div>
 
     <div *ngIf="showFilterOptions">
       <div *ngIf="source === 'line-chart'" class="card-body">
+
         <mat-radio-group class="date-filter" aria-label="Select an option" [value]="selectedRadio"
           (change)="onRadioFilterChange($event)">
           <mat-radio-button color="primary" value="1"
@@ -72,10 +69,10 @@
     </div>
   </div>
 
-  <table matSort (matSortChange)="sortData($event)">
+  <table matSort (matSortChange)="sortData($event)" class="tabla">
     <thead>
       <tr *ngIf="source === 'bar-chart'">
-        <th mat-sort-header="name">Words</th>
+        <th class="encabezado" mat-sort-header="name">Words</th>
         <th mat-sort-header="nVeces">n Veces</th>
         <th>Translation</th>
       </tr>
@@ -120,4 +117,5 @@
       </tr>
     </tbody>
   </table>
+  
 </div>
