@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-pie-chart',
   standalone: true,
-  imports: [],
   templateUrl: './pie-chart.component.html',
   styleUrls: ['./pie-chart.component.css']
 })
@@ -57,6 +56,26 @@ export class PieChartComponent implements OnInit, OnDestroy {
     this.chart = new Chart("pie-chart", {
       type: 'pie' as ChartType,
       data: data,
+      options: {
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top', // Posición de la leyenda en la parte inferior
+            align: 'center', // Alineación horizontal de la leyenda
+            labels: {
+              boxWidth: 20, // Ancho del cuadro de color de la leyenda
+              padding: 10, // Espaciado alrededor de los cuadros de leyenda
+            }
+          },
+          title: {
+            display: true,
+            text: 'Palabras Adivinadas', // Título principal del gráfico
+            font: {
+              size: 20
+            }
+          }
+        }
+      }
     });
   }
 }

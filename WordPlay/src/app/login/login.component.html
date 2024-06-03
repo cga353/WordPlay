@@ -7,10 +7,10 @@
   <form class="custom-form" (ngSubmit)="login()" #loginForm="ngForm">
     <h1>Login</h1>
     <input
-      type="text"
-      [(ngModel)]="userName"
-      name="userName"
-      placeholder="Username"
+      type="email"
+      [(ngModel)]="email"
+      name="email"
+      placeholder="Email"
       required
       (ngModelChange)="isFormValid = checkFormValidity()"
     />

@@ -14,7 +14,6 @@ import { ToastrService } from 'ngx-toastr';
 export class LoginComponent implements OnInit {
   email: string = "";
   password: string = "";
-  userName: string = "";
   isFormValid: boolean = false;
 
   constructor(private userService: UserService, private router: Router, private toastr: ToastrService) {
@@ -25,16 +24,16 @@ export class LoginComponent implements OnInit {
   }
 
   checkFormValidity(): boolean {
-    return !!this.userName && !!this.password;
+    return !!this.email && !!this.password;
   }
 
   login() {
     if (!this.checkFormValidity()) {
-      console.error('Username and password are required');
+      console.error('Email and password are required');
       return;
     }
 
-    this.userService.validateUser(this.userName, this.password)
+    this.userService.validateUser(this.email, this.password)
       .subscribe(
         user => {
           console.log('User:', user);

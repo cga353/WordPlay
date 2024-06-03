@@ -19,7 +19,10 @@ import { Router } from '@angular/router';
 export class ProfileComponent implements OnInit {
   user: User | undefined;
   editMode: boolean = false;
-  editedUser: User | undefined;
+  editedUser: User = { id: 0, name: '', email: '', userName: '', password: '' };
+  editedPassword: boolean = false;
+  newPassword: string ="";
+  confirmPassword: string ="";
 
   constructor(private userService: UserService, private router: Router) { }
 
@@ -32,7 +35,11 @@ export class ProfileComponent implements OnInit {
   }
 
   enableEditMode(): void {
-    this.editMode = true;
+    this.editMode = !this.editMode;
+  }
+
+  enableEditPassword(): void {
+    this.editedPassword = !this.editedPassword;
   }
 
   saveChanges(): void {
@@ -42,6 +49,23 @@ export class ProfileComponent implements OnInit {
         this.editMode = false;
       });
     }
+  }
+
+  changePassword(){
+    if(this.newPassword === this.confirmPassword){
+      if(this.user){
+        this.user.password = this.newPassword;
+        this.userService.updateUser(this.user.id, this.user).subscribe((updatedUser: User) => {
+          this.user = updatedUser;
+          this.editedPassword = false;
+        });
+      }
+    }
+  }
+
+  logOut(): void {
+    // TODO quitar user de localStorage
+    this.router.navigate(['/login']);
   }
 
   navigateToWordList(source: string): void {

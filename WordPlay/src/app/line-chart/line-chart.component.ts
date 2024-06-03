@@ -28,19 +28,20 @@ export class LineChartComponent implements OnInit {
       const values = victoriesData.map((guess: Guess) => guess.nAttempt);
 
       const chartData = {
-        labels: [1, 2, 3, 4, 5], // Números de intentos
+        labels: [1, 2, 3, 4, 5, 6], // Números de intentos
         datasets: [{
           label: 'Victorias por Intento',
           data: values, // Número de victorias
           fill: false,
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderColor: 'rgb(75, 192, 192)',
-          tension: 0.1
+          borderWidth: 1
         }]
       };
 
       // Crear el gráfico
       this.chart = new Chart("line-chart", {
-        type: 'line' as ChartType,
+        type: 'bar' as ChartType, // Cambia 'line' a 'bar'
         data: chartData,
         options: {
           indexAxis: 'x',
@@ -55,6 +56,15 @@ export class LineChartComponent implements OnInit {
                 precision: 0
               }
             }
+          },
+          plugins: {
+            title: {
+              display: true,
+              text: 'Victorias por Intento',
+              font: {
+                size: 20
+              }
+            },
           }
         },
       });

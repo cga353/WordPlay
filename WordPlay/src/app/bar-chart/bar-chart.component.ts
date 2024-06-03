@@ -74,23 +74,30 @@ export class BarChartComponent implements OnInit, OnDestroy {
         indexAxis: 'y',
         scales: {
           y: {
-            beginAtZero: true
+            beginAtZero: true,
           },
           x: {
             type: 'linear',
             ticks: {
               stepSize: 1,
               precision: 0
-            }
+            },
           }
         },
         plugins: {
           legend: {
-            display: false
+            display: false,
+          },
+          title: {
+            display: true,
+            text: 'Top Palabras Usadas',
+            font: {
+              size: 20
+            }
           },
           tooltip: {
             callbacks: {
-              label: function(context) {
+              label: function (context) {
                 var label = context.dataset.label || '';
                 if (label) {
                   label += ': ';

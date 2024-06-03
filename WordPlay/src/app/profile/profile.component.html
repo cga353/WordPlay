@@ -1,37 +1,51 @@
 <div class="ventana">
-    <app-nav-bar></app-nav-bar>
-    <div class="profile">
-        <div class="profile-panel">
-            <div class="edit-profile" (click)="enableEditMode()">
-                <img src="../../assets/logo-8.png" alt="Descripción de la imagen">
-                <p>Editar perfil</p>
-            </div>
-            <img src="../../assets/logo.png" alt="Descripción de la imagen">
-            <div *ngIf="editMode && editedUser">
-                <input [(ngModel)]="editedUser.userName" placeholder="Nombre de usuario">
-                <input [(ngModel)]="editedUser.name" placeholder="Nombre completo">
-                <input [(ngModel)]="editedUser.email" placeholder="Correo electrónico">
-                <button (click)="saveChanges()">Guardar cambios</button>
-            </div>
-            <div *ngIf="!editMode">
-                <h2>{{ user?.userName }}</h2>
-                <h5>{{ user?.name }}</h5>
-                <h5>{{ user?.email }}</h5>
-            </div>
+  <app-nav-bar></app-nav-bar>
+  <div class="profile">
+    <div class="profile-panel">
+      <div class="top-panel">
+        <div class="edit-profile" (click)="enableEditMode()">
+          <img *ngIf="!editMode" src="../../assets/edit-profile2.png" alt="Descripción de la imagen">
+          <img *ngIf="editMode" src="../../assets/close.png" alt="Descripción de la imagen">
         </div>
-        <div class="statistics">
-            <h2>Estadísticas</h2>
-            <div class="statistics-top">
-              <div (click)="navigateToWordList('pie-chart')">
-                <app-pie-chart></app-pie-chart>
-              </div>
-              <div (click)="navigateToWordList('line-chart')">
-                <app-line-chart></app-line-chart>
-              </div>
-            </div>
-            <div class="chart-container" (click)="navigateToWordList('bar-chart')">
-              <app-bar-chart></app-bar-chart>
-            </div>
+        <img src="../../assets/default-img.png" alt="Descripción de la imagen">
+        <!-- TODO cambiarla por la del usuario -->
+        <div *ngIf="editMode && editedUser" class="info">
+          <input [(ngModel)]="editedUser.name" placeholder="Nombre del usuario">
+          <input [(ngModel)]="editedUser.email" placeholder="Correo electrónico">
+          <button (click)="saveChanges()">Guardar cambios</button>
+        </div>
+        <div *ngIf="!editMode" class="info">
+          <h2>{{ user?.name }}</h2>
+          <h4>{{ user?.email }}</h4>
+        </div>
+        <div class="edit-pass">
+          <div class="cabecera" (click)="enableEditPassword()">
+            <h4>Cambiar contraseña</h4>
+            <p>></p>
           </div>
+          <div *ngIf="editedPassword" class="password">
+            <input [(ngModel)]="editedUser.password" placeholder="Contraseña actual" type="password">
+            <input [(ngModel)]="newPassword" placeholder="Nueva contraseña" type="password">
+            <input [(ngModel)]="confirmPassword" placeholder="Confirmar contraseña" type="password">
+            <button (click)="changePassword()">Cambiar contraseña</button>
+          </div>
+        </div>
+      </div>
+      <button (click)="logOut()" class="logOut">Cerrar sesión</button>
     </div>
+    <div class="statistics">
+      <h2>Estadísticas</h2>
+      <div class="statistics-top">
+        <div (click)="navigateToWordList('pie-chart')" class="pie-chart">
+          <app-pie-chart></app-pie-chart>
+        </div>
+        <div (click)="navigateToWordList('line-chart')" class="line-chart">
+          <app-line-chart></app-line-chart>
+        </div>
+      </div>
+      <div class="chart-container" (click)="navigateToWordList('bar-chart')">
+        <app-bar-chart></app-bar-chart>
+      </div>
+    </div>
+  </div>
 </div>
