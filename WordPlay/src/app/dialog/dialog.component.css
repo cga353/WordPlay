@@ -5,10 +5,10 @@
     border-radius: 8px;
     width: 100%;
     max-width: 300rem;
-    box-shadow: 0 0 0 500px rgb(255 255 255/50%),0 0 40px rgb(0 0 0/40%);
+    box-shadow: 0 0 0 500px rgb(255 255 255/50%), 0 0 40px rgb(0 0 0/40%);
 }
 
-.top{
+.top {
     background-color: #e5ecff;
 }
 
@@ -21,6 +21,17 @@
     text-align: center;
 }
 
+.translations-list {
+    list-style-position: inside; /* Mueve las bolas de la lista a dentro del contenedor de lista */
+    padding-left: 0; /* Elimina el padding a la izquierda del ul */
+    text-align: left; /* Alinea el texto a la izquierda */
+}
+
+.translations-list li {
+    padding-left: 0; /* Elimina el padding a la izquierda de los elementos li */
+    margin-bottom: 0;
+}
+
 .button-container {
     display: flex;
     justify-content: center;
@@ -28,7 +39,8 @@
 }
 
 .dialog-button {
-    margin: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
     width: auto;
     padding: 1rem;
     border-radius: 5px;

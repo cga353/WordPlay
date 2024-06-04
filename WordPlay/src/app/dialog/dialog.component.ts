@@ -37,9 +37,13 @@ export class DialogComponent implements OnInit {
   }
 
   loadTranslation(): void {
-    this.wordService.getTranslation(this.dialog.palabraAdivinar).toPromise().then(translations => {
+    console.error("this.dialog", this.dialog);
+    console.error("palabra", this.dialog.palabra);
+    this.wordService.getTranslation(this.dialog.palabra).toPromise().then(translations => {
+      console.error("translations", translations); 
       if (translations && translations.length > 0) {
-        this.translations = translations.map(translation => translation.text);
+        this.translations = translations.slice(0, 3).map(translation => translation.text);
+        console.error("this.translations", this.translations);
       }
     });
   }

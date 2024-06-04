@@ -43,7 +43,7 @@ export class WordListComponent implements OnInit {
 
   loadWords(): void {
     if (this.source === 'bar-chart') {
-      this.wordService.getAttemptsByUserId(2).subscribe((data: Attempt[]) => {
+      this.wordService.getAttemptsByUserId(2).subscribe((data: Attempt[]) => { //TODO Cambiar el id de usuario
         const wordIds = data.map(attempt => attempt.wordId);
         this.wordService.getWordsByIds(wordIds).subscribe(words => {
           this.words = data.map(attempt => {

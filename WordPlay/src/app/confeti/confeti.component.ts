@@ -1,11 +1,13 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'app-confetti',
-  templateUrl: './confetti.component.html',
-  styleUrls: ['./confetti.component.css']
+  selector: 'app-confeti',
+  standalone: true,
+  imports: [],
+  templateUrl: './confeti.component.html',
+  styleUrls: ['./confeti.component.css']
 })
-export class ConfettiComponent implements OnInit {
+export class ConfetiComponent implements OnInit {
   @ViewChild('canvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
   private canvas!: HTMLCanvasElement;
   private context!: CanvasRenderingContext2D;
