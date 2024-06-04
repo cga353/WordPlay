@@ -22,6 +22,14 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public boolean existsByUserName(String userName) {
+        return userRepository.existsByUserName(userName);
+    }
+
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
     public User createUser(User user) {
         return userRepository.save(user);
     }
@@ -50,15 +58,21 @@ public class UserService {
     }
 
     public Optional<User> validateUser(String userName, String password) {
+
         // 1. Find user by username
         Optional<User> userOpt = userRepository.findByUserName(userName);
 
+        if(!userOpt.isPresent()){
+            return null;
+        }
+
         // 2. Check if user exists and password matches
         if (userOpt.isPresent() && userOpt.get().getPassword().equals(password)) {
+            System.out.println("COINCIDEN CONTRASENAS");
             return userOpt;
         }
 
-        // User not found or password mismatch, return null
+        //Password mismatch, return null
         return null;
     }
 

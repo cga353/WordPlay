@@ -23,12 +23,10 @@ public class User {
     @Email
     private String email;
 
-    @NotBlank(message = "Name is mandatory")
-    private String name;
-
     @NotBlank(message = "Password is mandatory")
     private String password;
 
+    private String name;
     private String thumbnail;
 
     public User() {
@@ -75,7 +73,7 @@ public class User {
     }
 
     public String getPassword() {
-        return email;
+        return password;
     }
 
     public void setPassword(String password) {

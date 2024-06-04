@@ -13,5 +13,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 public interface UserRepository extends CrudRepository<User, Long> {
 
     Optional<User> findByUserName(String userName);
-
+    boolean existsByUserName(String userName);
+    boolean existsByEmail(String email);
 }

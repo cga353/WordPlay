@@ -11,14 +11,14 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
-export class RegisterComponent implements OnInit{
+export class RegisterComponent implements OnInit {
   userName: string = "";
   email: string = "";
   password: string = "";
   confirmPassword: string = "";
   isFormValid: boolean = false;
 
-  constructor(private userService: UserService, private router: Router, private toastr: ToastrService) {}
+  constructor(private userService: UserService, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit() {
     this.isFormValid = this.checkFormValidity();
@@ -38,8 +38,7 @@ export class RegisterComponent implements OnInit{
     this.isFormValid = isFilled && passwordsMatch;
     return this.isFormValid;
   }
-  
-  
+
   register() {
     if (!this.checkFormValidity()) {
       console.error('Username and password are required');
@@ -47,23 +46,25 @@ export class RegisterComponent implements OnInit{
     }
 
     const user = {
-      name: "",
-      userName: this.userName, // Ensure consistent naming
+      userName: this.userName,
       email: this.email,
       password: this.password
     };
 
+    console.log('Registering user', user);
+
     this.userService.register(user).subscribe(
       (data) => {
-        // this.toastr.success('User registered successfully', 'Success');
         console.log('User registered successfully', data);
-        this.router.navigate(['/login']); 
+        this.toastr.success('User registered successfully', 'Success');
+        this.router.navigate(['/login']);
       },
       (error) => {
-        // this.toastr.error('Error registering user', 'Error');
-        this.toastr.error('Las credenciales no coinciden', 'Error de inicio de sesión', {
-          positionClass: 'toast-bottom-right'
-        });
+        if (error.status === 409) {
+          this.toastr.error(error.error, 'Error');
+        } else {
+          this.toastr.error('Error registering user', 'Error');
+        }
         console.error('Error registering user', error);
       }
     );

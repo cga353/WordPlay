@@ -42,6 +42,14 @@ export class LoginComponent implements OnInit {
     this.userService.validateUser(this.userName, this.password)
       .subscribe(
         user => {
+          if(user === null){
+            this.toastr.error('Las credenciales no coinciden', 'Error de inicio de sesión', {
+              positionClass: 'toast-bottom-right'
+            });
+            console.error('Error:', 'Las credenciales no coinciden'); //TODO arreglar esto
+            return;
+          }
+
           localStorage.setItem('user', JSON.stringify(user));
           this.router.navigate(['/home']);
         },

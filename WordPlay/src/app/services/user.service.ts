@@ -31,6 +31,7 @@ export class UserService {
   }
 
   register(user: any): Observable<any> {
+    console.log('user:', user);
     return this.http.post(this.backendUrl, user);
   }
 
