@@ -8,12 +8,12 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { WordService } from '../services/word.service';
 import { Attempt } from '../interfaces/attempt';
-import { ConfetiComponent } from '../confeti/confeti.component';
+import * as confetti from 'canvas-confetti';
 
 @Component({
   selector: 'app-tablero',
   standalone: true,
-  imports: [NgFor, NgIf, CommonModule, DialogComponent, NavBarComponent, ConfetiComponent],
+  imports: [NgFor, NgIf, CommonModule, DialogComponent, NavBarComponent],
   templateUrl: './tablero.component.html',
   styleUrl: './tablero.component.css'
 })
@@ -239,7 +239,9 @@ export class TableroComponent implements OnInit {
       this.estadoTablero[this.filaActual][1] = true;
       this.colorearTeclasTeclado();
 
-      this.mostrarConfeti();
+      setTimeout(() => {
+        this.launchConfetti();
+      }, 1000);
 
       setTimeout(() => {
         this.openDialog("¡FELICIDADES!", "has acertado la palabra", palabraIngresada, true);
@@ -250,7 +252,6 @@ export class TableroComponent implements OnInit {
       if (this.filaActual == this.filas.length - 1) {
         this.addPalabraAdivinada(palabraIngresada);
         this.colorearTeclasTeclado();
-        // this.openDialog("¡PERDISTE!", "La palabra era:", this.palabraAdivinar.toUpperCase(), false);
         setTimeout(() => {
           this.openDialog("¡PERDISTE!", "La palabra era:", this.palabraAdivinar.toUpperCase(), false);
         }, 2000);
@@ -472,13 +473,12 @@ export class TableroComponent implements OnInit {
     return resultado[teclaIndex];
   }
 
-  mostrarConfeti(): void {
-    this.mostrarConfetti = true;
-  }
-
-  // Método para ocultar el confeti si es necesario
-  ocultarConfeti(): void {
-    this.mostrarConfetti = false;
+  launchConfetti() {
+    const myConfetti = confetti.create(undefined, { resize: true });
+    myConfetti({
+      particleCount: 100,
+      spread: 160
+    });
   }
 
   openDialog(title: string, message: string, palabra: string, adivinada: boolean): void {
