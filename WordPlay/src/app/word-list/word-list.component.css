@@ -13,8 +13,6 @@
   font-weight: bold;
   margin-top: 20px;
   margin-bottom: 20px;
-  border: 1px solid #ccc;
-
 }
 
 .word-list-header {
@@ -105,7 +103,7 @@ mat-slider {
   width: 15rem;
 }
 
-.date-filter{
+.date-filter {
   display: flex;
   flex-direction: column;
 }
@@ -132,4 +130,61 @@ mat-slider {
 
 .filter-options-bar.show-clear-filters .clear-filters {
   display: inline-block;
+}
+
+/* Aplica estilos al encabezado de la tabla */
+.tabla th {
+  background-color: #eef5f9;
+  padding: 10px;
+  text-align: center !important;
+  /* Asegura que el texto se centre */
+  align-items: center;
+  border-radius: 5px;
+}
+
+.encabezado {
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  /* Colapsa los bordes de la tabla */
+  margin-top: 1rem;
+}
+
+/* Aplica estilos a cada fila de la tabla */
+.tabla tr {
+  width: 100%;
+}
+
+/* la columna de traducciones ocupe más espacio */
+.tabla th:last-child,
+.tabla td:last-child {
+  width: 50%;
+}
+
+.tabla th:not(:last-child),
+.tabla td:not(:last-child) {
+  width: 15%;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+}
+
+/* Agrega bordes a las celdas de la tabla */
+.tabla th,
+.tabla td {
+  border: 1px solid #ddd;
+}
+
+/* Estilo adicional para las filas */
+.tabla tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.tabla tr:hover {
+  background-color: #f1f1f1;
 }

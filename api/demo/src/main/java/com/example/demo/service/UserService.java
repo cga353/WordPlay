@@ -27,13 +27,19 @@ public class UserService {
     }
 
     public User updateUser(Long id, User userDetails) {
+        System.out.println("Service: " + userDetails + " contraseña:" + userDetails.getPassword());
+
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
+            System.out.println(userDetails);
+            System.err.println(userDetails.getPassword());
             user.setName(userDetails.getName());
             user.setEmail(userDetails.getEmail());
             user.setUserName(userDetails.getUserName());
             user.setPassword(userDetails.getPassword());
+            System.out.println("dentro del if: " + user + " contraseña:" + user.getPassword());
+
             return userRepository.save(user);
         }
         return null;
@@ -43,8 +49,17 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public boolean validateUser(String userName, String password) {
-        Optional<User> optionalUser = userRepository.findByUserName(userName);
-        return optionalUser.isPresent() && optionalUser.get().getPassword().equals(password);
+    public Optional<User> validateUser(String userName, String password) {
+        // 1. Find user by username
+        Optional<User> userOpt = userRepository.findByUserName(userName);
+
+        // 2. Check if user exists and password matches
+        if (userOpt.isPresent() && userOpt.get().getPassword().equals(password)) {
+            return userOpt;
+        }
+
+        // User not found or password mismatch, return null
+        return null;
     }
+
 }

@@ -8,6 +8,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { WordService } from '../services/word.service';
 import { Attempt } from '../interfaces/attempt';
+import * as confetti from 'canvas-confetti';
+import { User } from '../interfaces/user';
 
 @Component({
   selector: 'app-tablero',
@@ -18,6 +20,7 @@ import { Attempt } from '../interfaces/attempt';
 })
 
 export class TableroComponent implements OnInit {
+  user: User | undefined;
   filas: string[][];
   palabraAdivinar: string = "";
   entradaActivada: boolean = false;
@@ -28,6 +31,7 @@ export class TableroComponent implements OnInit {
   estadoTablero: (number | boolean)[][];
   palabraId: number | undefined;
   estadoTeclado: { [key: string]: boolean } = {};
+  mostrarConfetti: boolean = false;
 
   shouldExpand: boolean = true;
   // Definimos el teclado virtual
@@ -225,9 +229,12 @@ export class TableroComponent implements OnInit {
   }
 
   palabraCorrecta(palabraIngresada: string) {
-    console.warn('Palabra ingresada:', palabraIngresada);
     this.addPalabra(palabraIngresada.toLowerCase());
-    this.handleWordAttempt(2, this.palabraId || -1); //TODO Cambiar por el id usuario real
+
+    const storedUserJSON = localStorage.getItem('user');
+    this.user = JSON.parse(storedUserJSON? storedUserJSON : '{}') as User;
+
+    this.handleWordAttempt(this.user.id, this.palabraId || -1); 
     // Verificar si la palabra ingresada por el usuario es igual a la palabra a adivinar
     if (palabraIngresada === this.palabraAdivinar.toLowerCase()) {
       console.log('¡Felicidades! Has adivinado la palabra.');
@@ -237,6 +244,11 @@ export class TableroComponent implements OnInit {
       this.palabraValida = true;
       this.estadoTablero[this.filaActual][1] = true;
       this.colorearTeclasTeclado();
+
+      setTimeout(() => {
+        this.launchConfetti();
+      }, 1000);
+
       setTimeout(() => {
         this.openDialog("¡FELICIDADES!", "has acertado la palabra", palabraIngresada, true);
       }, 1500);
@@ -246,7 +258,6 @@ export class TableroComponent implements OnInit {
       if (this.filaActual == this.filas.length - 1) {
         this.addPalabraAdivinada(palabraIngresada);
         this.colorearTeclasTeclado();
-        // this.openDialog("¡PERDISTE!", "La palabra era:", this.palabraAdivinar.toUpperCase(), false);
         setTimeout(() => {
           this.openDialog("¡PERDISTE!", "La palabra era:", this.palabraAdivinar.toUpperCase(), false);
         }, 2000);
@@ -468,6 +479,13 @@ export class TableroComponent implements OnInit {
     return resultado[teclaIndex];
   }
 
+  launchConfetti() {
+    const myConfetti = confetti.create(undefined, { resize: true });
+    myConfetti({
+      particleCount: 100,
+      spread: 160
+    });
+  }
 
   openDialog(title: string, message: string, palabra: string, adivinada: boolean): void {
     const dialogRef = this.dialog.open(DialogComponent, {

@@ -1,6 +1,5 @@
 .grafica{
-    width: 15em;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 14em;
+    max-width: 100%; /* Asegura que el gráfico no se salga del contenedor */
+    margin: 0 auto;  /* Centra el gráfico horizontalmente */
 }

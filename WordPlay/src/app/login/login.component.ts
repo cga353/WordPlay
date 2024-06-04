@@ -3,19 +3,20 @@ import { FormsModule } from '@angular/forms';
 import { UserService } from '../services/user.service';
 import { Router, RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, RouterModule],
+  imports: [FormsModule, RouterModule, NgIf],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent implements OnInit {
-  email: string = "";
   password: string = "";
   userName: string = "";
   isFormValid: boolean = false;
+  showPassword: boolean = false;
 
   constructor(private userService: UserService, private router: Router, private toastr: ToastrService) {
   }
@@ -28,6 +29,10 @@ export class LoginComponent implements OnInit {
     return !!this.userName && !!this.password;
   }
 
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
   login() {
     if (!this.checkFormValidity()) {
       console.error('Username and password are required');
@@ -37,8 +42,7 @@ export class LoginComponent implements OnInit {
     this.userService.validateUser(this.userName, this.password)
       .subscribe(
         user => {
-          console.log('User:', user);
-          // Redirigir a la página principal u otra página deseada
+          localStorage.setItem('user', JSON.stringify(user));
           this.router.navigate(['/home']);
         },
         error => {

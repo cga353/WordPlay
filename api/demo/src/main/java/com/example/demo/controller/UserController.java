@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -32,6 +33,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public User updateUser(@PathVariable Long id, @RequestBody User userDetails) {
+        System.out.println("Controller: " + userDetails + " contraseña:" + userDetails.getPassword());
         return userService.updateUser(id, userDetails);
     }
 
@@ -41,7 +43,8 @@ public class UserController {
     }
 
     @GetMapping("/validate")
-    public boolean validateUser(@RequestParam String userName, @RequestParam String password) {
+    public Optional<User> validateUser(@RequestParam String userName, @RequestParam String password) {
         return userService.validateUser(userName, password);
     }
+
 }

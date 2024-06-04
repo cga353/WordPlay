@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { User } from '../interfaces/user';
 
 @Injectable({
@@ -12,14 +12,22 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
   
-  validateUser(userName: string, password: string): Observable<boolean> {
+  validateUser(userName: string, password: string): Observable<User> {
     // Construye los parámetros de la consulta
     const params = new HttpParams()
       .set('userName', userName)
       .set('password', password);
 
     // Realiza la solicitud GET con los parámetros de consulta
-    return this.http.get<boolean>(`${this.backendUrl}/validate`, { params });
+    return this.http.get<User>(`${this.backendUrl}/validate`, { params }).pipe(
+      map(user => {
+        // Elimina la contraseña del usuario
+        if (user) {
+          user.password = '';
+        }
+        return user;
+      })
+    );
   }
 
   register(user: any): Observable<any> {
@@ -31,6 +39,7 @@ export class UserService {
   }
 
   updateUser(id: number, user: User): Observable<User> {
+    console.log('Updating user:', user);
     return this.http.put<User>(`${this.backendUrl}/${id}`, user);
   }
 

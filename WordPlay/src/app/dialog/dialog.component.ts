@@ -31,15 +31,15 @@ export class DialogComponent implements OnInit {
       this.autoCloseDialog();
     }
 
-    if (this.dialog.adivinada == true) {
+    if (this.dialog.adivinada == true || this.dialog.title ==="¡PERDISTE!") {
       this.loadTranslation();
     }
   }
 
   loadTranslation(): void {
-    this.wordService.getTranslation(this.dialog.palabraAdivinar).toPromise().then(translations => {
+    this.wordService.getTranslation(this.dialog.palabra).toPromise().then(translations => {
       if (translations && translations.length > 0) {
-        this.translations = translations.map(translation => translation.text);
+        this.translations = translations.slice(0, 3).map(translation => translation.text);
       }
     });
   }

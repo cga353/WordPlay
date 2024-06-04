@@ -9,6 +9,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { Sort, MatSortModule, MatSort } from '@angular/material/sort';
+import { User } from '../interfaces/user';
 
 @Component({
   selector: 'app-word-list',
@@ -19,6 +20,7 @@ import { Sort, MatSortModule, MatSort } from '@angular/material/sort';
 })
 export class WordListComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort | undefined;
+  user: User | undefined;
   words: any[] = [];
   source: string | null = '';
   filteredWords: any[] = [];
@@ -42,8 +44,11 @@ export class WordListComponent implements OnInit {
   }
 
   loadWords(): void {
+    const storedUserJSON = localStorage.getItem('user');
+    this.user = JSON.parse(storedUserJSON? storedUserJSON : '{}') as User;
+
     if (this.source === 'bar-chart') {
-      this.wordService.getAttemptsByUserId(2).subscribe((data: Attempt[]) => {
+      this.wordService.getAttemptsByUserId(this.user.id).subscribe((data: Attempt[]) => {
         const wordIds = data.map(attempt => attempt.wordId);
         this.wordService.getWordsByIds(wordIds).subscribe(words => {
           this.words = data.map(attempt => {
@@ -56,7 +61,7 @@ export class WordListComponent implements OnInit {
         });
       });
     } else if (this.source === 'pie-chart') {
-      this.wordService.getGuessesByUserId(2).subscribe((data: Guess[]) => {
+      this.wordService.getGuessesByUserId(this.user.id).subscribe((data: Guess[]) => {
         const wordIds = data.map(guess => guess.wordId);
         this.wordService.getWordsByIds(wordIds).subscribe(words => {
           this.words = data.map(guess => {
@@ -69,7 +74,7 @@ export class WordListComponent implements OnInit {
         });
       });
     } else if (this.source === 'line-chart') {
-      this.wordService.getGuessesByUserId(2).subscribe((data: Guess[]) => {
+      this.wordService.getGuessesByUserId(this.user.id).subscribe((data: Guess[]) => {
         const wordIds = data.map(guess => guess.wordId);
         this.wordService.getWordsByIds(wordIds).subscribe(words => {
           this.words = data.map(guess => {

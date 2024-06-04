@@ -3,16 +3,17 @@
     flex-wrap: nowrap;
     flex-direction: column;
     width: 100%;
-    height: 97vh;
+    height: 100vh;
 }
 
 .profile {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     flex-direction: row;
     width: 100%;
     height: 100%;
+    background-color: #eef5f9;
 }
 
 .profile-panel {
@@ -20,15 +21,82 @@
     align-items: center;
     align-self: flex-start;
     flex-direction: column;
-    width: 25%;
+    justify-content: space-between;
+    width: 28%;
     height: 100%;
-    background-color: #0C918E;
+    background-color: #03a5aa;
 }
 
-.profile-panel img{
+.top-panel {
+    display: flex;
+    align-items: center;
+    align-self: flex-start;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.profile-panel img {
     width: 10rem;
     height: 10rem;
     border-radius: 50%;
+}
+
+.info {
+    display: flex;
+    width: 75%;
+    min-height: 9rem;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #fff;
+}
+
+.info h2 {
+    margin-top: 0rem;
+}
+
+.info h4 {
+    margin-top: 0.5rem;
+}
+
+.info input {
+    display: block;
+    width: 80%;
+    margin: 0.5rem 0;
+    padding: 0.35rem;
+    border-radius: 4px;
+    border: none;
+    background: #ebf5fc;
+    box-shadow: inset -5px -5px 15px rgba(255, 255, 255, 0.8), inset 5px 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.info button {
+    display: block;
+    width: 70%;
+    margin: 0.5rem 0;
+    padding: 0.35rem;
+    border-radius: 4px;
+    border: none;
+    background: #03a5aa;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.password button {
+    display: block;
+    width: 70%;
+    margin: 0.5rem 0;
+    padding: 0.35rem;
+    border-radius: 4px;
+    border: none;
+    background: #03a5aa;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.info button:hover {
+    background-color: #03a5aa;
+    color: white;
 }
 
 .edit-profile {
@@ -36,11 +104,11 @@
     align-self: flex-end;
     align-items: center;
     flex-direction: row;
+    margin-top: 1rem;
     margin-right: 1rem;
-    margin-bottom: 3rem;
 }
 
-.edit-profile img{
+.edit-profile img {
     width: 2rem;
     height: 2rem;
     margin-right: 0.5rem;
@@ -51,13 +119,14 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    width: 90%;
+    width: 80%;
     height: 100%;
     margin-top: 0rem;
 }
 
 .statistics h2 {
     margin-top: 0rem;
+    font-size: 2rem;
 }
 
 .statistics-top {
@@ -67,14 +136,130 @@
     align-items: center;
     align-self: baseline;
     width: 100%;
+    height: 38%;
 }
 
-.statistics-top > div {
-    width: 25%; /* Dividir el ancho en dos para ambos gráficos */
+.statistics-top>div {
+    width: 40%;
+    height: 100%;
+    /* Dividir el ancho en dos para ambos gráficos */
+    /* width: 45%; */
+    max-width: 100%; /* Asegurarse de que no se salga del contenedor */
+    overflow: hidden; /* Manejar el desbordamiento */
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.chart-container {
-    width: 100%; /* Para que los gráficos ocupen la mitad del contenedor */
+.pie-chart {
+    padding: 1em;
     display: flex;
     justify-content: center;
-  }
+    align-items: center;
+    height: auto;
+    max-width: 100%; /* Asegurarse de que no se salga del contenedor */
+}   
+
+.line-chart {
+    padding: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    max-width: 100%; /* Asegurarse de que no se salga del contenedor */
+}   
+
+.chart-container {
+    width: 50%;
+    height: 40%;
+    /* Para que los gráficos ocupen la mitad del contenedor */
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+    max-width: 100%; /* Asegurarse de que no se salga del contenedor */
+    overflow: hidden; /* Manejar el desbordamiento */
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.edit-pass {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 75%;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: 1px solid #03a5aa;
+}
+
+.cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    padding: 0 0.5rem;
+    width: 100%;
+}
+
+.cabecera h4 {
+    margin: 0;
+}
+
+.password {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 4px;
+
+}
+
+.password input {
+    display: block;
+    width: 80%;
+    margin: 0.5rem 0;
+    padding: 0.35rem;
+    border-radius: 4px;
+    border: none;
+    background: #ebf5fc;
+    box-shadow: inset -5px -5px 15px rgba(255, 255, 255, 0.8), inset 5px 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logOut {
+    display: block;
+    width: 50%;
+    margin: 0.5rem 0;
+    padding: 0.35rem;
+    border-radius: 4px;
+    border: none;
+    background: #fb0202;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin-bottom: 2rem;
+}
+
+.logOut:hover {
+    background-color: #aa0303;
+    color: white;
+}
+
+.password button {
+    display: block;
+    width: 70%;
+    margin: 0.5rem 0;
+    padding: 0.35rem;
+    border-radius: 4px;
+    border: none;
+    background: #03a5aa;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.password button:hover {
+    background-color: #03a5aa;
+    color: white;
+}

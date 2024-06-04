@@ -15,28 +15,31 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
-    @NotBlank(message = "Name is mandatory")
-    private String name;
+    
+    @NotBlank(message = "UserName is mandatory")
+    private String userName;
 
     @NotBlank(message = "Email is mandatory")
     @Email
     private String email;
 
-    @NotBlank(message = "UserName is mandatory")
-    private String userName;
+    @NotBlank(message = "Name is mandatory")
+    private String name;
 
     @NotBlank(message = "Password is mandatory")
     private String password;
 
+    private String thumbnail;
+
     public User() {
     }
 
-    public User(String name, String userName, String email, String password) {
+    public User(String name, String userName, String email, String password, String thumbnail) {
         this.name = name;
         this.email = email;
         this.userName = userName;
         this.password = password;
+        this.thumbnail = thumbnail;
     }
 
     public long getId() {
@@ -77,6 +80,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
     @Override
