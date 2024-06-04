@@ -188,3 +188,10 @@ mat-slider {
 .tabla tr:hover {
   background-color: #f1f1f1;
 }
+
+.no-words-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px; /* Ajusta la altura según tus necesidades */
+}

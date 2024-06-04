@@ -69,53 +69,60 @@
     </div>
   </div>
 
-  <table matSort (matSortChange)="sortData($event)" class="tabla">
-    <thead>
-      <tr *ngIf="source === 'bar-chart'">
-        <th class="encabezado" mat-sort-header="name">Words</th>
-        <th mat-sort-header="nVeces">n Veces</th>
-        <th>Translation</th>
-      </tr>
-      <tr *ngIf="source === 'line-chart'">
-        <th mat-sort-header="name">Words</th>
-        <th mat-sort-header="isGuessed">isGuessed</th>
-        <th mat-sort-header="nAttempt">n Attempts</th>
-        <th mat-sort-header="date">Date</th>
-        <th>Translation</th>
-      </tr>
-      <tr *ngIf="source === 'pie-chart'">
-        <th mat-sort-header="name">Words</th>
-        <th mat-sort-header="isGuessed">isGuessed</th>
-        <th>Translation</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let word of filteredWords">
-        <td *ngIf="source === 'bar-chart'">{{ word.name }}</td>
-        <td *ngIf="source === 'bar-chart'">{{ word.nVeces }}</td>
-        <td *ngIf="source === 'bar-chart'">
-          <ul>
-            <li *ngFor="let translation of word.translations">{{ translation }}</li>
-          </ul>
-        </td>
-        <td *ngIf="source === 'line-chart'">{{ word.name }}</td>
-        <td *ngIf="source === 'line-chart'">{{ word.isGuessed }}</td>
-        <td *ngIf="source === 'line-chart'">{{ word.nAttempt }}</td>
-        <td *ngIf="source === 'line-chart'">{{ word.date }}</td>
-        <td *ngIf="source === 'line-chart'">
-          <ul>
-            <li *ngFor="let translation of word.translations">{{ translation }}</li>
-          </ul>
-        </td>
-        <td *ngIf="source === 'pie-chart'">{{ word.name }}</td>
-        <td *ngIf="source === 'pie-chart'">{{ word.isGuessed }}</td>
-        <td *ngIf="source === 'pie-chart'">
-          <ul>
-            <li *ngFor="let translation of word.translations">{{ translation }}</li>
-          </ul>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  
+  <div *ngIf="filteredWords.length > 0; else noWordsTemplate">
+    <table matSort (matSortChange)="sortData($event)" class="tabla">
+      <thead>
+        <tr *ngIf="source === 'bar-chart'">
+          <th class="encabezado" mat-sort-header="name">Words</th>
+          <th mat-sort-header="nVeces">n Veces</th>
+          <th>Translation</th>
+        </tr>
+        <tr *ngIf="source === 'line-chart'">
+          <th mat-sort-header="name">Words</th>
+          <th mat-sort-header="isGuessed">isGuessed</th>
+          <th mat-sort-header="nAttempt">n Attempts</th>
+          <th mat-sort-header="date">Date</th>
+          <th>Translation</th>
+        </tr>
+        <tr *ngIf="source === 'pie-chart'">
+          <th mat-sort-header="name">Words</th>
+          <th mat-sort-header="isGuessed">isGuessed</th>
+          <th>Translation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let word of filteredWords">
+          <td *ngIf="source === 'bar-chart'">{{ word.name }}</td>
+          <td *ngIf="source === 'bar-chart'">{{ word.nVeces }}</td>
+          <td *ngIf="source === 'bar-chart'">
+            <ul>
+              <li *ngFor="let translation of word.translations">{{ translation }}</li>
+            </ul>
+          </td>
+          <td *ngIf="source === 'line-chart'">{{ word.name }}</td>
+          <td *ngIf="source === 'line-chart'">{{ word.isGuessed }}</td>
+          <td *ngIf="source === 'line-chart'">{{ word.nAttempt }}</td>
+          <td *ngIf="source === 'line-chart'">{{ word.date }}</td>
+          <td *ngIf="source === 'line-chart'">
+            <ul>
+              <li *ngFor="let translation of word.translations">{{ translation }}</li>
+            </ul>
+          </td>
+          <td *ngIf="source === 'pie-chart'">{{ word.name }}</td>
+          <td *ngIf="source === 'pie-chart'">{{ word.isGuessed }}</td>
+          <td *ngIf="source === 'pie-chart'">
+            <ul>
+              <li *ngFor="let translation of word.translations">{{ translation }}</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #noWordsTemplate>
+    <div class="no-words-message">
+      <h3>No hay palabras disponibles</h3>
+    </div>
+  </ng-template>
 </div>

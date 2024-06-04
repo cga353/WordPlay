@@ -4,7 +4,7 @@ import { WordService } from '../services/word.service';
 import { Attempt } from '../interfaces/attempt';
 import { Guess } from '../interfaces/guess';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
-import { NgFor, NgIf } from '@angular/common';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -14,7 +14,7 @@ import { User } from '../interfaces/user';
 @Component({
   selector: 'app-word-list',
   standalone: true,
-  imports: [NavBarComponent, NgFor, NgIf, MatSliderModule, MatRadioModule, MatSlideToggleModule, MatSortModule],
+  imports: [NavBarComponent, NgFor, NgIf, MatSliderModule, MatRadioModule, MatSlideToggleModule, MatSortModule, CommonModule],
   templateUrl: './word-list.component.html',
   styleUrls: ['./word-list.component.css']
 })
