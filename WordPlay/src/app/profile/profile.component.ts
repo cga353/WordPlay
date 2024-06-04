@@ -23,6 +23,7 @@ export class ProfileComponent implements OnInit {
   editedPassword: boolean = false;
   newPassword: string ="";
   confirmPassword: string ="";
+  noData: boolean = false;
   
   constructor(private userService: UserService, private router: Router) { }
 
@@ -34,6 +35,10 @@ export class ProfileComponent implements OnInit {
       this.user = data;
       this.editedUser = { ...data }; // Inicializa editedUser con una copia de los datos del usuario
     });
+  }
+
+  handleNoData(event: boolean): void {
+    this.noData = event;
   }
 
   enableEditMode(): void {
@@ -55,19 +60,6 @@ export class ProfileComponent implements OnInit {
   }
 
   changePassword(){
-    // this.userService.validateUser(this.user?.userName, this.password)
-    // .subscribe(
-    //   user => {
-    //     localStorage.setItem('user', JSON.stringify(user));
-    //     this.router.navigate(['/home']);
-    //   },
-    //   error => {
-    //     console.error('Error:', error);
-    //     this.toastr.error('Las credenciales no coinciden', 'Error de inicio de sesión', {
-    //       positionClass: 'toast-bottom-right'
-    //     });
-    //   }
-    // );
 
     if(this.newPassword === this.confirmPassword){
       if(this.user){

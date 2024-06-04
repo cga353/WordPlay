@@ -1,3 +1,5 @@
 .vscode
 docker/data
 docker-dev/data
+
+.node_modules

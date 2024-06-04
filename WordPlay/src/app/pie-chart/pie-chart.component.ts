@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Chart, ChartType } from 'chart.js/auto';
 import { WordService } from '../services/word.service';
 import { Router } from '@angular/router';
@@ -11,6 +11,7 @@ import { User } from '../interfaces/user';
   styleUrls: ['./pie-chart.component.css']
 })
 export class PieChartComponent implements OnInit, OnDestroy {
+  @Output() noData: EventEmitter<boolean> = new EventEmitter<boolean>();
   user: User | undefined;
   public chart: Chart | undefined;
 

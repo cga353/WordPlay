@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Chart, ChartType, registerables } from 'chart.js';
 import { WordService } from '../services/word.service';
 import { Guess } from '../interfaces/guess';  // Cambia `Attempt` a `Guess` si es necesario
@@ -14,7 +14,8 @@ Chart.register(...registerables);
   templateUrl: './line-chart.component.html',
   styleUrls: ['./line-chart.component.css']
 })
-export class LineChartComponent implements OnInit {
+export class LineChartComponent implements OnInit, OnDestroy {
+  @Output() noData: EventEmitter<boolean> = new EventEmitter<boolean>();
   user: User | undefined;
 
   public chart: Chart | undefined;
@@ -74,4 +75,11 @@ export class LineChartComponent implements OnInit {
       });
     });
   }
+
+  ngOnDestroy(): void {
+    if (this.chart) {
+      this.chart.destroy();
+    }
+  }
+
 }

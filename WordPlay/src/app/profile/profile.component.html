@@ -35,16 +35,19 @@
     </div>
     <div class="statistics">
       <h2>Estadísticas</h2>
-      <div class="statistics-top">
+      <div *ngIf="noData" class="sin-datos">
+        <h1>No hay datos disponibles para mostrar</h1>
+      </div>
+      <div *ngIf="!noData" class="statistics-top">
         <div (click)="navigateToWordList('pie-chart')" class="pie-chart">
-          <app-pie-chart></app-pie-chart>
+          <app-pie-chart (noData)="handleNoData($event)"></app-pie-chart>
         </div>
         <div (click)="navigateToWordList('line-chart')" class="line-chart">
-          <app-line-chart></app-line-chart>
+          <app-line-chart (noData)="handleNoData($event)"></app-line-chart>
         </div>
       </div>
-      <div class="chart-container" (click)="navigateToWordList('bar-chart')">
-        <app-bar-chart></app-bar-chart>
+      <div *ngIf="!noData" class="chart-container" (click)="navigateToWordList('bar-chart')">
+        <app-bar-chart (noData)="handleNoData($event)"></app-bar-chart>
       </div>
     </div>
   </div>
