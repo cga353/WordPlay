@@ -17,7 +17,6 @@ export class LoginComponent implements OnInit {
   userName: string = "";
   isFormValid: boolean = false;
   showPassword: boolean = false;
-  errorOccurred: boolean = false;
 
   constructor(private userService: UserService, private router: Router, private toastr: ToastrService) {
   }
@@ -33,6 +32,7 @@ export class LoginComponent implements OnInit {
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
+  
   login() {
     if (!this.checkFormValidity()) {
       console.error('Username and password are required');
@@ -47,9 +47,6 @@ export class LoginComponent implements OnInit {
               positionClass: 'toast-bottom-left',
               timeOut: 2000
             });
-            this.errorOccurred = true;
-            console.log('Error occurred:', this.errorOccurred); // Añadimos este console.log()
-
             return;
           }
           this.toastr.success('Inicio de sesión exitoso', '', {
@@ -59,9 +56,6 @@ export class LoginComponent implements OnInit {
   
           localStorage.setItem('user', JSON.stringify(user));
           this.router.navigate(['/home']);
-  
-          // Restablecer la variable errorOccurred a false
-          this.errorOccurred = false;
         },
         error => {
           console.error('Error:', error);
@@ -69,10 +63,6 @@ export class LoginComponent implements OnInit {
             positionClass: 'toast-bottom-left',
             timeOut: 2000
           });
-          this.errorOccurred = true;
-
-          console.log('Error occurred:', this.errorOccurred); // Añadimos este console.log()
-
         }
       );
   }

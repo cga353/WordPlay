@@ -199,7 +199,7 @@
     justify-content: space-between;
     align-items: center;
     flex-direction: row;
-    padding: 0 0.5rem;
+    padding: 0  1rem 0 0.5rem;
     width: 100%;
 }
 
@@ -254,17 +254,43 @@
     padding: 0.35rem;
     border-radius: 4px;
     border: none;
-    background: #03a5aa;
+    background-color: #bcd8c1;
     color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    cursor: not-allowed;
 }
 
-.password button:hover {
-    background-color: #03a5aa;
+.password button.enabled {
+    background-color: #0c918e;
     color: white;
+    cursor: pointer;
 }
 
 .sin-datos{
     margin-top: 12rem;
     margin-bottom: 16rem;
+}
+
+.pass {
+    width: 75%;
+    position: relative;
+}
+
+.pass input {
+    width: 100%;
+    padding-right: 30px;
+    box-sizing: border-box;
+    /* Ensure padding doesn't affect width calculation */
+}
+
+.password-eye {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: none; /* Elimina cualquier borde */
+    z-index: 9;
 }

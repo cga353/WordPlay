@@ -48,7 +48,6 @@ export class RegisterComponent  {
 
     const passwordsMatch = this.password === this.confirmPassword;
     if (!passwordsMatch) {
-      console.error('Las contraseñas no coinciden');
       this.toastr.error('Las contraseñas no coinciden', '', {
         positionClass: 'toast-bottom-left',
         timeOut: 3000
