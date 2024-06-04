@@ -15,7 +15,7 @@
     /* Asegura que el padding no afecte el tamaño del contenedor */
     overflow: hidden;
     /* Evita que el contenido se desborde */
-   
+
 }
 
 .imagen {
@@ -38,7 +38,7 @@ h1 {
     text-align: center;
 }
 
-.formulario{
+.formulario {
     display: flex;
     flex-direction: column;
     width: 45%;
@@ -100,5 +100,29 @@ h1 {
     color: white;
     text-align: center;
     margin-top: 1.5rem;
+    cursor: pointer;
+}
+
+.pass {
+    width: 100%;
+    position: relative;
+}
+
+.pass input {
+    width: 100%;
+    padding-right: 30px;
+    box-sizing: border-box;
+    /* Ensure padding doesn't affect width calculation */
+}
+
+.password-eye {
+    position: absolute;
+    /* Position the span absolutely within the pass div */
+    top: 50%;
+    /* Center the icon vertically */
+    right: 10px;
+    /* Position the icon at the right edge */
+    transform: translateY(-50%);
+    /* Adjust vertical positioning for centering */
     cursor: pointer;
 }

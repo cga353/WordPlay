@@ -3,6 +3,7 @@ import { Chart, ChartType, registerables } from 'chart.js';
 import { WordService } from '../services/word.service';
 import { Guess } from '../interfaces/guess';  // Cambia `Attempt` a `Guess` si es necesario
 import { Router } from '@angular/router';
+import { User } from '../interfaces/user';
 
 // Registrar los componentes de Chart.js
 Chart.register(...registerables);
@@ -14,14 +15,17 @@ Chart.register(...registerables);
   styleUrls: ['./line-chart.component.css']
 })
 export class LineChartComponent implements OnInit {
+  user: User | undefined;
 
   public chart: Chart | undefined;
-  private userId: number = 2; // Cambia esto al ID del usuario que quieras usar
 
   constructor(private wordService: WordService, private router: Router) { }
 
   ngOnInit(): void {
-    this.wordService.getSuccessfulGuessesByUserId(this.userId).subscribe((data: Guess[]) => {
+    const storedUserJSON = localStorage.getItem('user');
+    this.user = JSON.parse(storedUserJSON? storedUserJSON : '{}') as User;
+
+    this.wordService.getSuccessfulGuessesByUserId(this.user.id).subscribe((data: Guess[]) => {
       // Filtra las adivinanzas correctas
       const victoriesData = data.filter((guess: Guess) => guess.isGuessed);
       // Mapea los intentos y victorias

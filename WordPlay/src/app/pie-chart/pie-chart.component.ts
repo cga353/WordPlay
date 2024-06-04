@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Chart, ChartType } from 'chart.js/auto';
 import { WordService } from '../services/word.service';
 import { Router } from '@angular/router';
+import { User } from '../interfaces/user';
 
 @Component({
   selector: 'app-pie-chart',
@@ -10,14 +11,16 @@ import { Router } from '@angular/router';
   styleUrls: ['./pie-chart.component.css']
 })
 export class PieChartComponent implements OnInit, OnDestroy {
-
+  user: User | undefined;
   public chart: Chart | undefined;
-  private userId: number = 2; // Cambia esto al ID del usuario que quieras usar
 
   constructor(private wordService: WordService, private router: Router) { }
 
   ngOnInit(): void {
-    this.wordService.getGuessStatistics(this.userId).subscribe(data => {
+    const storedUserJSON = localStorage.getItem('user');
+    this.user = JSON.parse(storedUserJSON? storedUserJSON : '{}') as User;
+
+    this.wordService.getGuessStatistics(this.user.id).subscribe(data => {
       const labels = Object.keys(data);
       const values = Object.values(data);
 

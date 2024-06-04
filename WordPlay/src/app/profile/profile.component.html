@@ -10,12 +10,12 @@
         <img src="../../assets/default-img.png" alt="Descripción de la imagen">
         <!-- TODO cambiarla por la del usuario -->
         <div *ngIf="editMode && editedUser" class="info">
-          <input [(ngModel)]="editedUser.name" placeholder="Nombre del usuario">
+          <input [(ngModel)]="editedUser.userName" placeholder="Nombre del usuario">
           <input [(ngModel)]="editedUser.email" placeholder="Correo electrónico">
           <button (click)="saveChanges()">Guardar cambios</button>
         </div>
         <div *ngIf="!editMode" class="info">
-          <h2>{{ user?.name }}</h2>
+          <h2>{{ user?.userName }}</h2>
           <h4>{{ user?.email }}</h4>
         </div>
         <div class="edit-pass">

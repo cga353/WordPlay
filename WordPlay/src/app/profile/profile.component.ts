@@ -19,16 +19,18 @@ import { Router } from '@angular/router';
 export class ProfileComponent implements OnInit {
   user: User | undefined;
   editMode: boolean = false;
-  editedUser: User = { id: 0, name: '', email: '', userName: '', password: '' };
+  editedUser: User = { id: 0, name: '', email: '', userName: '', password: '', thumbnail: ''};
   editedPassword: boolean = false;
   newPassword: string ="";
   confirmPassword: string ="";
-
+  
   constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
-    const userId = 2; // Cambia esto al ID del usuario que quieras usar
-    this.userService.getUserById(userId).subscribe((data: User) => {
+    const storedUserJSON = localStorage.getItem('user');
+    this.user = JSON.parse(storedUserJSON? storedUserJSON : '{}') as User;
+
+    this.userService.getUserById(this.user.id).subscribe((data: User) => {
       this.user = data;
       this.editedUser = { ...data }; // Inicializa editedUser con una copia de los datos del usuario
     });
@@ -45,6 +47,7 @@ export class ProfileComponent implements OnInit {
   saveChanges(): void {
     if (this.editedUser && this.user) {
       this.userService.updateUser(this.user.id, this.editedUser).subscribe((updatedUser: User) => {
+        localStorage.setItem('user', JSON.stringify(updatedUser));
         this.user = updatedUser;
         this.editMode = false;
       });
@@ -52,9 +55,24 @@ export class ProfileComponent implements OnInit {
   }
 
   changePassword(){
+    // this.userService.validateUser(this.user?.userName, this.password)
+    // .subscribe(
+    //   user => {
+    //     localStorage.setItem('user', JSON.stringify(user));
+    //     this.router.navigate(['/home']);
+    //   },
+    //   error => {
+    //     console.error('Error:', error);
+    //     this.toastr.error('Las credenciales no coinciden', 'Error de inicio de sesión', {
+    //       positionClass: 'toast-bottom-right'
+    //     });
+    //   }
+    // );
+
     if(this.newPassword === this.confirmPassword){
       if(this.user){
         this.user.password = this.newPassword;
+        console.log('User:', this.user);
         this.userService.updateUser(this.user.id, this.user).subscribe((updatedUser: User) => {
           this.user = updatedUser;
           this.editedPassword = false;
@@ -64,7 +82,7 @@ export class ProfileComponent implements OnInit {
   }
 
   logOut(): void {
-    // TODO quitar user de localStorage
+    localStorage.removeItem('user');
     this.router.navigate(['/login']);
   }
 

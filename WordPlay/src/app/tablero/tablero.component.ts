@@ -9,6 +9,7 @@ import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { WordService } from '../services/word.service';
 import { Attempt } from '../interfaces/attempt';
 import * as confetti from 'canvas-confetti';
+import { User } from '../interfaces/user';
 
 @Component({
   selector: 'app-tablero',
@@ -19,6 +20,7 @@ import * as confetti from 'canvas-confetti';
 })
 
 export class TableroComponent implements OnInit {
+  user: User | undefined;
   filas: string[][];
   palabraAdivinar: string = "";
   entradaActivada: boolean = false;
@@ -228,7 +230,11 @@ export class TableroComponent implements OnInit {
 
   palabraCorrecta(palabraIngresada: string) {
     this.addPalabra(palabraIngresada.toLowerCase());
-    this.handleWordAttempt(2, this.palabraId || -1); //TODO Cambiar por el id usuario real
+
+    const storedUserJSON = localStorage.getItem('user');
+    this.user = JSON.parse(storedUserJSON? storedUserJSON : '{}') as User;
+
+    this.handleWordAttempt(this.user.id, this.palabraId || -1); 
     // Verificar si la palabra ingresada por el usuario es igual a la palabra a adivinar
     if (palabraIngresada === this.palabraAdivinar.toLowerCase()) {
       console.log('¡Felicidades! Has adivinado la palabra.');

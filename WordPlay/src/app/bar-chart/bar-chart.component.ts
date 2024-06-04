@@ -3,6 +3,7 @@ import { Chart, ChartType } from 'chart.js/auto';
 import { WordService } from '../services/word.service';
 import { Attempt } from '../interfaces/attempt';
 import { Router } from '@angular/router';
+import { User } from '../interfaces/user';
 
 @Component({
   selector: 'app-bar-chart',
@@ -12,14 +13,17 @@ import { Router } from '@angular/router';
   styleUrls: ['./bar-chart.component.css']
 })
 export class BarChartComponent implements OnInit, OnDestroy {
-
+  user: User | undefined;
   public chart: Chart | undefined;
-  private userId: number = 2; // Cambia esto al ID del usuario que quieras usar
 
   constructor(private wordService: WordService, private router: Router) { }
 
   ngOnInit(): void {
-    this.wordService.getTop5WordsByUserId(this.userId).subscribe((attempts: Attempt[]) => {
+
+    const storedUserJSON = localStorage.getItem('user');
+    this.user = JSON.parse(storedUserJSON? storedUserJSON : '{}') as User;
+
+    this.wordService.getTop5WordsByUserId(this.user.id).subscribe((attempts: Attempt[]) => {
       const wordIds = attempts.map((attempt: Attempt) => attempt.wordId);
       const data = attempts.map((attempt: Attempt) => attempt.nVeces);
 
