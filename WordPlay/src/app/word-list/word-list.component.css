@@ -4,15 +4,10 @@
   margin: auto;
 }
 
-.word-list-title {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+h2{
   text-align: center;
-  font-size: 24px;
-  font-weight: bold;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  font-size: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .word-list-header {
@@ -58,6 +53,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 1rem;
 }
 
 .word-list-item card {
@@ -68,11 +64,31 @@
   border-bottom: 1px solid #ddd;
 }
 
+.search{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+}
+
 .search-bar {
-  padding: 10px;
-  margin: 10px 0;
+  padding: 0.75rem 3rem;
   width: 100%;
   box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.search span{
+  position: absolute;
+  /* Position the span absolutely within the pass div */
+  left: 1rem;
+  /* Position the icon at the right edge */
+  transform: translateY(-50%);
+  transform: rotate(90deg);
+  /* Adjust vertical positioning for centering */
+  cursor: pointer;
 }
 
 .combobox {
@@ -108,24 +124,66 @@ mat-slider {
   flex-direction: column;
 }
 
+.date-input-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* Ajusta el espacio entre los campos si es necesario */
+}
+
+.date-input-container label {
+  width: 100px; /* Ajusta este valor según tus necesidades */
+  text-align: left;
+  margin-right: 10px;
+}
+
+.date-input-container input {
+  flex-grow: 1;
+  border: 1px solid #ccc;
+  padding: 0.25rem;
+  border-radius: 5px;
+}
+
+.date-input-container input:focus {
+  border-color: #66afe9; /* Color del borde al enfocar */
+  box-shadow: 0 0 5px rgba(102, 175, 233, 0.5); /* Sombra al enfocar */
+  outline: none;
+}
+
 .filter-container {
   position: relative;
 }
 
 .filter-options-bar {
   display: flex;
-  align-items: center;
-  margin-top: 10px;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: start;
+  margin-top: 1rem;
 }
 
 .filter-options-toggle {
   cursor: pointer;
-  color: blue;
-  margin-right: 10px;
+  color: #12bbb8;
+  margin-bottom: 1rem;
 }
 
-.clear-filters {
-  display: none;
+.filter-clear button{
+  display: block;
+  width: 100%;
+  padding: 0.35rem;
+  margin: 0;
+  border-radius: 4px;
+  border: none;
+  background-color: #12bbb8;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.filter-clear button:hover{
+  background-color: #0c918e;
+
 }
 
 .filter-options-bar.show-clear-filters .clear-filters {
@@ -136,9 +194,6 @@ mat-slider {
 .tabla th {
   background-color: #eef5f9;
   padding: 10px;
-  text-align: center !important;
-  /* Asegura que el texto se centre */
-  align-items: center;
   border-radius: 5px;
 }
 
@@ -146,6 +201,10 @@ mat-slider {
   justify-content: center;
   text-align: center;
   align-items: center;
+}
+
+th {
+  text-align: center;
 }
 
 .tabla {
@@ -168,16 +227,18 @@ mat-slider {
 
 .tabla th:not(:last-child),
 .tabla td:not(:last-child) {
-  width: 15%;
-  justify-content: center;
+  width: 16.5%;
   text-align: center;
+  justify-content: center;
   align-items: center;
+  align-self: center;
 }
 
 /* Agrega bordes a las celdas de la tabla */
 .tabla th,
 .tabla td {
   border: 1px solid #ddd;
+  text-align: center;
 }
 
 /* Estilo adicional para las filas */
@@ -194,4 +255,52 @@ mat-slider {
   justify-content: center;
   align-items: center;
   height: 100px; /* Ajusta la altura según tus necesidades */
+}
+
+:host ::ng-deep .mat-sort-header-container {
+  display: flex;
+  justify-content: center;
+  padding-left: 1.2rem;
+}
+
+.nUsadas{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.nIntentos{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.nUsadas label,
+.nIntentos label{
+  margin-right: 0.25rem;
+}
+
+.nUsadas input,
+.nIntentos input{
+  display: block;
+  width: 5rem;
+  padding: 0.25rem 0 0.25rem 1rem;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.translations-list {
+  list-style-position: inside; /* Mueve las bolas de la lista a dentro del contenedor de lista */
+  text-align: left; /* Alinea el texto a la izquierda */
+}
+
+.translations-list li {
+  padding-left: 0; /* Elimina el padding a la izquierda de los elementos li */
+  margin-bottom: 0;
 }

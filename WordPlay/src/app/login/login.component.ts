@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../services/user.service';
 import { Router, RouterModule } from '@angular/router';
@@ -12,17 +12,13 @@ import { CommonModule, NgIf } from '@angular/common';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   password: string = "";
   userName: string = "";
   isFormValid: boolean = false;
   showPassword: boolean = false;
 
   constructor(private userService: UserService, private router: Router, private toastr: ToastrService) {
-  }
-
-  ngOnInit() {
-    this.isFormValid = this.checkFormValidity();
   }
 
   checkFormValidity(): boolean {

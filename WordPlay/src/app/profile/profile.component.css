@@ -195,6 +195,7 @@ app-nav-bar{
     /* Para que los gráficos ocupen la mitad del contenedor */
     display: flex;
     justify-content: center;
+    align-items: center;
     margin-top: 1.5rem;
     max-width: 100%; /* Asegurarse de que no se salga del contenedor */
     overflow: hidden; /* Manejar el desbordamiento */

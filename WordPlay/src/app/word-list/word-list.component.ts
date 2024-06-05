@@ -130,7 +130,25 @@ export class WordListComponent implements OnInit {
     this.applyFilters();
   }
 
-  onAttemptsFilterChange(event: any) {
+  onAttemptsFilterChangeIntentos(event: any) {
+    if (event.target.value < 0) {
+      event.target.value =  event.target.value.substring(1); // Establecer el valor a 0 si es negativo
+    }
+
+    if (event.target.value > 6) {
+      event.target.value =  6; // Establecer el valor a 0 si es negativo
+    }
+
+    const filterValue = event.target.value;
+    this.attemptsFilter = filterValue !== '' ? parseInt(filterValue) : null;
+    this.applyFilters();
+  }
+
+  onAttemptsFilterChangeIntroducidos(event: any) {
+    if (event.target.value < 0) {
+      event.target.value =  event.target.value.substring(1); // Establecer el valor a 0 si es negativo
+    }
+
     const filterValue = event.target.value;
     this.attemptsFilter = filterValue !== '' ? parseInt(filterValue) : null;
     this.applyFilters();
