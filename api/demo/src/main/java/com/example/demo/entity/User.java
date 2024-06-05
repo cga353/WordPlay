@@ -23,9 +23,7 @@ public class User {
     @Email
     private String email;
 
-    @NotBlank(message = "Password is mandatory")
     private String password;
-
     private String name;
     private String thumbnail;
 

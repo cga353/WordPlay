@@ -18,14 +18,15 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  user: User = { id: 0, name: '', email: '', userName: '', password: '', thumbnail: ''};
+  user: User = { id: 0, name: '', email: '', userName: '', password: '', thumbnail: '' };
   editMode: boolean = false;
-  editedUser: User = { id: 0, name: '', email: '', userName: '', password: '', thumbnail: ''};
+  editedUser: User = { id: 0, name: '', email: '', userName: '', password: '', thumbnail: '' };
   editedPassword: boolean = false;
-  newPassword: string ="";
-  confirmPassword: string ="";
+  newPassword: string = "";
+  confirmPassword: string = "";
   noData: boolean = false;
-  isFormValid: boolean = false;
+  isFormValidUser: boolean = true;
+  isFormValidPass: boolean = false;
   showPassword1: boolean = false;
   showPassword2: boolean = false;
   showPassword3: boolean = false;
@@ -38,8 +39,12 @@ export class ProfileComponent implements OnInit {
     this.editedUser = this.user;
   }
 
-  checkFormValidity(): void {
-    this.isFormValid = !!this.newPassword && !!this.editedUser.password && !!this.confirmPassword;
+  checkFormValidityPass(): void {
+    this.isFormValidPass = !!this.newPassword && !!this.editedUser.password && !!this.confirmPassword;
+  }
+
+  checkFormValidityUser(): void {
+    this.isFormValidUser = !!this.editedUser.userName.trim() && !!this.editedUser.email.trim();
   }
 
   handleNoData(event: boolean): void {
@@ -48,6 +53,9 @@ export class ProfileComponent implements OnInit {
 
   enableEditMode(): void {
     this.editMode = !this.editMode;
+    if (this.editMode) {
+      this.checkFormValidityUser();
+    }
   }
 
   enableEditPassword(): void {
@@ -65,12 +73,38 @@ export class ProfileComponent implements OnInit {
   }
 
   saveChanges(): void {
+    if (!this.isFormValidUser) {
+      return;
+    }
+    console.log("hola", this.editedUser);
     if (this.editedUser && this.user) {
-      this.userService.updateUser(this.user.id, this.editedUser).subscribe((updatedUser: User) => {
-        localStorage.setItem('user', JSON.stringify(updatedUser));
-        this.user = updatedUser;
-        this.editMode = false;
-      });
+      this.userService.updateUser(this.user.id, this.editedUser).subscribe(
+        (updatedUser: User) => {
+          localStorage.setItem('user', JSON.stringify(updatedUser));
+          this.user = updatedUser;
+          this.editMode = false;
+        },
+        (error: any) => {
+          if (error.status === 400) {
+            if (error.error === "Username already exists") {
+              this.toastr.error("Nombre de usuario en uso", '', {
+                positionClass: 'toast-bottom-left',
+                timeOut: 2000
+              });
+            } else if (error.error === "Email already exists") {
+              this.toastr.error("Correo electrónico en uso", '', {
+                positionClass: 'toast-bottom-left',
+                timeOut: 2000
+              });
+            } else {
+              this.toastr.error("Actualización erroónea", '', {
+                positionClass: 'toast-bottom-left',
+                timeOut: 2000
+              });
+            }
+          }
+        }
+      );
     }
   }
 
@@ -80,25 +114,24 @@ export class ProfileComponent implements OnInit {
 
     // Mostrar una nueva notificación de error
     this.toastr.error(message, '', {
-        positionClass: 'toast-top-left',
-        timeOut: 2000
+      positionClass: 'toast-top-left',
+      timeOut: 2000
     });
-}
+  }
 
-showSuccessNotification(message: string) {
+  showSuccessNotification(message: string) {
     // Limpiar cualquier notificación activa
     this.toastr.clear();
 
     // Mostrar una nueva notificación de éxito
     this.toastr.success(message, '', {
-        positionClass: 'toast-bottom-center',
-        timeOut: 2000
+      positionClass: 'toast-bottom-center',
+      timeOut: 2000
     });
-}
-
+  }
 
   changePassword() {
-    if (!this.isFormValid) {
+    if (!this.isFormValidPass) {
       return;
     }
 
@@ -126,6 +159,11 @@ showSuccessNotification(message: string) {
   }
 
   logOut(): void {
+    this.toastr.success('Sesión cerrada', '', {
+      positionClass: 'toast-bottom-left',
+      timeOut: 2000
+    });
+
     localStorage.removeItem('user');
     this.router.navigate(['/login']);
   }

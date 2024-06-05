@@ -4,15 +4,17 @@
     <div class="profile-panel">
       <div class="top-panel">
         <div class="edit-profile" (click)="enableEditMode()">
-          <img *ngIf="!editMode" src="../../assets/edit-profile2.png" alt="Descripción de la imagen">
+          <img *ngIf="!editMode" src="../../assets/edit.png" alt="Descripción de la imagen">
           <img *ngIf="editMode" src="../../assets/close.png" alt="Descripción de la imagen">
         </div>
-        <img src="../../assets/default-img.png" alt="Descripción de la imagen">
+        <img class="profile-img" src="../../assets/profile.png" alt="Descripción de la imagen">
         <!-- TODO cambiarla por la del usuario -->
-        <div *ngIf="editMode && editedUser" class="info">
-          <input [(ngModel)]="editedUser.userName" placeholder="Nombre del usuario">
-          <input [(ngModel)]="editedUser.email" placeholder="Correo electrónico">
-          <button (click)="saveChanges()">Guardar cambios</button>
+        <div *ngIf="editMode && editedUser" class="info-edit">
+          <h4>Modificar datos</h4>
+          <input [(ngModel)]="editedUser.userName" placeholder="Nombre del usuario" (input)="checkFormValidityUser()">
+          <input [(ngModel)]="editedUser.email" placeholder="Correo electrónico" (input)="checkFormValidityUser()">
+          <!-- <button (click)="saveChanges()">Guardar cambios</button> -->
+          <button (click)="saveChanges()" [disabled]="!isFormValidUser" [class.enabled]="isFormValidUser">Guardar cambios</button>
         </div>
         <div *ngIf="!editMode" class="info">
           <h2>{{ user.userName }}</h2>
@@ -25,27 +27,27 @@
           </div>
           <div *ngIf="editedPassword" class="password">
             <div class="pass">
-            <input [(ngModel)]="editedUser.password" placeholder="Contraseña actual" type="{{ showPassword1 ? 'text' : 'password' }}" (input)="checkFormValidity()">
+            <input [(ngModel)]="editedUser.password" placeholder="Contraseña actual" type="{{ showPassword1 ? 'text' : 'password' }}" (input)="checkFormValidityPass()">
             <span class="password-eye" (click)="togglePasswordVisibility1()">
               <span *ngIf="!showPassword1" class="material-symbols-outlined">visibility</span>
               <span *ngIf="showPassword1" class="material-symbols-outlined">visibility_off</span>
             </span>
             </div>
             <div class="pass">
-            <input [(ngModel)]="newPassword" placeholder="Nueva contraseña" type="{{ showPassword2 ? 'text' : 'password' }}" (input)="checkFormValidity()">
+            <input [(ngModel)]="newPassword" placeholder="Nueva contraseña" type="{{ showPassword2 ? 'text' : 'password' }}" (input)="checkFormValidityPass()">
             <span class="password-eye" (click)="togglePasswordVisibility2()">
               <span *ngIf="!showPassword2" class="material-symbols-outlined">visibility</span>
               <span *ngIf="showPassword2" class="material-symbols-outlined">visibility_off</span>
             </span>
             </div>
             <div class="pass">
-            <input [(ngModel)]="confirmPassword" placeholder="Confirmar contraseña" type="{{ showPassword3 ? 'text' : 'password' }}" (input)="checkFormValidity()">
+            <input [(ngModel)]="confirmPassword" placeholder="Confirmar contraseña" type="{{ showPassword3 ? 'text' : 'password' }}" (input)="checkFormValidityPass()">
             <span class="password-eye" (click)="togglePasswordVisibility3()">
               <span *ngIf="!showPassword3" class="material-symbols-outlined">visibility</span>
               <span *ngIf="showPassword3" class="material-symbols-outlined">visibility_off</span>
             </span>
             </div>
-            <button (click)="changePassword()" [disabled]="!isFormValid" [class.enabled]="isFormValid">Cambiar contraseña</button>
+            <button (click)="changePassword()" [disabled]="!isFormValidPass" [class.enabled]="isFormValidPass">Cambiar contraseña</button>
           </div>
         </div>
       </div>

@@ -43,11 +43,15 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User userDetails) {
-        System.out.println("Controller: " + userDetails + " contraseña:" + userDetails.getPassword());
-        return userService.updateUser(id, userDetails);
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
+        try {
+            User updatedUser = userService.updateUser(id, userDetails);
+            return ResponseEntity.ok(updatedUser);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
-
+    
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);

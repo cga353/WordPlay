@@ -3,7 +3,12 @@ package com.example.demo.service;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,22 +40,26 @@ public class UserService {
     }
 
     public User updateUser(Long id, User userDetails) {
-        System.out.println("Service: " + userDetails + " contraseña:" + userDetails.getPassword());
-
         Optional<User> optionalUser = userRepository.findById(id);
+        
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            System.out.println(userDetails);
-            System.err.println(userDetails.getPassword());
-            user.setName(userDetails.getName());
-            user.setEmail(userDetails.getEmail());
+            
+            if (!user.getUserName().equals(userDetails.getUserName()) && userRepository.existsByUserName(userDetails.getUserName())) {
+                throw new RuntimeException("Username already exists");
+            }
+            
+            if (!user.getEmail().equals(userDetails.getEmail()) && userRepository.existsByEmail(userDetails.getEmail())) {
+                throw new RuntimeException("Email already exists");
+            }
+            
             user.setUserName(userDetails.getUserName());
-            user.setPassword(userDetails.getPassword());
-            System.out.println("dentro del if: " + user + " contraseña:" + user.getPassword());
-
+            user.setEmail(userDetails.getEmail());
+    
             return userRepository.save(user);
+        } else {
+            throw new RuntimeException("User not found");
         }
-        return null;
     }
 
     public void deleteUser(Long id) {
@@ -62,7 +71,7 @@ public class UserService {
         // 1. Find user by username
         Optional<User> userOpt = userRepository.findByUserName(userName);
 
-        if(!userOpt.isPresent()){
+        if (!userOpt.isPresent()) {
             return null;
         }
 
@@ -72,7 +81,7 @@ public class UserService {
             return userOpt;
         }
 
-        //Password mismatch, return null
+        // Password mismatch, return null
         return null;
     }
 
