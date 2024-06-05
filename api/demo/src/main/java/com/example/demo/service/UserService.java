@@ -55,7 +55,8 @@ public class UserService {
             
             user.setUserName(userDetails.getUserName());
             user.setEmail(userDetails.getEmail());
-    
+            user.setPassword(userDetails.getPassword());
+            
             return userRepository.save(user);
         } else {
             throw new RuntimeException("User not found");

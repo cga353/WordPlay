@@ -24,18 +24,14 @@ public class User {
     private String email;
 
     private String password;
-    private String name;
-    private String thumbnail;
 
     public User() {
     }
 
-    public User(String name, String userName, String email, String password, String thumbnail) {
-        this.name = name;
+    public User(String userName, String email, String password) {
         this.email = email;
         this.userName = userName;
         this.password = password;
-        this.thumbnail = thumbnail;
     }
 
     public long getId() {
@@ -44,14 +40,6 @@ public class User {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getUserName() {
@@ -78,17 +66,9 @@ public class User {
         this.password = password;
     }
 
-    public String getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
-    }
-
     @Override
     public String toString() {
-        return "User [id=" + id + ", name=" + name + ", userName=" + userName + ", email=" + email + "]";
+        return "User [id=" + id + ", userName=" + userName + ", email=" + email + "]";
     }
 
 }

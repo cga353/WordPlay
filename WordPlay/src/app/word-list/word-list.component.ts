@@ -25,12 +25,12 @@ export class WordListComponent implements OnInit {
   source: string | null = '';
   filteredWords: any[] = [];
   filters = ["Hoy", "Semana", "Mes", "Año"];
-  selectedRadio: string | null = null; // Almacena el valor seleccionado actualmente
-  radioFilter: string | null = null; // Almacena el filtro actual
-  startDate: string | null = null; // Fecha de inicio
-  endDate: string | null = null; // Fecha de fin
-  searchTerm: string = ''; // Término de búsqueda
-  attemptsFilter: number | null = null; // Filtro de intentos
+  selectedRadio: string | null = null; 
+  radioFilter: string | null = null;
+  startDate: string | null = null; 
+  endDate: string | null = null; 
+  searchTerm: string = ''; 
+  attemptsFilter: number | null = null; 
   showFilterOptions: boolean = false;
 
 

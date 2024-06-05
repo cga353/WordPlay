@@ -18,9 +18,9 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  user: User = { id: 0, name: '', email: '', userName: '', password: '', thumbnail: '' };
+  user: User = { id: 0, email: '', userName: '', password: ''};
   editMode: boolean = false;
-  editedUser: User = { id: 0, name: '', email: '', userName: '', password: '', thumbnail: '' };
+  editedUser: User = { id: 0, email: '', userName: '', password: ''};
   editedPassword: boolean = false;
   newPassword: string = "";
   confirmPassword: string = "";
