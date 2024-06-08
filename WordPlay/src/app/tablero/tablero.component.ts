@@ -33,7 +33,6 @@ export class TableroComponent implements OnInit {
   estadoTeclado: { [key: string]: boolean } = {};
   mostrarConfetti: boolean = false;
 
-  shouldExpand: boolean = true;
   // Definimos el teclado virtual
   teclado: string[][] = [
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
@@ -67,7 +66,7 @@ export class TableroComponent implements OnInit {
         this.addPalabra(this.palabraAdivinar.toLowerCase());
       },
       (error: any) => {
-        // console.error('Error al obtener la palabra a adivinar:', error); //TODO: Descomentar
+        console.error('Error al obtener la palabra a adivinar:', error); 
       }
     );
   }
@@ -94,7 +93,6 @@ export class TableroComponent implements OnInit {
   }
 
   activarEntrada() {
-    console.log('Entrada activada ...');
     this.entradaActivada = true;
   }
 

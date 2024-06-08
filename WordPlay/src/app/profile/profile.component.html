@@ -8,7 +8,6 @@
           <img *ngIf="editMode" src="../../assets/close.png" alt="Descripción de la imagen">
         </div>
         <img class="profile-img" src="../../assets/profile.png" alt="Descripción de la imagen">
-        <!-- TODO cambiarla por la del usuario -->
         <div *ngIf="editMode && editedUser" class="info-edit">
           <h4>Modificar datos</h4>
           <input [(ngModel)]="editedUser.userName" placeholder="Nombre del usuario" (input)="checkFormValidityUser()">
