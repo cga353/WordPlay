@@ -23,6 +23,7 @@
     align-items: end;
     height: 10rem;
     margin-bottom: 1rem;
+    margin-top: 3rem;
     display: flex;
     justify-content: center;
 }
@@ -37,6 +38,7 @@ h1 {
     color: white;
     font-size: 2rem;
     text-align: center;
+    margin-bottom: 0;
 }
 
 .formulario{
@@ -56,8 +58,8 @@ h1 {
     background: rgb(255, 255, 255);
     border: 1px solid #d9d9d9;
     border-radius: 2.5rem;
-    margin-top: 3rem;
-    padding: 2rem 3rem;
+    margin-top: 1.5rem;
+    padding: 1rem 3rem;
     /* Añade margen superior para separarlo de los otros elementos */
 }
 
@@ -65,13 +67,14 @@ h1 {
     margin-top: 0;
     color: #02182f;
     text-align: center;
+    margin-bottom: 0.5rem;
 }
 
 .custom-form2 input {
     display: block;
     width: 100%;
     margin: 0.5rem 0;
-    padding: 1rem;
+    padding: 0.75rem 1rem;
     border-radius: 0.5rem;
     border: none;
     background: #ebf5fc;
@@ -90,6 +93,7 @@ h1 {
     border-radius: 1.5rem;
     cursor: not-allowed;
     background-color: #bcd8c1;
+    margin-top: 1rem;
 }
 
 .custom-form2 button.enabled {
@@ -104,4 +108,28 @@ h1 {
     text-align: center;
     margin-top: 1.5rem;
     cursor: pointer;
+}
+
+.pass {
+    width: 100%;
+    position: relative;
+}
+
+.pass input {
+    width: 100%;
+    padding-right: 30px;
+    box-sizing: border-box;
+    /* Ensure padding doesn't affect width calculation */
+}
+
+.password-eye {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: none; /* Elimina cualquier borde */
+    z-index: 9;
 }

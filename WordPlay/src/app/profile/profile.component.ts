@@ -8,6 +8,7 @@ import { LineChartComponent } from '../line-chart/line-chart.component';
 import { UserService } from '../services/user.service';
 import { User } from '../interfaces/user';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-profile',
@@ -17,71 +18,152 @@ import { Router } from '@angular/router';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  user: User | undefined;
+  user: User = { id: 0, email: '', userName: '', password: ''};
   editMode: boolean = false;
-  editedUser: User = { id: 0, name: '', email: '', userName: '', password: '', thumbnail: ''};
+  editedUser: User = { id: 0, email: '', userName: '', password: ''};
   editedPassword: boolean = false;
-  newPassword: string ="";
-  confirmPassword: string ="";
-  
-  constructor(private userService: UserService, private router: Router) { }
+  newPassword: string = "";
+  confirmPassword: string = "";
+  noData: boolean = false;
+  isFormValidUser: boolean = true;
+  isFormValidPass: boolean = false;
+  showPassword1: boolean = false;
+  showPassword2: boolean = false;
+  showPassword3: boolean = false;
+
+  constructor(private userService: UserService, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     const storedUserJSON = localStorage.getItem('user');
-    this.user = JSON.parse(storedUserJSON? storedUserJSON : '{}') as User;
+    this.user = JSON.parse(storedUserJSON ? storedUserJSON : '{}') as User;
+    this.editedUser = this.user;
+  }
 
-    this.userService.getUserById(this.user.id).subscribe((data: User) => {
-      this.user = data;
-      this.editedUser = { ...data }; // Inicializa editedUser con una copia de los datos del usuario
-    });
+  checkFormValidityPass(): void {
+    this.isFormValidPass = !!this.newPassword && !!this.editedUser.password && !!this.confirmPassword;
+  }
+
+  checkFormValidityUser(): void {
+    this.isFormValidUser = !!this.editedUser.userName.trim() && !!this.editedUser.email.trim();
+  }
+
+  handleNoData(event: boolean): void {
+    this.noData = event;
   }
 
   enableEditMode(): void {
     this.editMode = !this.editMode;
+    if (this.editMode) {
+      this.checkFormValidityUser();
+    }
   }
 
   enableEditPassword(): void {
     this.editedPassword = !this.editedPassword;
   }
 
+  togglePasswordVisibility1() {
+    this.showPassword1 = !this.showPassword1;
+  }
+  togglePasswordVisibility2() {
+    this.showPassword2 = !this.showPassword2;
+  }
+  togglePasswordVisibility3() {
+    this.showPassword3 = !this.showPassword3;
+  }
+
   saveChanges(): void {
+    if (!this.isFormValidUser) {
+      return;
+    }
+    console.log("hola", this.editedUser);
     if (this.editedUser && this.user) {
-      this.userService.updateUser(this.user.id, this.editedUser).subscribe((updatedUser: User) => {
-        localStorage.setItem('user', JSON.stringify(updatedUser));
-        this.user = updatedUser;
-        this.editMode = false;
-      });
+      this.userService.updateUser(this.user.id, this.editedUser).subscribe(
+        (updatedUser: User) => {
+          localStorage.setItem('user', JSON.stringify(updatedUser));
+          this.user = updatedUser;
+          this.editMode = false;
+        },
+        (error: any) => {
+          if (error.status === 400) {
+            if (error.error === "Username already exists") {
+              this.toastr.error("Nombre de usuario en uso", '', {
+                positionClass: 'toast-bottom-left',
+                timeOut: 2000
+              });
+            } else if (error.error === "Email already exists") {
+              this.toastr.error("Correo electrónico en uso", '', {
+                positionClass: 'toast-bottom-left',
+                timeOut: 2000
+              });
+            } else {
+              this.toastr.error("Actualización erroónea", '', {
+                positionClass: 'toast-bottom-left',
+                timeOut: 2000
+              });
+            }
+          }
+        }
+      );
     }
   }
 
-  changePassword(){
-    // this.userService.validateUser(this.user?.userName, this.password)
-    // .subscribe(
-    //   user => {
-    //     localStorage.setItem('user', JSON.stringify(user));
-    //     this.router.navigate(['/home']);
-    //   },
-    //   error => {
-    //     console.error('Error:', error);
-    //     this.toastr.error('Las credenciales no coinciden', 'Error de inicio de sesión', {
-    //       positionClass: 'toast-bottom-right'
-    //     });
-    //   }
-    // );
+  showErrorNotification(message: string) {
+    // Limpiar cualquier notificación activa
+    this.toastr.clear();
 
-    if(this.newPassword === this.confirmPassword){
-      if(this.user){
-        this.user.password = this.newPassword;
-        console.log('User:', this.user);
-        this.userService.updateUser(this.user.id, this.user).subscribe((updatedUser: User) => {
-          this.user = updatedUser;
-          this.editedPassword = false;
-        });
-      }
+    // Mostrar una nueva notificación de error
+    this.toastr.error(message, '', {
+      positionClass: 'toast-top-left',
+      timeOut: 2000
+    });
+  }
+
+  showSuccessNotification(message: string) {
+    // Limpiar cualquier notificación activa
+    this.toastr.clear();
+
+    // Mostrar una nueva notificación de éxito
+    this.toastr.success(message, '', {
+      positionClass: 'toast-bottom-center',
+      timeOut: 2000
+    });
+  }
+
+  changePassword() {
+    if (!this.isFormValidPass) {
+      return;
     }
+
+    if (this.editedUser.password !== this.user.password) {
+      this.showErrorNotification('La contraseña actual no coincide');
+      return;
+    }
+
+    if (this.newPassword === this.editedUser.password) {
+      this.showErrorNotification('La nueva contraseña no puede ser igual a la anterior');
+      return;
+    }
+
+    if (this.newPassword !== this.confirmPassword) {
+      this.showErrorNotification('Las nuevas contraseñas no coinciden');
+      return;
+    }
+
+    this.user.password = this.newPassword;
+    this.userService.updateUser(this.user.id, this.user).subscribe((updatedUser: User) => {
+      this.user = updatedUser;
+      this.editedPassword = false;
+      this.showSuccessNotification('Contraseña actualizada correctamente');
+    });
   }
 
   logOut(): void {
+    this.toastr.success('Sesión cerrada', '', {
+      positionClass: 'toast-bottom-left',
+      timeOut: 2000
+    });
+
     localStorage.removeItem('user');
     this.router.navigate(['/login']);
   }

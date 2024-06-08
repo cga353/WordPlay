@@ -52,6 +52,7 @@ export class WordService {
   }
 
   getGuessesByUserId(userId: number): Observable<Guess[]> {
+    console.log('Getting guesses by user id:', userId);
     return this.http.get<Guess[]>(`${this.gessuesUrl}/user/${userId}`);
   }
 

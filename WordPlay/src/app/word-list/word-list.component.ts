@@ -4,7 +4,7 @@ import { WordService } from '../services/word.service';
 import { Attempt } from '../interfaces/attempt';
 import { Guess } from '../interfaces/guess';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
-import { NgFor, NgIf } from '@angular/common';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -14,7 +14,7 @@ import { User } from '../interfaces/user';
 @Component({
   selector: 'app-word-list',
   standalone: true,
-  imports: [NavBarComponent, NgFor, NgIf, MatSliderModule, MatRadioModule, MatSlideToggleModule, MatSortModule],
+  imports: [NavBarComponent, NgFor, NgIf, MatSliderModule, MatRadioModule, MatSlideToggleModule, MatSortModule, CommonModule],
   templateUrl: './word-list.component.html',
   styleUrls: ['./word-list.component.css']
 })
@@ -25,14 +25,13 @@ export class WordListComponent implements OnInit {
   source: string | null = '';
   filteredWords: any[] = [];
   filters = ["Hoy", "Semana", "Mes", "Año"];
-  selectedRadio: string | null = null; // Almacena el valor seleccionado actualmente
-  radioFilter: string | null = null; // Almacena el filtro actual
-  startDate: string | null = null; // Fecha de inicio
-  endDate: string | null = null; // Fecha de fin
-  searchTerm: string = ''; // Término de búsqueda
-  attemptsFilter: number | null = null; // Filtro de intentos
+  selectedRadio: string | null = null; 
+  radioFilter: string | null = null;
+  startDate: string | null = null; 
+  endDate: string | null = null; 
+  searchTerm: string = ''; 
+  attemptsFilter: number | null = null; 
   showFilterOptions: boolean = false;
-
 
   constructor(private wordService: WordService, private route: ActivatedRoute) { }
 
@@ -52,8 +51,9 @@ export class WordListComponent implements OnInit {
         const wordIds = data.map(attempt => attempt.wordId);
         this.wordService.getWordsByIds(wordIds).subscribe(words => {
           this.words = data.map(attempt => {
-            const word = words.find(w => w.id === attempt.wordId);
-            return { ...attempt, name: word.name, translations: [] };
+            const word = words.find(w => w && w.id === attempt.wordId);
+            const name = word ? word.name : "Nombre Desconocido";
+            return { ...attempt, name: name, translations: [] };
           });
           this.fetchTranslations();
           this.filteredWords = [...this.words];
@@ -75,18 +75,26 @@ export class WordListComponent implements OnInit {
       });
     } else if (this.source === 'line-chart') {
       this.wordService.getGuessesByUserId(this.user.id).subscribe((data: Guess[]) => {
+        console.warn('Guesses:', data);
         const wordIds = data.map(guess => guess.wordId);
+        console.warn('Word IDs:', wordIds);
         this.wordService.getWordsByIds(wordIds).subscribe(words => {
-          this.words = data.map(guess => {
-            const word = words.find(w => w.id === guess.wordId);
-            const formattedDate = new Date(guess.date).toLocaleDateString();
-            return { ...guess, name: word.name, date: formattedDate, translations: [] };
+          this.words = words.map(word => {
+            const guess = data.find(g => g.wordId === word.id);
+            if (guess) {
+              const formattedDate = new Date(guess.date).toLocaleDateString();
+              return { ...guess, name: word.name, date: formattedDate, translations: [] };
+            } else {
+              // Si no hay un juego correspondiente, retornar la palabra sin datos del juego
+              return { id: word.id, name: word.name, date: null, isGuessed: false, nAttempt: 0, translations: [] };
+            }
           });
           this.fetchTranslations();
           this.filteredWords = [...this.words];
           console.warn('Line Chart Data:', this.words); // Datos para line-chart
         });
       });
+      
     }
   }
 
@@ -130,7 +138,25 @@ export class WordListComponent implements OnInit {
     this.applyFilters();
   }
 
-  onAttemptsFilterChange(event: any) {
+  onAttemptsFilterChangeIntentos(event: any) {
+    if (event.target.value < 0) {
+      event.target.value =  event.target.value.substring(1); // Establecer el valor a 0 si es negativo
+    }
+
+    if (event.target.value > 6) {
+      event.target.value =  6; // Establecer el valor a 0 si es negativo
+    }
+
+    const filterValue = event.target.value;
+    this.attemptsFilter = filterValue !== '' ? parseInt(filterValue) : null;
+    this.applyFilters();
+  }
+
+  onAttemptsFilterChangeIntroducidos(event: any) {
+    if (event.target.value < 0) {
+      event.target.value =  event.target.value.substring(1); // Establecer el valor a 0 si es negativo
+    }
+
     const filterValue = event.target.value;
     this.attemptsFilter = filterValue !== '' ? parseInt(filterValue) : null;
     this.applyFilters();

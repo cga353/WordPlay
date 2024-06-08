@@ -1,0 +1,41 @@
+version: latest
+
+services:
+  frontend:
+    build:
+      context: ./WordPlay
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    command: npm start
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/cga353
+      SPRING_DATASOURCE_USERNAME: cga353
+      SPRING_DATASOURCE_PASSWORD: cga353
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres_container
+    restart: always
+    environment:
+      POSTGRES_USER: cga353
+      POSTGRES_PASSWORD: cga353
+      POSTGRES_DB: cga353
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

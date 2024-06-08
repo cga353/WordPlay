@@ -1,26 +1,22 @@
 <app-nav-bar></app-nav-bar>
 
 <div class="word-list-container">
-  <div class="word-list-title">
-    <h1>Detalles gráfico</h1>
-    <!-- Example of a combobox -->
-    <select class="combobox" (change)="onFilterChange($event)">
-      <option value="">Select Chart Type</option>
-      <option value="bar-chart">Bar Chart</option>
-      <option value="line-chart">Line Chart</option>
-      <option value="pie-chart">Pie Chart</option>
-    </select>
-  </div>
+    <h2 *ngIf="source === 'bar-chart'" >Palabras Usadas</h2>
+    <h2 *ngIf="source === 'line-chart'" >Partidas Jugadas</h2>
+    <h2 *ngIf="source === 'pie-chart'" >Palabras Adivinadas</h2>
 
   <!-- Search bar and filters -->
   <div class="filter-container">
-    <input type="text" class="search-bar" placeholder="Search words..." (input)="onSearch($event)">
+    <div class="search">
+      <span class="material-symbols-outlined">search</span>
+      <input type="text" class="search-bar" placeholder="Buscar palabras..." (input)="onSearch($event)">
+    </div>
     <div class="filter-options-bar">
       <div class="filter-options-toggle" (click)="toggleFilterOptions()">
-        Filter options
+        Filtrar
       </div>
-      <div class="filter-options-bar" [class.show-clear-filters]="showFilterOptions">
-        <button *ngIf="showFilterOptions" class="clear-filters" (click)="clearFilters()">Clear Filters</button>
+      <div class="filter-clear" [class.show-clear-filters]="showFilterOptions">
+        <button *ngIf="showFilterOptions" class="clear-filters" (click)="clearFilters()">Borrar filtros</button>
       </div>
     </div>
 
@@ -36,19 +32,22 @@
             adivinadas</mat-radio-button>
         </mat-radio-group>
 
-        <label for="attempts-filter">Number of Attempts:</label>
-        <input type="number" id="attempts-filter" name="attempts-filter" (input)="onAttemptsFilterChange($event)">
-
         <div class="date-filter">
-          <div>
-            <label for="start-date">Start Date:</label>
+          <div class="date-input-container">
+            <label for="start-date">Inicio Fecha:</label>
             <input type="date" id="start-date" (change)="onStartDateChange($event)">
           </div>
-          <div>
-            <label for="end-date">End Date:</label>
+          <div class="date-input-container">
+            <label for="end-date">Fin Fecha:</label>
             <input type="date" id="end-date" (change)="onEndDateChange($event)">
           </div>
         </div>
+        
+        <div class="nIntentos">
+          <label for="attempts-filter">Número de Intentos:</label>
+          <input type="number" id="attempts-filter" name="attempts-filter" min="1" max="6" (input)="onAttemptsFilterChangeIntentos($event)">
+        </div>
+
       </div>
 
       <div *ngIf="source === 'pie-chart'" class="card-body">
@@ -63,59 +62,68 @@
       </div>
 
       <div *ngIf="source === 'bar-chart'" class="card-body">
-        <label for="attempts-filter">Number of Attempts:</label>
-        <input type="number" id="attempts-filter" name="attempts-filter" (input)="onAttemptsFilterChange($event)">
+        <div class="nUsadas">
+          <label for="attempts-filter">nº Usos:</label>
+          <input type="number" id="attempts-filter" name="attempts-filter" min="1" (input)="onAttemptsFilterChangeIntroducidos($event)">
+        </div>
       </div>
     </div>
   </div>
 
-  <table matSort (matSortChange)="sortData($event)" class="tabla">
-    <thead>
-      <tr *ngIf="source === 'bar-chart'">
-        <th class="encabezado" mat-sort-header="name">Words</th>
-        <th mat-sort-header="nVeces">n Veces</th>
-        <th>Translation</th>
-      </tr>
-      <tr *ngIf="source === 'line-chart'">
-        <th mat-sort-header="name">Words</th>
-        <th mat-sort-header="isGuessed">isGuessed</th>
-        <th mat-sort-header="nAttempt">n Attempts</th>
-        <th mat-sort-header="date">Date</th>
-        <th>Translation</th>
-      </tr>
-      <tr *ngIf="source === 'pie-chart'">
-        <th mat-sort-header="name">Words</th>
-        <th mat-sort-header="isGuessed">isGuessed</th>
-        <th>Translation</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let word of filteredWords">
-        <td *ngIf="source === 'bar-chart'">{{ word.name }}</td>
-        <td *ngIf="source === 'bar-chart'">{{ word.nVeces }}</td>
-        <td *ngIf="source === 'bar-chart'">
-          <ul>
-            <li *ngFor="let translation of word.translations">{{ translation }}</li>
-          </ul>
-        </td>
-        <td *ngIf="source === 'line-chart'">{{ word.name }}</td>
-        <td *ngIf="source === 'line-chart'">{{ word.isGuessed }}</td>
-        <td *ngIf="source === 'line-chart'">{{ word.nAttempt }}</td>
-        <td *ngIf="source === 'line-chart'">{{ word.date }}</td>
-        <td *ngIf="source === 'line-chart'">
-          <ul>
-            <li *ngFor="let translation of word.translations">{{ translation }}</li>
-          </ul>
-        </td>
-        <td *ngIf="source === 'pie-chart'">{{ word.name }}</td>
-        <td *ngIf="source === 'pie-chart'">{{ word.isGuessed }}</td>
-        <td *ngIf="source === 'pie-chart'">
-          <ul>
-            <li *ngFor="let translation of word.translations">{{ translation }}</li>
-          </ul>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  
+  <div *ngIf="filteredWords.length > 0; else noWordsTemplate">
+    <table matSort (matSortChange)="sortData($event)" class="tabla">
+      <thead>
+        <tr *ngIf="source === 'bar-chart'">
+          <th mat-sort-header="name">Palabra</th>
+          <th mat-sort-header="nVeces">nº Usos</th>
+          <th>Traducción</th>
+        </tr>
+        <tr *ngIf="source === 'line-chart'">
+          <th mat-sort-header="name">Palabra</th>
+          <th mat-sort-header="isGuessed">Adivinada</th>
+          <th mat-sort-header="nAttempt">nº Intento</th>
+          <th mat-sort-header="date">Date</th>
+          <th>Traducción</th>
+        </tr>
+        <tr *ngIf="source === 'pie-chart'">
+          <th mat-sort-header="name">Palabra</th>
+          <th mat-sort-header="isGuessed">Adivinada</th>
+          <th>Traducción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let word of filteredWords">
+          <td *ngIf="source === 'bar-chart'">{{ word.name }}</td>
+          <td *ngIf="source === 'bar-chart'">{{ word.nVeces }}</td>
+          <td *ngIf="source === 'bar-chart'">
+            <ul class="translations-list">
+              <li *ngFor="let translation of word.translations">{{ translation }}</li>
+            </ul>
+          </td>
+          <td *ngIf="source === 'line-chart'">{{ word.name }}</td>
+          <td *ngIf="source === 'line-chart'">{{ word.isGuessed }}</td>
+          <td *ngIf="source === 'line-chart'">{{ word.nAttempt }}</td>
+          <td *ngIf="source === 'line-chart'">{{ word.date }}</td>
+          <td *ngIf="source === 'line-chart'">
+            <ul class="translations-list">
+              <li *ngFor="let translation of word.translations">{{ translation }}</li>
+            </ul>
+          </td>
+          <td *ngIf="source === 'pie-chart'">{{ word.name }}</td>
+          <td *ngIf="source === 'pie-chart'">{{ word.isGuessed }}</td>
+          <td *ngIf="source === 'pie-chart'">
+            <ul class="translations-list">
+              <li *ngFor="let translation of word.translations">{{ translation }}</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #noWordsTemplate>
+    <div class="no-words-message">
+      <h3>No hay palabras disponibles</h3>
+    </div>
+  </ng-template>
 </div>

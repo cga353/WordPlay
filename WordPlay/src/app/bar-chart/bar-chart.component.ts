@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Chart, ChartType } from 'chart.js/auto';
 import { WordService } from '../services/word.service';
 import { Attempt } from '../interfaces/attempt';
@@ -13,6 +13,7 @@ import { User } from '../interfaces/user';
   styleUrls: ['./bar-chart.component.css']
 })
 export class BarChartComponent implements OnInit, OnDestroy {
+  @Output() noData: EventEmitter<boolean> = new EventEmitter<boolean>();
   user: User | undefined;
   public chart: Chart | undefined;
 
@@ -24,12 +25,17 @@ export class BarChartComponent implements OnInit, OnDestroy {
     this.user = JSON.parse(storedUserJSON? storedUserJSON : '{}') as User;
 
     this.wordService.getTop5WordsByUserId(this.user.id).subscribe((attempts: Attempt[]) => {
+      if (attempts.length === 0) {
+        this.noData.emit(true);
+        return;
+      }
+
       const wordIds = attempts.map((attempt: Attempt) => attempt.wordId);
       const data = attempts.map((attempt: Attempt) => attempt.nVeces);
 
       this.wordService.getWordsByIds(wordIds).subscribe((words: any[]) => {
-        const labels = words.map((word: any) => word.name);
-
+        const labels = words.map((word: any) => word ? word.name : '');
+        this.noData.emit(false);
         this.createChart(labels, data);
       });
     });
