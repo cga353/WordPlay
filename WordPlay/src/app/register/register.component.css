@@ -5,10 +5,7 @@
     justify-content: center;
     height: 100vh;
     /* Ajusta el contenedor a la altura de la ventana */
-    background: linear-gradient(to right, #02182f, #03a5aa, #00c25f, #06db87, #03dcfb);
-    /* background: linear-gradient(to right, #02182f, #03a5aa, #00c25f, #06db87, #03dcfb); */
-
-    /* clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); */
+    background: linear-gradient(to right, #02182f, #03a5aa, #00c25f, #03a5aa, #02182f);
     padding: 2rem;
     /* Añade padding para evitar que los contenidos toquen los bordes */
     box-sizing: border-box;
