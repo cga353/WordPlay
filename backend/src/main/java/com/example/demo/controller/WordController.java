@@ -1,11 +1,14 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Word;
+import com.example.demo.service.ExternalApiService;
 import com.example.demo.service.WordService;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,6 +17,12 @@ public class WordController {
 
     @Autowired
     private WordService wordService;
+
+    private ExternalApiService externalApiService;
+
+    public WordController(ExternalApiService externalApiService) {
+        this.externalApiService = externalApiService;
+    }
 
     /**
      * Obtiene todas las palabras.
@@ -34,6 +43,34 @@ public class WordController {
     @PostMapping
     public Long createWordAndGetId(@RequestBody Word word) {
         return wordService.createOrUpdateWord(word);
+    }
+
+    /**
+     * Obtener una palabra aleatoria.
+     * 
+     * @return ResponseEntity con la palabra aleatoria obtenida.
+     */
+    @GetMapping("/random")
+    public ResponseEntity<String> obtenerPalabraAdivinar() {
+        String palabra = externalApiService.getRandomWordAPI();
+        return ResponseEntity.ok(palabra);
+    }
+
+    /**
+     * Busca la palabra en la API.
+     * 
+     * @param palabra La palabra para la cual se desea obtener la definición.
+     * @return ResponseEntity con la definición de la palabra.
+     */
+    @GetMapping("/definition/{palabra}")
+    public ResponseEntity<?> buscarDefinicionPalabra(@PathVariable String palabra) {
+        try {
+            Object respuesta = externalApiService.searchWordAPI(palabra);
+            return ResponseEntity.ok(respuesta);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al buscar la definición de la palabra");
+        }
     }
 
     /**

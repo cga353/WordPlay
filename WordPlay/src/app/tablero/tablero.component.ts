@@ -292,7 +292,7 @@ export class TableroComponent implements OnInit {
 
   addPalabraAdivinada(palabraIngresada: string) {
     const guess = {
-      userId: 2, // Reemplazar con el ID del usuario real
+      userId: this.user?.id || -1, 
       wordId: this.palabraId,
       isGuessed: palabraIngresada.toLowerCase() === this.palabraAdivinar.toLowerCase(),
       nAttempt: this.filaActual + 1, // Reemplazar con el número real de intentos

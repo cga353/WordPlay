@@ -6,12 +6,11 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class RandomWordService {
-  private apiUrl = 'https://random-word-api.herokuapp.com/word?lang=en&&length=5'; // Reemplaza esto con la URL de tu API
+  private apiUrl = 'http://localhost:8080/api/words/random'; // URL del endpoint del backend
 
   constructor(private http: HttpClient) { }
 
   obtenerPalabraAdivinar(): Observable<string> {
     return this.http.get<string>(this.apiUrl);
   }
-
 }

@@ -34,7 +34,7 @@ export class BarChartComponent implements OnInit, OnDestroy {
       const data = attempts.map((attempt: Attempt) => attempt.nVeces);
 
       this.wordService.getWordsByIds(wordIds).subscribe((words: any[]) => {
-        const labels = words.map((word: any) => word.name);
+        const labels = words.map((word: any) => word ? word.name : '');
         this.noData.emit(false);
         this.createChart(labels, data);
       });
