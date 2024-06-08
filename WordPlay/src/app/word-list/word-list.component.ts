@@ -33,6 +33,7 @@ export class WordListComponent implements OnInit {
   attemptsFilter: number | null = null; 
   showFilterOptions: boolean = false;
 
+
   constructor(private wordService: WordService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -51,9 +52,8 @@ export class WordListComponent implements OnInit {
         const wordIds = data.map(attempt => attempt.wordId);
         this.wordService.getWordsByIds(wordIds).subscribe(words => {
           this.words = data.map(attempt => {
-            const word = words.find(w => w && w.id === attempt.wordId);
-            const name = word ? word.name : "Nombre Desconocido";
-            return { ...attempt, name: name, translations: [] };
+            const word = words.find(w => w.id === attempt.wordId);
+            return { ...attempt, name: word.name, translations: [] };
           });
           this.fetchTranslations();
           this.filteredWords = [...this.words];
@@ -75,26 +75,18 @@ export class WordListComponent implements OnInit {
       });
     } else if (this.source === 'line-chart') {
       this.wordService.getGuessesByUserId(this.user.id).subscribe((data: Guess[]) => {
-        console.warn('Guesses:', data);
         const wordIds = data.map(guess => guess.wordId);
-        console.warn('Word IDs:', wordIds);
         this.wordService.getWordsByIds(wordIds).subscribe(words => {
-          this.words = words.map(word => {
-            const guess = data.find(g => g.wordId === word.id);
-            if (guess) {
-              const formattedDate = new Date(guess.date).toLocaleDateString();
-              return { ...guess, name: word.name, date: formattedDate, translations: [] };
-            } else {
-              // Si no hay un juego correspondiente, retornar la palabra sin datos del juego
-              return { id: word.id, name: word.name, date: null, isGuessed: false, nAttempt: 0, translations: [] };
-            }
+          this.words = data.map(guess => {
+            const word = words.find(w => w.id === guess.wordId);
+            const formattedDate = new Date(guess.date).toLocaleDateString();
+            return { ...guess, name: word.name, date: formattedDate, translations: [] };
           });
           this.fetchTranslations();
           this.filteredWords = [...this.words];
           console.warn('Line Chart Data:', this.words); // Datos para line-chart
         });
       });
-      
     }
   }
 
