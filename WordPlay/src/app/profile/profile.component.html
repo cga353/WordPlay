@@ -12,7 +12,6 @@
           <h4>Modificar datos</h4>
           <input [(ngModel)]="editedUser.userName" placeholder="Nombre del usuario" (input)="checkFormValidityUser()">
           <input [(ngModel)]="editedUser.email" placeholder="Correo electrónico" (input)="checkFormValidityUser()">
-          <!-- <button (click)="saveChanges()">Guardar cambios</button> -->
           <button (click)="saveChanges()" [disabled]="!isFormValidUser" [class.enabled]="isFormValidUser">Guardar cambios</button>
         </div>
         <div *ngIf="!editMode" class="info">

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { WordService } from '../services/word.service';
 import { Attempt } from '../interfaces/attempt';
-import { Guess } from '../interfaces/guess';
+import { Game } from '../interfaces/game';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { MatSliderModule } from '@angular/material/slider';
@@ -19,24 +19,23 @@ import { User } from '../interfaces/user';
   styleUrls: ['./word-list.component.css']
 })
 export class WordListComponent implements OnInit {
-  @ViewChild(MatSort) sort: MatSort | undefined;
+  @ViewChild(MatSort) sort: MatSort | undefined; // Para ordenar datos en la tabla
   user: User | undefined;
   words: any[] = [];
   source: string | null = '';
   filteredWords: any[] = [];
-  filters = ["Hoy", "Semana", "Mes", "Año"];
-  selectedRadio: string | null = null; 
+  selectedRadio: string | null = null;
   radioFilter: string | null = null;
-  startDate: string | null = null; 
-  endDate: string | null = null; 
-  searchTerm: string = ''; 
-  attemptsFilter: number | null = null; 
+  startDate: string | null = null;
+  endDate: string | null = null;
+  searchTerm: string = '';
+  attemptsFilter: number | null = null;
   showFilterOptions: boolean = false;
-
 
   constructor(private wordService: WordService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    // Suscribirse a los parámetros de la ruta para obtener la fuente de datos
     this.route.queryParamMap.subscribe(params => {
       this.source = params.get('source');
       this.loadWords();
@@ -44,9 +43,11 @@ export class WordListComponent implements OnInit {
   }
 
   loadWords(): void {
+    // Obtener información del usuario del localStorage
     const storedUserJSON = localStorage.getItem('user');
-    this.user = JSON.parse(storedUserJSON? storedUserJSON : '{}') as User;
+    this.user = JSON.parse(storedUserJSON ? storedUserJSON : '{}') as User;
 
+    // Cargar palabras según la fuente (bar-chart, pie-chart, line-chart)
     if (this.source === 'bar-chart') {
       this.wordService.getAttemptsByUserId(this.user.id).subscribe((data: Attempt[]) => {
         const wordIds = data.map(attempt => attempt.wordId);
@@ -61,12 +62,12 @@ export class WordListComponent implements OnInit {
         });
       });
     } else if (this.source === 'pie-chart') {
-      this.wordService.getGuessesByUserId(this.user.id).subscribe((data: Guess[]) => {
-        const wordIds = data.map(guess => guess.wordId);
+      this.wordService.getGamesByUserId(this.user.id).subscribe((data: Game[]) => {
+        const wordIds = data.map(game => game.wordId);
         this.wordService.getWordsByIds(wordIds).subscribe(words => {
-          this.words = data.map(guess => {
-            const word = words.find(w => w.id === guess.wordId);
-            return { ...guess, name: word.name, translations: [] };
+          this.words = data.map(game => {
+            const word = words.find(w => w.id === game.wordId);
+            return { ...game, name: word.name, translations: [] };
           });
           this.fetchTranslations();
           this.filteredWords = [...this.words];
@@ -74,13 +75,13 @@ export class WordListComponent implements OnInit {
         });
       });
     } else if (this.source === 'line-chart') {
-      this.wordService.getGuessesByUserId(this.user.id).subscribe((data: Guess[]) => {
-        const wordIds = data.map(guess => guess.wordId);
+      this.wordService.getGamesByUserId(this.user.id).subscribe((data: Game[]) => {
+        const wordIds = data.map(game => game.wordId);
         this.wordService.getWordsByIds(wordIds).subscribe(words => {
-          this.words = data.map(guess => {
-            const word = words.find(w => w.id === guess.wordId);
-            const formattedDate = new Date(guess.date).toLocaleDateString();
-            return { ...guess, name: word.name, date: formattedDate, translations: [] };
+          this.words = data.map(game => {
+            const word = words.find(w => w.id === game.wordId);
+            const formattedDate = new Date(game.date).toLocaleDateString();
+            return { ...game, name: word.name, date: formattedDate, translations: [] };
           });
           this.fetchTranslations();
           this.filteredWords = [...this.words];
@@ -90,7 +91,9 @@ export class WordListComponent implements OnInit {
     }
   }
 
+
   fetchTranslations(): void {
+    // Obtener traducciones para cada palabra
     const translationPromises = this.words.map(word =>
       this.wordService.getTranslation(word.name).toPromise().then(translations => {
         if (translations && translations.length > 0) {
@@ -105,16 +108,13 @@ export class WordListComponent implements OnInit {
   }
 
   onSearch(event: any) {
+    // Actualizar el término de búsqueda y aplicar filtros
     this.searchTerm = event.target.value.toLowerCase();
     this.applyFilters();
   }
 
-  onFilterChange(event: any) {
-    this.source = event.target.value;
-    this.loadWords(); // Recargar palabras cuando se cambia el filtro
-  }
-
   onRadioFilterChange(event: any) {
+    // Cambiar el filtro de radio y aplicar filtros
     const newValue = event.value;
 
     if (this.selectedRadio === newValue) {
@@ -131,12 +131,13 @@ export class WordListComponent implements OnInit {
   }
 
   onAttemptsFilterChangeIntentos(event: any) {
+    // Validar y actualizar el filtro de intentos y aplicar filtros
     if (event.target.value < 0) {
-      event.target.value =  event.target.value.substring(1); // Establecer el valor a 0 si es negativo
+      event.target.value = event.target.value.substring(1); // Establecer el valor a 0 si es negativo
     }
 
     if (event.target.value > 6) {
-      event.target.value =  6; // Establecer el valor a 0 si es negativo
+      event.target.value = 6; // Establecer el valor a 0 si es negativo
     }
 
     const filterValue = event.target.value;
@@ -145,8 +146,9 @@ export class WordListComponent implements OnInit {
   }
 
   onAttemptsFilterChangeIntroducidos(event: any) {
+    // Validar y actualizar el filtro de intentos y aplicar filtros
     if (event.target.value < 0) {
-      event.target.value =  event.target.value.substring(1); // Establecer el valor a 0 si es negativo
+      event.target.value = event.target.value.substring(1); // Establecer el valor a 0 si es negativo
     }
 
     const filterValue = event.target.value;
@@ -155,11 +157,13 @@ export class WordListComponent implements OnInit {
   }
 
   onStartDateChange(event: any) {
+    // Actualizar la fecha de inicio y aplicar filtros
     this.startDate = event.target.value;
     this.applyFilters();
   }
 
   onEndDateChange(event: any) {
+    // Actualizar la fecha de fin y aplicar filtros
     this.endDate = event.target.value;
     this.applyFilters();
   }
@@ -168,9 +172,9 @@ export class WordListComponent implements OnInit {
     this.filteredWords = this.words.filter(word => {
       const matchesSearch = word.name.toLowerCase().includes(this.searchTerm);
       const matchesRadio = this.radioFilter ? (this.radioFilter === '1' ? word.isGuessed : !word.isGuessed) : true;
-      const matchesAttempts = this.attemptsFilter ? (word.nAttempt === this.attemptsFilter) ||  (word.nVeces === this.attemptsFilter): true;
-
+      const matchesAttempts = this.attemptsFilter ? (word.nAttempt === this.attemptsFilter) || (word.nVeces === this.attemptsFilter) : true;
       let matchesDate = true;
+
       if (this.startDate && word.date) {
         const wordDateParts = word.date.split('/');
         const formattedWordDate = `${wordDateParts[2]}-${wordDateParts[1]}-${wordDateParts[0]}`;
@@ -200,6 +204,7 @@ export class WordListComponent implements OnInit {
   }
 
   sortData(sort: Sort) {
+    // Ordenar los datos según el criterio seleccionado
     const data = this.filteredWords.slice();
     if (!sort.active || sort.direction === '') {
       this.filteredWords = data;
