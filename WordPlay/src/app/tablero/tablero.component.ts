@@ -291,7 +291,7 @@ export class TableroComponent implements OnInit {
   }
 
   addPalabraAdivinada(palabraIngresada: string) {
-    const guess = {
+    const game = {
       userId: this.user?.id || -1, 
       wordId: this.palabraId,
       isGuessed: palabraIngresada.toLowerCase() === this.palabraAdivinar.toLowerCase(),
@@ -299,7 +299,7 @@ export class TableroComponent implements OnInit {
       date: new Date()
     };
 
-    this.wordService.addPalabraAdivinada(guess).subscribe(
+    this.wordService.addPalabraAdivinada(game).subscribe(
       response => {
         console.log('Palabra adivinada guardada con éxito', response);
       },

@@ -21,7 +21,7 @@ export class PieChartComponent implements OnInit, OnDestroy {
     const storedUserJSON = localStorage.getItem('user');
     this.user = JSON.parse(storedUserJSON? storedUserJSON : '{}') as User;
 
-    this.wordService.getGuessStatistics(this.user.id).subscribe(data => {
+    this.wordService.getGameStatistics(this.user.id).subscribe(data => {
       const labels = Object.keys(data);
       const values = Object.values(data);
 
@@ -67,8 +67,8 @@ export class PieChartComponent implements OnInit, OnDestroy {
             position: 'top', // Posición de la leyenda en la parte inferior
             align: 'center', // Alineación horizontal de la leyenda
             labels: {
-              boxWidth: 20, // Ancho del cuadro de color de la leyenda
-              padding: 10, // Espaciado alrededor de los cuadros de leyenda
+              boxWidth: 20, 
+              padding: 10,
             }
           },
           title: {

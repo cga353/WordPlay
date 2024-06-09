@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Chart, ChartType, registerables } from 'chart.js';
 import { WordService } from '../services/word.service';
-import { Guess } from '../interfaces/guess';  // Cambia `Attempt` a `Guess` si es necesario
+import { Game } from '../interfaces/game'; 
 import { Router } from '@angular/router';
 import { User } from '../interfaces/user';
 
@@ -26,11 +26,11 @@ export class LineChartComponent implements OnInit, OnDestroy {
     const storedUserJSON = localStorage.getItem('user');
     this.user = JSON.parse(storedUserJSON? storedUserJSON : '{}') as User;
 
-    this.wordService.getSuccessfulGuessesByUserId(this.user.id).subscribe((data: Guess[]) => {
+    this.wordService.getSuccessfulGamesByUserId(this.user.id).subscribe((data: Game[]) => {
       // Filtra las adivinanzas correctas
-      const victoriesData = data.filter((guess: Guess) => guess.isGuessed);
+      const victoriesData = data.filter((game: Game) => game.isGuessed);
       // Mapea los intentos y victorias
-      const values = victoriesData.map((guess: Guess) => guess.nAttempt);
+      const values = victoriesData.map((game: Game) => game.nAttempt);
 
       const chartData = {
         labels: [1, 2, 3, 4, 5, 6], // Números de intentos
@@ -46,7 +46,7 @@ export class LineChartComponent implements OnInit, OnDestroy {
 
       // Crear el gráfico
       this.chart = new Chart("line-chart", {
-        type: 'bar' as ChartType, // Cambia 'line' a 'bar'
+        type: 'bar' as ChartType,
         data: chartData,
         options: {
           indexAxis: 'x',

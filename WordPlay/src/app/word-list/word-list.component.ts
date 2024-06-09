@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { WordService } from '../services/word.service';
 import { Attempt } from '../interfaces/attempt';
-import { Guess } from '../interfaces/guess';
+import { Game } from '../interfaces/game';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { MatSliderModule } from '@angular/material/slider';
@@ -61,12 +61,12 @@ export class WordListComponent implements OnInit {
         });
       });
     } else if (this.source === 'pie-chart') {
-      this.wordService.getGuessesByUserId(this.user.id).subscribe((data: Guess[]) => {
-        const wordIds = data.map(guess => guess.wordId);
+      this.wordService.getGamesByUserId(this.user.id).subscribe((data: Game[]) => {
+        const wordIds = data.map(game => game.wordId);
         this.wordService.getWordsByIds(wordIds).subscribe(words => {
-          this.words = data.map(guess => {
-            const word = words.find(w => w.id === guess.wordId);
-            return { ...guess, name: word.name, translations: [] };
+          this.words = data.map(game => {
+            const word = words.find(w => w.id === game.wordId);
+            return { ...game, name: word.name, translations: [] };
           });
           this.fetchTranslations();
           this.filteredWords = [...this.words];
@@ -74,13 +74,13 @@ export class WordListComponent implements OnInit {
         });
       });
     } else if (this.source === 'line-chart') {
-      this.wordService.getGuessesByUserId(this.user.id).subscribe((data: Guess[]) => {
-        const wordIds = data.map(guess => guess.wordId);
+      this.wordService.getGamesByUserId(this.user.id).subscribe((data: Game[]) => {
+        const wordIds = data.map(game => game.wordId);
         this.wordService.getWordsByIds(wordIds).subscribe(words => {
-          this.words = data.map(guess => {
-            const word = words.find(w => w.id === guess.wordId);
-            const formattedDate = new Date(guess.date).toLocaleDateString();
-            return { ...guess, name: word.name, date: formattedDate, translations: [] };
+          this.words = data.map(game => {
+            const word = words.find(w => w.id === game.wordId);
+            const formattedDate = new Date(game.date).toLocaleDateString();
+            return { ...game, name: word.name, date: formattedDate, translations: [] };
           });
           this.fetchTranslations();
           this.filteredWords = [...this.words];

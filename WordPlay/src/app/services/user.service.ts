@@ -35,10 +35,6 @@ export class UserService {
     return this.http.post(this.backendUrl, user);
   }
 
-  getUserById(id: number): Observable<User> {
-    return this.http.get<User>(`${this.backendUrl}/${id}`);
-  }
-
   updateUser(id: number, user: User): Observable<User> {
     console.log('Updating user:', user);
     return this.http.put<User>(`${this.backendUrl}/${id}`, user);
