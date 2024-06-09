@@ -7,7 +7,6 @@
     /* Ajusta el contenedor a la altura de la ventana */
     background: linear-gradient(to right, #02182f, #03a5aa, #00c25f, #03a5aa, #02182f);
     padding: 2rem;
-    /* Añade padding para evitar que los contenidos toquen los bordes */
     box-sizing: border-box;
     /* Asegura que el padding no afecte el tamaño del contenedor */
     overflow: hidden;
@@ -46,14 +45,11 @@ h1 {
     justify-content: center;
     align-items: center;
     width: 100%;
-    /* Ajusta el ancho del formulario */
-    /* Limita el ancho máximo del formulario */
     background: rgb(255, 255, 255);
     border: 1px solid #d9d9d9;
     border-radius: 2.5rem;
     margin-top: 3rem;
     padding: 1rem 3rem;
-    /* Añade margen superior para separarlo de los otros elementos */
 }
 
 .custom-form h1 {
@@ -95,7 +91,6 @@ h1 {
 
 .login p {
     margin-top: 0.5rem;
-    /* Reduce el margen superior del párrafo */
     color: white;
     text-align: center;
     margin-top: 1.5rem;
@@ -111,17 +106,13 @@ h1 {
     width: 100%;
     padding-right: 30px;
     box-sizing: border-box;
-    /* Ensure padding doesn't affect width calculation */
 }
 
 .password-eye {
     position: absolute;
-    /* Position the span absolutely within the pass div */
     top: 50%;
-    /* Center the icon vertically */
     right: 10px;
-    /* Position the icon at the right edge */
     transform: translateY(-50%);
-    /* Adjust vertical positioning for centering */
+    /* Ajusta la posición vertical para centrar */
     cursor: pointer;
 }

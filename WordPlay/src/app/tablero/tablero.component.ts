@@ -4,7 +4,6 @@ import { Component, OnInit } from '@angular/core';
 import { RandomWordService } from '../services/randomword.service';
 import { SearchwordService } from '../services/searchword.service';
 import { MatDialog } from '@angular/material/dialog';
-import { MatDialogRef } from '@angular/material/dialog';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { WordService } from '../services/word.service';
 import { Attempt } from '../interfaces/attempt';
@@ -32,6 +31,10 @@ export class TableroComponent implements OnInit {
   palabraId: number | undefined;
   estadoTeclado: { [key: string]: boolean } = {};
   mostrarConfetti: boolean = false;
+  letrasIntroducidas: string[] = [];
+  estadoTeclas: { [key: string]: string } = {};
+  obtenerIdPalabraAdivinar: boolean = true;
+  palabraAdivinarId: number | undefined;
 
   // Definimos el teclado virtual
   teclado: string[][] = [
@@ -39,9 +42,6 @@ export class TableroComponent implements OnInit {
     ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', '◀'],
     ['Z', 'X', 'C', 'V', 'B', 'N', 'M', 'Enter']
   ];
-  letrasIntroducidas: string[] = [];
-
-  estadoTeclas: { [key: string]: string } = {};
 
   constructor(
     private palabraService: RandomWordService,
@@ -63,10 +63,11 @@ export class TableroComponent implements OnInit {
     this.palabraService.obtenerPalabraAdivinar().subscribe(
       (palabra: string) => {
         this.palabraAdivinar = palabra[0];
+        console.warn('Palabra a adivinar:', this.palabraAdivinar);
         this.addPalabra(this.palabraAdivinar.toLowerCase());
       },
       (error: any) => {
-        console.error('Error al obtener la palabra a adivinar:', error); 
+        console.error('Error al obtener la palabra a adivinar:', error);
       }
     );
   }
@@ -83,7 +84,6 @@ export class TableroComponent implements OnInit {
     return tablero;
   }
 
-  // Método para inicializar el estado del tablero
   inicializarEstadoTablero(): (number | boolean)[][] {
     const estadoTablero: (number | boolean)[][] = [];
     for (let i = 0; i < this.filas.length; i++) {
@@ -96,7 +96,6 @@ export class TableroComponent implements OnInit {
     this.entradaActivada = true;
   }
 
-  // Método para inicializar el estado del teclado
   inicializarEstadoTeclado() {
     this.teclado.forEach(fila => {
       fila.forEach(tecla => {
@@ -106,11 +105,6 @@ export class TableroComponent implements OnInit {
   }
 
   recogerLetra(event: KeyboardEvent) {
-
-    console.log('Tecla presionada:', event.key);
-    console.log("entradaActivada", this.entradaActivada);
-    console.log("palabraAdivinada", this.palabraAdivinada);
-
     if (this.entradaActivada && !this.palabraAdivinada) {
       if (!this.enterPresionado) {
         this.palabraValida = false;
@@ -124,8 +118,6 @@ export class TableroComponent implements OnInit {
         if (!this.filaCompleta(this.filaActual)) {
           return;
         }
-        // Avanzar a la siguiente fila disponible
-        // this.avanzarFila();
       }
     }
   }
@@ -159,8 +151,6 @@ export class TableroComponent implements OnInit {
   }
 
   borrarLetra() {
-    console.log('Tecla retroceso presionada');
-    // Verificar si la palabra ya se ha adivinado
     if (this.palabraAdivinada) {
       console.log('La palabra ya se ha adivinado. No se puede borrar.');
       return;
@@ -187,12 +177,11 @@ export class TableroComponent implements OnInit {
       if (this.filaCompleta(this.filaActual)) {
         this.comprobarPalabra();
       } else {
-        console.log('La fila no está completa, no se aplicarán colores.');
+        console.log('La fila no está completa.');
         this.enterPresionado = false; // Reiniciar la bandera de Enter presionado
       }
     }
   }
-
 
   comprobarPalabra() {
     const palabraIngresada = this.filas[this.filaActual].join('').trim().toLocaleLowerCase();
@@ -211,12 +200,12 @@ export class TableroComponent implements OnInit {
       (error: any) => {
         if (!(palabraIngresada.toLowerCase() === this.palabraAdivinar.toLowerCase())) {
           // Si hay un error, la palabra no existe
-          this.enterPresionado = false; // Reiniciar la bandera de Enter presionado
+          this.enterPresionado = false;
           this.palabraValida = false;
           this.estadoTablero[this.filaActual][1] = false;
-          console.error('La palabra ingresada no existe:', palabraIngresada, error);
           this.openDialog("PALABRA NO ENCONTRADA", "", palabraIngresada, false);
         } else {
+          // La palabra es correcta pese a no estar en la API
           this.palabraCorrecta(palabraIngresada);
           setTimeout(() => {
             this.colorearTeclasTeclado();
@@ -228,14 +217,14 @@ export class TableroComponent implements OnInit {
 
   palabraCorrecta(palabraIngresada: string) {
     this.addPalabra(palabraIngresada.toLowerCase());
-
+    // Obtener información del usuario del localStorage
     const storedUserJSON = localStorage.getItem('user');
-    this.user = JSON.parse(storedUserJSON? storedUserJSON : '{}') as User;
+    this.user = JSON.parse(storedUserJSON ? storedUserJSON : '{}') as User;
+    
+    this.handleWordAttempt(this.user.id, this.palabraId || -1);
 
-    this.handleWordAttempt(this.user.id, this.palabraId || -1); 
     // Verificar si la palabra ingresada por el usuario es igual a la palabra a adivinar
     if (palabraIngresada === this.palabraAdivinar.toLowerCase()) {
-      console.log('¡Felicidades! Has adivinado la palabra.');
       this.addPalabraAdivinada(palabraIngresada);
       this.entradaActivada = false;
       this.palabraAdivinada = true;
@@ -251,11 +240,11 @@ export class TableroComponent implements OnInit {
         this.openDialog("¡FELICIDADES!", "has acertado la palabra", palabraIngresada, true);
       }, 1500);
     } else {
-      console.log('La palabra ingresada no es correcta.');
-      // No avanzar a la siguiente fila si la palabra no es correcta
+      // No avanzar a la siguiente fila si la palabra no es correcta en el último intento
       if (this.filaActual == this.filas.length - 1) {
         this.addPalabraAdivinada(palabraIngresada);
         this.colorearTeclasTeclado();
+
         setTimeout(() => {
           this.openDialog("¡PERDISTE!", "La palabra era:", this.palabraAdivinar.toUpperCase(), false);
         }, 2000);
@@ -264,7 +253,6 @@ export class TableroComponent implements OnInit {
         this.avanzarFila();
       }
       this.enterPresionado = false; // Reiniciar la bandera de Enter presionado
-
     }
   }
 
@@ -278,11 +266,14 @@ export class TableroComponent implements OnInit {
   }
 
   addPalabra(palabra: string) {
-    console.warn('Palabra', palabra);
     this.wordService.addPalabra(palabra).subscribe(
       (id: number) => {
+        if(this.obtenerIdPalabraAdivinar === true) {
+          this.palabraAdivinarId = id;
+          this.obtenerIdPalabraAdivinar = false;
+          return;
+        }
         this.palabraId = id;
-        console.log('Palabra a adivinar ID:', this.palabraId);
       },
       error => {
         console.error('Error al obtener la palabra a adivinar:', error);
@@ -292,10 +283,10 @@ export class TableroComponent implements OnInit {
 
   addPalabraAdivinada(palabraIngresada: string) {
     const game = {
-      userId: this.user?.id || -1, 
-      wordId: this.palabraId,
+      userId: this.user?.id || -1,
+      wordId: this.palabraAdivinarId!,
       isGuessed: palabraIngresada.toLowerCase() === this.palabraAdivinar.toLowerCase(),
-      nAttempt: this.filaActual + 1, // Reemplazar con el número real de intentos
+      nAttempt: this.filaActual + 1,
       date: new Date()
     };
 
@@ -339,7 +330,6 @@ export class TableroComponent implements OnInit {
           this.updateAttempt(attempt);
         } else {
           const newAttempt: Attempt = { userId, wordId, nVeces: 1 };
-          console.log('Nuevo intento:', newAttempt);
           this.addAttempt(newAttempt);
         }
       },
@@ -362,11 +352,11 @@ export class TableroComponent implements OnInit {
 
   }
 
-  // Método para obtener la clase para una letra en una fila específica
+  // Método para obtener la clase para una letra específica en una fila 
   obtenerClase(filaIndex: number, letraIndex: number): string {
     const palabraAdivinar = this.palabraAdivinar.toLowerCase();
     const resultado = Array(5).fill('no-encontrado'); // Inicializamos con 'no-encontrado'
-    const letraUsada = Array(5).fill(false); // Para llevar cuenta de las letras adivinadas
+    const letraUsada = Array(5).fill(false); // Lleva la cuenta de las letras adivinadas
 
     // Primera pasada: comprobar las letras correctas (en la posición correcta)
     for (let i = 0; i < 5; i++) {
@@ -400,7 +390,7 @@ export class TableroComponent implements OnInit {
 
     // Actualizar el estado de las teclas basado en las filas actuales
     for (let filaIndex = 0; filaIndex <= this.filaActual; filaIndex++) {
-      const letraUsada = Array(5).fill(false); // Para llevar cuenta de las letras adivinadas
+      const letraUsada = Array(5).fill(false); // Lleva la cuenta de las letras adivinadas
       const resultado = Array(5).fill('no-encontrado'); // Inicializamos con 'no-encontrado'
 
       // Primera pasada: comprobar las letras correctas (en la posición correcta)
@@ -446,37 +436,6 @@ export class TableroComponent implements OnInit {
     }
   }
 
-  obtenerClaseTecla(teclaUtilizada: boolean, letraCorrecta: boolean, filaIndex: number, teclaIndex: number): string {
-    const palabraAdivinar = this.palabraAdivinar.toLowerCase();
-    const resultado = Array(this.palabraAdivinar.length).fill('no-encontrado'); // Inicializamos con 'no-encontrado'
-    const letraUsada = Array(this.palabraAdivinar.length).fill(false); // Para llevar cuenta de las letras adivinadas
-
-    // Primera pasada: comprobar las letras correctas (en la posición correcta)
-    for (let i = 0; i < this.palabraAdivinar.length; i++) {
-      const letra = this.filas[filaIndex][i].toLowerCase();
-      if (letra === palabraAdivinar[i]) {
-        resultado[i] = 'correcto';
-        letraUsada[i] = true; // Marcar la letra como usada
-      }
-    }
-
-    // Segunda pasada: comprobar las letras incorrectas pero presentes en la palabra
-    for (let i = 0; i < this.palabraAdivinar.length; i++) {
-      if (resultado[i] === 'correcto') continue; // Saltar las letras ya adivinadas correctamente
-
-      const letra = this.filas[filaIndex][i].toLowerCase();
-      for (let j = 0; j < this.palabraAdivinar.length; j++) {
-        if (!letraUsada[j] && letra === palabraAdivinar[j]) {
-          resultado[i] = 'incorrecto';
-          letraUsada[j] = true; // Marcar la letra como usada
-          break;
-        }
-      }
-    }
-
-    return resultado[teclaIndex];
-  }
-
   launchConfetti() {
     const myConfetti = confetti.create(undefined, { resize: true });
     myConfetti({
@@ -498,7 +457,6 @@ export class TableroComponent implements OnInit {
     }
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('El diálogo ha sido cerrado.');
     });
   }
 }

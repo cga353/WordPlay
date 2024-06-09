@@ -37,6 +37,7 @@ export class RegisterComponent  {
   togglePasswordVisibility1() {
     this.showPassword1 = !this.showPassword1;
   }
+
   togglePasswordVisibility2() {
     this.showPassword2 = !this.showPassword2;
   }
@@ -50,7 +51,7 @@ export class RegisterComponent  {
     if (!passwordsMatch) {
       this.toastr.error('Las contraseñas no coinciden', '', {
         positionClass: 'toast-bottom-left',
-        timeOut: 3000
+        timeOut: 3000 // 3 segundos
       });
       return
     }
@@ -65,7 +66,7 @@ export class RegisterComponent  {
       (data) => {
         this.toastr.success('Registro exitoso', '', {
           positionClass: 'toast-bottom-left',
-          timeOut: 1000
+          timeOut: 1000 // 1 segundo
         });
         this.router.navigate(['/login']);
       },

@@ -18,9 +18,9 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  user: User = { id: 0, email: '', userName: '', password: ''};
+  user: User = { id: 0, email: '', userName: '', password: '' };
   editMode: boolean = false;
-  editedUser: User = { id: 0, email: '', userName: '', password: ''};
+  editedUser: User = { id: 0, email: '', userName: '', password: '' };
   editedPassword: boolean = false;
   newPassword: string = "";
   confirmPassword: string = "";
@@ -34,6 +34,7 @@ export class ProfileComponent implements OnInit {
   constructor(private userService: UserService, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {
+    // Obtener información del usuario del localStorage
     const storedUserJSON = localStorage.getItem('user');
     this.user = JSON.parse(storedUserJSON ? storedUserJSON : '{}') as User;
     this.editedUser = this.user;
@@ -65,9 +66,11 @@ export class ProfileComponent implements OnInit {
   togglePasswordVisibility1() {
     this.showPassword1 = !this.showPassword1;
   }
+
   togglePasswordVisibility2() {
     this.showPassword2 = !this.showPassword2;
   }
+
   togglePasswordVisibility3() {
     this.showPassword3 = !this.showPassword3;
   }
@@ -76,7 +79,7 @@ export class ProfileComponent implements OnInit {
     if (!this.isFormValidUser) {
       return;
     }
-    console.log("hola", this.editedUser);
+
     if (this.editedUser && this.user) {
       this.userService.updateUser(this.user.id, this.editedUser).subscribe(
         (updatedUser: User) => {
@@ -161,7 +164,7 @@ export class ProfileComponent implements OnInit {
   logOut(): void {
     this.toastr.success('Sesión cerrada', '', {
       positionClass: 'toast-bottom-left',
-      timeOut: 2000
+      timeOut: 2000 // 2 segundos
     });
 
     localStorage.removeItem('user');

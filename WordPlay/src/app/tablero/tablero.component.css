@@ -10,13 +10,10 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* Centra el contenido verticalmente */
     align-items: center;
-    /* Centra el contenido horizontalmente */
     width: fit-content;
     /* Ajusta el ancho del contenedor al contenido */
     margin: auto;
-    /* Añade margen automático para centrarlo horizontalmente */
     margin-top: 2rem;
 }
 
@@ -53,27 +50,27 @@
 }
 
 .tecla:hover {
-    background-color: #c4cbdd; /* Cambia el color de fondo al pasar el cursor sobre el elemento */
+    background-color: #c4cbdd;
 }
 
 .fila-teclado button.correcto,
 .correcto {
     background-color: #79b851;
-    color: white !important; 
+    color: white !important;
     font-style: bold;
 }
 
 .fila-teclado button.incorrecto,
 .incorrecto {
     background-color: #f3c237;
-    color: white !important; 
+    color: white !important;
     font-style: bold;
 }
 
 .fila-teclado button.no-encontrado,
 .no-encontrado {
     background-color: #a4aec4;
-    color: white !important; 
+    color: white !important;
     font-style: bold;
 }
 
@@ -110,11 +107,11 @@
 }
 
 .tablero.animate__slideInUp {
-    animation-duration: 1s; /* Cambiar la duración de la animación según sea necesario */
+    animation-duration: 1s;
 }
 
 .teclado.animate__slideInUp {
-    animation-duration: 2s; /* Cambiar la duración de la animación según sea necesario */
+    animation-duration: 2s;
 }
 
 @keyframes flipInX {
@@ -145,5 +142,5 @@
 
 .animate__flipInX {
     animation-name: flipInX;
-    animation-duration: 1.2s; /* Puedes ajustar la duración según sea necesario */
+    animation-duration: 1.2s;
 }

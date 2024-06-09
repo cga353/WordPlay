@@ -1,5 +1,7 @@
-.grafica{
+.grafica {
     width: 14em;
-    max-width: 100%; /* Asegura que el gráfico no se salga del contenedor */
-    margin: 0 auto;  /* Centra el gráfico horizontalmente */
+    max-width: 100%;
+    /* Asegura que el gráfico no se salga del contenedor */
+    margin: 0 auto;
+    /* Centra el gráfico horizontalmente */
 }

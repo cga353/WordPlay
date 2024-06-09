@@ -28,17 +28,17 @@ export class LoginComponent {
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
-  
+
   login() {
     if (!this.checkFormValidity()) {
       console.error('Username and password are required');
       return;
     }
-  
+
     this.userService.validateUser(this.userName, this.password)
       .subscribe(
         user => {
-          if(user === null){
+          if (user === null) {
             this.toastr.error('Las credenciales no coinciden', '', {
               positionClass: 'toast-bottom-left',
               timeOut: 2000
@@ -49,7 +49,7 @@ export class LoginComponent {
             positionClass: 'toast-bottom-left',
             timeOut: 1000
           });
-  
+
           localStorage.setItem('user', JSON.stringify(user));
           this.router.navigate(['/home']);
         },
@@ -62,5 +62,5 @@ export class LoginComponent {
         }
       );
   }
-  
+
 }

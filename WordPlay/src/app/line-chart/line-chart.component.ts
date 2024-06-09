@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Chart, ChartType, registerables } from 'chart.js';
 import { WordService } from '../services/word.service';
-import { Game } from '../interfaces/game'; 
+import { Game } from '../interfaces/game';
 import { Router } from '@angular/router';
 import { User } from '../interfaces/user';
 
@@ -17,20 +17,25 @@ Chart.register(...registerables);
 export class LineChartComponent implements OnInit, OnDestroy {
   @Output() noData: EventEmitter<boolean> = new EventEmitter<boolean>();
   user: User | undefined;
-
   public chart: Chart | undefined;
 
   constructor(private wordService: WordService, private router: Router) { }
 
   ngOnInit(): void {
     const storedUserJSON = localStorage.getItem('user');
-    this.user = JSON.parse(storedUserJSON? storedUserJSON : '{}') as User;
+    this.user = JSON.parse(storedUserJSON ? storedUserJSON : '{}') as User;
 
     this.wordService.getSuccessfulGamesByUserId(this.user.id).subscribe((data: Game[]) => {
       // Filtra las adivinanzas correctas
       const victoriesData = data.filter((game: Game) => game.isGuessed);
       // Mapea los intentos y victorias
-      const values = victoriesData.map((game: Game) => game.nAttempt);
+      // const values = victoriesData.map((game: Game) => game.nAttempt);
+
+      const values = [];
+      for (let i = 1; i <= 6; i++) {
+        const victories = victoriesData.filter((game: Game) => game.nAttempt === i).length;
+        values.push(victories);
+      }
 
       const chartData = {
         labels: [1, 2, 3, 4, 5, 6], // Números de intentos

@@ -22,13 +22,16 @@
 }
 
 .translations-list {
-    list-style-position: inside; /* Mueve las bolas de la lista a dentro del contenedor de lista */
-    padding-left: 0; /* Elimina el padding a la izquierda del ul */
-    text-align: left; /* Alinea el texto a la izquierda */
+    list-style-position: inside;
+    /* Mueve las bolas de la lista a dentro del contenedor de lista */
+    padding-left: 0;
+    /* Elimina el padding a la izquierda del ul */
+    text-align: left;
 }
 
 .translations-list li {
-    padding-left: 0; /* Elimina el padding a la izquierda de los elementos li */
+    padding-left: 0;
+    /* Elimina el padding a la izquierda de los elementos li */
     margin-bottom: 0;
 }
 

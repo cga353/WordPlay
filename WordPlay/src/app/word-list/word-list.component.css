@@ -4,7 +4,7 @@
   margin: auto;
 }
 
-h2{
+h2 {
   text-align: center;
   font-size: 2rem;
   margin-bottom: 2.5rem;
@@ -64,7 +64,7 @@ h2{
   border-bottom: 1px solid #ddd;
 }
 
-.search{
+.search {
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -80,14 +80,11 @@ h2{
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.search span{
+.search span {
   position: absolute;
-  /* Position the span absolutely within the pass div */
   left: 1rem;
-  /* Position the icon at the right edge */
   transform: translateY(-50%);
   transform: rotate(90deg);
-  /* Adjust vertical positioning for centering */
   cursor: pointer;
 }
 
@@ -127,11 +124,11 @@ mat-slider {
 .date-input-container {
   display: flex;
   align-items: center;
-  margin-bottom: 10px; /* Ajusta el espacio entre los campos si es necesario */
+  margin-bottom: 10px;
 }
 
 .date-input-container label {
-  width: 100px; /* Ajusta este valor según tus necesidades */
+  width: 100px;
   text-align: left;
   margin-right: 10px;
 }
@@ -144,8 +141,8 @@ mat-slider {
 }
 
 .date-input-container input:focus {
-  border-color: #66afe9; /* Color del borde al enfocar */
-  box-shadow: 0 0 5px rgba(102, 175, 233, 0.5); /* Sombra al enfocar */
+  border-color: #66afe9;
+  box-shadow: 0 0 5px rgba(102, 175, 233, 0.5);
   outline: none;
 }
 
@@ -168,7 +165,7 @@ mat-slider {
   margin-bottom: 1rem;
 }
 
-.filter-clear button{
+.filter-clear button {
   display: block;
   width: 100%;
   padding: 0.35rem;
@@ -181,7 +178,7 @@ mat-slider {
   cursor: pointer;
 }
 
-.filter-clear button:hover{
+.filter-clear button:hover {
   background-color: #0c918e;
 
 }
@@ -254,7 +251,7 @@ th {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100px; /* Ajusta la altura según tus necesidades */
+  height: 100px;
 }
 
 :host ::ng-deep .mat-sort-header-container {
@@ -263,7 +260,7 @@ th {
   padding-left: 1.2rem;
 }
 
-.nUsadas{
+.nUsadas {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -272,7 +269,7 @@ th {
   margin-top: 1rem;
 }
 
-.nIntentos{
+.nIntentos {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -281,12 +278,12 @@ th {
 }
 
 .nUsadas label,
-.nIntentos label{
+.nIntentos label {
   margin-right: 0.25rem;
 }
 
 .nUsadas input,
-.nIntentos input{
+.nIntentos input {
   display: block;
   width: 5rem;
   padding: 0.25rem 0 0.25rem 1rem;
@@ -296,11 +293,14 @@ th {
 }
 
 .translations-list {
-  list-style-position: inside; /* Mueve las bolas de la lista a dentro del contenedor de lista */
-  text-align: left; /* Alinea el texto a la izquierda */
+  list-style-position: inside;
+  /* Mueve las bolas de la lista a dentro del contenedor de lista */
+  text-align: left;
+  /* Alinea el texto a la izquierda */
 }
 
 .translations-list li {
-  padding-left: 0; /* Elimina el padding a la izquierda de los elementos li */
+  padding-left: 0;
+  /* Elimina el padding a la izquierda de los elementos li */
   margin-bottom: 0;
 }

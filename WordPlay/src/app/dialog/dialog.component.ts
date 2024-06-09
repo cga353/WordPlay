@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Inject } from '@angular/core';
 import { WordService } from '../services/word.service';
-import { NgFor, NgIf, Location  } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { NgFor, NgIf, Location } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-dialog',
@@ -23,15 +23,13 @@ export class DialogComponent implements OnInit {
     private location: Location
   ) { }
 
-
   ngOnInit(): void {
-
     if (this.dialog.adivinada == false && this.dialog.message === "") {
       this.palabraNoEncontrada = true;
       this.autoCloseDialog();
     }
 
-    if (this.dialog.adivinada == true || this.dialog.title ==="¡PERDISTE!") {
+    if (this.dialog.adivinada == true || this.dialog.title === "¡PERDISTE!") {
       this.loadTranslation();
     }
   }
@@ -47,7 +45,7 @@ export class DialogComponent implements OnInit {
   navigateToHome(): void {
     this.location.go('/home');
     window.location.reload();
-    this.dialogRef.close(); 
+    this.dialogRef.close();
   }
 
   autoCloseDialog(): void {
